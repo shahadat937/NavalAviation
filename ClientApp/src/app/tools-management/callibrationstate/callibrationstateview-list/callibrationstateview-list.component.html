@@ -1,0 +1,213 @@
+<section class="content">
+  <div class="container-fluid">
+    <div class="block-header">
+      <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+          <ul class="breadcrumb breadcrumb-style ">
+            <li class="breadcrumb-item">
+              <h4 class="page-title">Callibration State List</h4>
+            </li>
+            <li class="breadcrumb-item bcrumb-1">
+              <a routerLink="/admin/dashboard/main"><i class="fas fa-home"></i></a>
+            </li>
+            <li class="breadcrumb-item bcrumb-2">
+              <a href="#" onClick="return false;">Callibration State List</a>
+            </li>
+            <li class="breadcrumb-item active">All</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+        <div class="card">
+          <div class="body">
+            <div class="responsive_table">
+              <div class="materialTableHeader">
+                <div class="row">
+                  <div class="col-8">
+                    <ul class="header-buttons-left ml-0">
+                      
+                      <li class="dropdown">
+                        <input placeholder="Search" type="text" [(ngModel)]="searchText"  #filter class="browser-default search-field"
+                          aria-label="Search box">
+                      </li>
+                      <li>
+                        <div class="icon-button-demo m-l-10">
+                          <button mat-mini-fab (click)="applyFilter(searchText)" color="primary">Go
+                            <!-- <mat-icon class="col-white">search</mat-icon> -->
+                          </button>
+                        </div>
+                      </li>
+                    </ul>
+                  </div>
+                  <div class="col-4">
+                    <ul class="header-buttons">
+                      <li>
+                        <div class="icon-button-demo">
+                          <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 mb-2 db-p">
+                            <button class="btn-space"  mat-raised-button
+                            color="primary" routerLink="/tools-management/callibrationstate-list"> Add
+                              <mat-icon class="col-white">add</mat-icon>
+                            </button>
+                        </div>
+                         
+                        </div>
+                        <!-- <div class="icon-button-demo">
+                          <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 mb-2 db-p">
+                            <button class="btn-space"  mat-raised-button
+                            color="primary" routerLink="/tools-management/add-callibrationstate"> Add
+                              <mat-icon class="col-white">add</mat-icon>
+                            </button>
+                        </div>
+                        </div> -->
+                      </li>
+                      <li>
+                        <div class="icon-button-demo">
+                          <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 mb-2 db-p">
+                          <button class="btn-space" mat-raised-button color="primary" (click)="printSingle()">
+                            <mat-icon class="col-white">print</mat-icon>
+                          </button>
+                         
+                        </div>
+                         
+                        </div>
+                      </li>
+
+                  
+                    </ul>
+                  </div>
+                </div>
+              </div>
+              <div id="print-routine">
+                <table class="table tbl-by-group db-li-s-in mnt-scdle-lst">
+                  <thead>
+                    <tr>
+                      <th class="cl-srl">
+                        <h5>Ser</h5>
+                      </th>
+                      <th class="cl-mrk">
+                        <h5>Part No</h5>
+                      </th>
+                      <th class="cl-mrk">
+                        <h5>Item Serial  No</h5>
+                      </th>
+                      <th class="cl-mrk">
+                        <h5>Name of Item</h5>
+                      </th>
+                      
+                      <th class="cl-mrk">
+                        <h5>Model</h5>
+                      </th>
+                      <th class="cl-mrk">
+                        <h5>Brand</h5>
+                      </th>
+                      <th class="cl-mrk">
+                        <h5>Last Calibration Date</h5>
+                      </th>
+                      <th class="cl-mrk">
+                        <h5>Next Date</h5>
+                      </th>
+                      <!-- <th class="cl-mrk">
+                        <h5>Next Calibration Date</h5>
+                      </th>
+  
+                      <th class="cl-mrk">
+                        <h5>Completed Date</h5>
+                      </th>
+  
+                      <th class="cl-mrk">
+                        <h5>Action</h5>
+                      </th> -->
+                      <!-- <th>Action</th> -->
+                      <!-- <th class="cl-mrk">
+                        <h5>Type of Maintenance</h5>
+                      </th>
+                      <th class="cl-nm-rnk">
+                        <h5>Last Insp. Date</h5>
+                      </th>
+                      <th class="cl-nm-rnk">
+                        <h5>Commencing  Date</h5>
+                      </th>
+                      <th class="cl-nm-rnk">
+                        <h5>Planned Completion Date</h5>
+                      </th> -->
+                      <!-- <th *ngIf="role != userRole.CO" class="cl-nm-rnk">
+                        <h5>Complete Date</h5>
+                      </th>
+                      <th  class="cl-nm-rnk">
+                        <h5>Progress bar</h5>
+                      </th>
+                      <th *ngIf="role != userRole.CO" class="cl-nm-rnk">
+                        <h5>Document</h5>
+                      </th>
+                      <th *ngIf="role != userRole.CO" class="cl-nm-rnk">
+                        <h5>Status</h5>
+                      </th>
+                      <th *ngIf="role == userRole.CO" class="cl-nm-rnk">
+                        <h5>Job Card</h5>
+                      </th> -->
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let unit of MaintanenceScheduleForm.get('MaintanenceScheduleList')['controls']; let i = index" [formGroup]="unit">
+                      <td class="cl-srl" scope="row">{{ i + 1 }}</td>                    
+                      <td class="cl-nm-rnk">
+                        {{getControlLabel(i, "partNo") }}
+                      </td>
+                      <td class="cl-nm-rnk">
+                        {{getControlLabel(i, "itemSerNo") }}
+                      </td>
+                      <td class="cl-nm-rnk">
+                        {{getControlLabel(i, "nameOfItem") }}
+                      </td>
+                      
+                      <td class="cl-nm-rnk">
+                        {{getControlLabel(i, "model") }}
+                      </td>
+                      <td class="cl-nm-rnk">
+                        {{getControlLabel(i, "brand") }}
+                      </td>
+                      
+                      <td class="cl-nm-rnk">
+                        {{getControlLabel(i, "lastCalibrationDate")  | date: "dd/MMM/yyyy" }}
+                      </td>
+                    <td class="cl-nm-rnk">
+                        {{getControlLabel(i, "nextCalibrationDate")  | date: "dd/MMM/yyyy" }}
+                      </td>
+                        <!-- 
+                      <td class="cl-mrk custom-date">
+                        <mat-form-field class="example-full-width mb-3" appearance="outline">
+                          <input class="custom-date-picker" matInput [matDatepicker]="datepicker2" formControlName="nextCalibrationDate">
+                          <mat-datepicker-toggle matSuffix [for]="datepicker2"></mat-datepicker-toggle>
+                          <mat-datepicker #datepicker2></mat-datepicker>
+                        </mat-form-field>
+                      </td>  
+                      <td class="cl-mrk custom-date">
+                        <mat-form-field class="example-full-width mb-3" appearance="outline">
+                          <input class="custom-date-picker" matInput [matDatepicker]="datepicker3" formControlName="completedDate">
+                          <mat-datepicker-toggle matSuffix [for]="datepicker3"></mat-datepicker-toggle>
+                          <mat-datepicker #datepicker3></mat-datepicker>
+                        </mat-form-field>
+                      </td>   -->
+                      
+                      <!-- <td>
+                        <button title="Work Completed"   class="btn-space custom" (click)="onCompletedButtonClick($event,unit)"><i class="fa fa-check"></i></button> 
+                      </td> -->
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+         </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
+
+
+ 

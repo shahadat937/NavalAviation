@@ -1,0 +1,478 @@
+<section class="content">
+    <div class="container-fluid">
+      <div class="block-header">
+        <div class="row">
+          <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+            <ul class="breadcrumb breadcrumb-style ">
+              <li class="breadcrumb-item">
+                <h4 class="page-title">{{pageTitle}}</h4>
+              </li>
+              <li class="breadcrumb-item bcrumb-1">
+                <a routerLink="/admin/dashboard/main"><i class="fas fa-home"></i></a>
+              </li>
+              <li class="breadcrumb-item bcrumb-2">
+                <a href="#" onClick="return false;">Item Store</a>
+              </li>
+              <li class="breadcrumb-item active">{{destination}}</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="row clearfix">
+        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+          <div class="card">
+            <div class="body">
+              <div class="row store-item ">
+                <div class="col-xl-2 col-lg-2 col-md-2 store-menu-item">
+                  <a href="/#/spares-management/add-itemstor-main-equ">Main Equipment</a>
+                </div>
+                <div class="col-xl-2 col-lg-2 col-md-2 store-menu-item">
+                  <a href="/#/spares-management/add-itemstor-spares">Spares</a>
+                </div>
+                <div class="col-xl-2 col-lg-2 col-md-2 store-menu-item">
+                  <a href="/#/spares-management/add-itemstor-consumble">Consumble</a>
+                </div>
+                <div class="col-xl-2 col-lg-2 col-md-2 store-menu-item active">
+                  <a href="/#/spares-management/add-itemstor-returnable">Returnable</a>
+                </div>
+                <div class="col-xl-2 col-lg-2 col-md-2 store-menu-item">
+                  <a href="/#/spares-management/add-itemstor-lifelimititem">Life Limit Item</a>
+                </div>
+                <div class="col-xl-2 col-lg-2 col-md-2 store-menu-item">
+                  <a href="/#/spares-management/add-itemstor-misc">Misc</a>
+                </div>
+              </div>
+              
+              <form class="m-4" [formGroup]="ItemStorForm" (ngSubmit)="onSubmit()">
+                <div class="row exam-mark store-entry">
+                  <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                    <div class="row left-row">
+                      <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-2">
+                        <mat-form-field class="example-full-width mb-3" appearance="outline">
+                            <mat-label>Flight Line/Squadron </mat-label>                        
+                            <mat-select formControlName="departmentNameId" (selectionChange)="getselectedAcceptence()"  required>
+                              <mat-option  value="0">--Select--</mat-option >
+                                <mat-option *ngFor="let dropdown of selectedDepartmentNames" [value]="dropdown.value">
+                                    {{dropdown.text}}  
+                                  </mat-option>                          
+                            </mat-select>
+                            <mat-error *ngIf="ItemStorForm.get('departmentNameId').hasError('required')">
+                              Flight Line/Squadron  is Required!
+                            </mat-error>
+                        </mat-form-field>
+                      </div>
+                      <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-2">
+                        <mat-form-field class="example-full-width mb-3" appearance="outline">
+                          <mat-label>Part No</mat-label>                        
+                          <mat-select formControlName="acceptanceId" (selectionChange)="getAcceptanceData()" required>
+                            <mat-option  value="0">--Select--</mat-option >
+                              <mat-option *ngFor="let dropdown of selectedPartNo" [value]="dropdown.value">
+                                  {{dropdown.text}} 
+                                </mat-option>                          
+                          </mat-select>
+                          <mat-error *ngIf="ItemStorForm.get('acceptanceId').hasError('required')">
+                            item Detail  is Required!
+                          </mat-error>
+                        </mat-form-field>
+                      </div>
+                    </div>
+                  </div> 
+                  <div *ngIf="isShown" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2 sft-entry">
+                    <div class="row">
+                      <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-2">
+                        <div class="row">
+                          <div class="container col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2 mt-2 sticky-table ex-mrk-li">
+                            
+                            <h4 class="align-center">Procurement Information</h4>
+                            <mat-table  #table [dataSource]="procurementData" matSort class="mat-cell ex-mrk-lft-tbl">                                  
+                              <ng-container matColumnDef="sl">
+                                <mat-header-cell *matHeaderCellDef mat-sort-header> Ser. </mat-header-cell>
+                                <mat-cell *matCellDef="let element; let i = index;"> {{ ((paging.pageIndex-1) *  paging.pageSize) + i+1}} </mat-cell>
+                              </ng-container>
+
+                              <ng-container matColumnDef="tenderNumber">
+                                <mat-header-cell *matHeaderCellDef mat-sort-header> Tender No</mat-header-cell>
+                                <mat-cell *matCellDef="let element">{{element.tenderNumber}}
+                              </mat-cell>
+                              </ng-container>
+
+                              <ng-container matColumnDef="dateOfDelivery">
+                                <mat-header-cell *matHeaderCellDef mat-sort-header>Delivery</mat-header-cell>
+                                <mat-cell *matCellDef="let element">{{element.dateOfDelivery | date:'dd/MMM/yyyy'}}
+                              </mat-cell>
+                              </ng-container>
+
+                              <ng-container matColumnDef="dateOfTenderFloat">
+                                <mat-header-cell *matHeaderCellDef mat-sort-header>Float Date</mat-header-cell>
+                                <mat-cell *matCellDef="let element">{{element.dateOfTenderFloat | date:'dd/MMM/yyyy'}} 
+                                </mat-cell>
+                              </ng-container>
+
+                              <ng-container matColumnDef="cstTec">
+                                <mat-header-cell *matHeaderCellDef mat-sort-header> CST / TEC</mat-header-cell>
+                                <mat-cell *matCellDef="let element">{{element.cstTec}} 
+                                </mat-cell>
+                              </ng-container>
+
+                              <ng-container matColumnDef="qty">
+                                <mat-header-cell *matHeaderCellDef mat-sort-header>Qty</mat-header-cell>
+                                <mat-cell *matCellDef="let element">{{element.qty}} 
+                                </mat-cell>
+                              </ng-container>
+
+                              <mat-header-row *matHeaderRowDef="procurementColumns"></mat-header-row>
+                              <mat-row *matRowDef="let row; columns: procurementColumns;"></mat-row> 
+                            </mat-table>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-2">
+                        <div class="row">
+                          <div   class="container col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2 mt-2 sticky-table ex-mrk-li">
+                            <h4 class="align-center">SFT </h4>
+                          <mat-table  #table [dataSource]="acceptanceData" matSort class="mat-cell ex-mrk-lft-tbl">  
+                            
+                            <ng-container matColumnDef="sl">
+                              <mat-header-cell *matHeaderCellDef mat-sort-header> Ser. </mat-header-cell>
+                              <mat-cell *matCellDef="let element; let i = index;"> {{ ((paging.pageIndex-1) *  paging.pageSize) + i+1}} </mat-cell>
+                            </ng-container>
+
+                            <ng-container matColumnDef="itemDetail">
+                              <mat-header-cell *matHeaderCellDef mat-sort-header> Part No </mat-header-cell>
+                              <mat-cell *matCellDef="let element"> {{element.itemDetail}} </mat-cell>
+                            </ng-container> 
+                            <ng-container matColumnDef="sftQty">
+                              <mat-header-cell *matHeaderCellDef mat-sort-header>Qty</mat-header-cell>
+                              <mat-cell *matCellDef="let element"> {{element.sftQty}} </mat-cell>
+                            </ng-container>  
+                            <ng-container matColumnDef="storeQty">
+                              <mat-header-cell *matHeaderCellDef mat-sort-header>Store Qty</mat-header-cell>
+                              <mat-cell *matCellDef="let element"> {{element.storeQty}} </mat-cell>
+                            </ng-container>        
+                            <ng-container matColumnDef="demandDate">
+                              <mat-header-cell *matHeaderCellDef mat-sort-header> Demand Date </mat-header-cell>
+                              <mat-cell *matCellDef="let element"> {{element.demandDate | date:'dd/MMM/yyyy'}} </mat-cell>
+                            </ng-container>
+                            <ng-container matColumnDef="deliveryDate">
+                              <mat-header-cell *matHeaderCellDef mat-sort-header>Delivery Date</mat-header-cell>
+                              <mat-cell *matCellDef="let element"> {{element.deliveryDate | date:'dd/MMM/yyyy'}} </mat-cell>
+                            </ng-container> 
+                            <ng-container matColumnDef="outerLatterNo">
+                              <mat-header-cell *matHeaderCellDef mat-sort-header> Outer Latter </mat-header-cell>
+                              <mat-cell *matCellDef="let element"> {{element.outerLatterNo}} </mat-cell>
+                            </ng-container> 
+
+                            <mat-header-row *matHeaderRowDef="sftColumns"></mat-header-row>
+                            <mat-row *matRowDef="let row; columns: sftColumns;"></mat-row> 
+                          </mat-table>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                    <div class="row item-store-form-row">
+                      <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 mb-2">
+                        <mat-form-field class="example-full-width mb-3" appearance="outline">
+                            <mat-label>Qty Entry Type</mat-label>                        
+                            <mat-select formControlName="qtyEntryType" required>
+                                <mat-option [value]="1">All</mat-option>
+                                <mat-option [value]="2">Indevidual</mat-option>
+                            </mat-select>
+                            <mat-error *ngIf="ItemStorForm.get('qtyEntryType').hasError('required')">
+                              Qty Entry Type is Required!
+                            </mat-error>
+                        </mat-form-field>
+                      </div>
+                      <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 mb-2">
+                        <mat-form-field class="example-full-width mb-3" appearance="outline">
+                          <mat-label>Item Ser No</mat-label>
+                          <input matInput formControlName="itemSerNo" required>
+                          <mat-error *ngIf="ItemStorForm.get('itemSerNo').hasError('required')">
+                            item Ser No is required
+                          </mat-error>
+                        </mat-form-field>
+                      </div>
+  
+                      
+                      <!-- <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 mb-2">
+                        <mat-form-field class="example-full-width mb-3" appearance="outline">
+                            <mat-label>Deno</mat-label>                        
+                            <mat-select formControlName="denoId" required>
+                                <mat-option *ngFor="let dropdown of selectedDeno" [value]="dropdown.value">
+                                    {{dropdown.text}} 
+                                  </mat-option>                          
+                            </mat-select>
+                            <mat-error *ngIf="ItemStorForm.get('denoId').hasError('required')">
+                              deno is Required!
+                            </mat-error>
+                        </mat-form-field>
+                      </div> -->
+                      
+  
+                      <!-- <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 mb-2">
+                        <mat-form-field class="example-full-width mb-3" appearance="outline">
+                          <mat-label>Received Qty</mat-label>
+                          <input matInput formControlName="totalReceivedQty" required>
+                          <mat-error *ngIf="ItemStorForm.get('totalReceivedQty').hasError('required')">
+                            Received Qty is required
+                          </mat-error>
+                        </mat-form-field>
+                      </div> -->
+                      <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 mb-2">
+                        <mat-form-field class="example-full-width mb-3" appearance="outline">
+                            <mat-label>Acct Store</mat-label>                        
+                            <mat-select formControlName="acctStoreId" required>
+                                <mat-option *ngFor="let dropdown of selectedAcctStore" [value]="dropdown.value">
+                                    {{dropdown.text}} 
+                                  </mat-option>                          
+                            </mat-select>
+                            <mat-error *ngIf="ItemStorForm.get('acctStoreId').hasError('required')">
+                              Acct Store is Required!
+                            </mat-error>
+                        </mat-form-field>
+                      </div>
+  
+                      <!-- <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 mb-2">
+                        <mat-form-field class="example-full-width mb-3" appearance="outline">
+                          <mat-label>Location</mat-label>
+                          <input matInput formControlName="location" required>
+                          <mat-error *ngIf="ItemStorForm.get('location').hasError('required')">
+                            location is required
+                          </mat-error>
+                        </mat-form-field>
+                      </div> -->
+  
+                      
+                      <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 mb-2">
+                        <mat-form-field class="example-full-width mb-3" appearance="outline">
+                          <mat-label>Accessories (If Any)</mat-label>
+                          <input matInput formControlName="accessories" >
+                        </mat-form-field>
+                      </div>
+                      
+                      <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 mb-2">
+                        <mat-form-field class="example-full-width mb-3" appearance="outline">
+                          <mat-label>Shalf Life</mat-label>
+                          <input matInput formControlName="shelfLife" required>
+                          <mat-error *ngIf="ItemStorForm.get('shelfLife').hasError('required')">
+                            shalf Life is required
+                          </mat-error>
+                        </mat-form-field>
+                      </div>
+                      <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 mb-2">
+                        <mat-form-field class="example-full-width mb-3" appearance="outline">
+                          <mat-label>End Of Shalf Life</mat-label>
+                          <input matInput formControlName="endShalfLife" required>
+                          <mat-error *ngIf="ItemStorForm.get('endShalfLife').hasError('required')">
+                            End Of Shalf Life is required
+                          </mat-error>
+                        </mat-form-field>
+                      </div>
+                      <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 mb-2">
+                        <mat-form-field class="example-full-width mb-3" appearance="outline">
+                            <mat-label>Overhauling Type</mat-label>                        
+                            <mat-select formControlName="overhaulingTypeId" required>
+                                <mat-option *ngFor="let dropdown of selectedOverhaulingTypes" [value]="dropdown.value">
+                                    {{dropdown.text}} 
+                                  </mat-option>                          
+                            </mat-select>
+                            <mat-error *ngIf="ItemStorForm.get('overhaulingTypeId').hasError('required')">
+                              Overhauling Type is Required!
+                            </mat-error>
+                        </mat-form-field>
+                      </div>
+  
+                      
+                      <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 mb-2">
+                        <mat-form-field class="example-full-width mb-3" appearance="outline">
+                          <mat-label>Warranty Start Date</mat-label>
+                            <input matInput [matDatepicker]="frompicker" formControlName="warrantyStartDate" >
+                            <mat-datepicker-toggle matSuffix [for]="frompicker"></mat-datepicker-toggle>
+                          <mat-datepicker #frompicker></mat-datepicker>                                            
+                        </mat-form-field>
+                      </div>
+                      <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 mb-2">
+                        <mat-form-field class="example-full-width mb-3" appearance="outline">
+                          <mat-label>Warranty End Date</mat-label>
+                            <input matInput [matDatepicker]="endpicker" formControlName="warrantyEndDate" >
+                            <mat-datepicker-toggle matSuffix [for]="endpicker"></mat-datepicker-toggle>
+                          <mat-datepicker #endpicker></mat-datepicker>                                            
+                        </mat-form-field>
+                      </div>
+                      <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 mb-2">
+                        <mat-form-field class="example-full-width mb-3" appearance="outline">
+                          <mat-label>Item Received Date</mat-label>
+                            <input matInput [matDatepicker]="repicker" formControlName="itemReceivedDate" >
+                            <mat-datepicker-toggle matSuffix [for]="repicker"></mat-datepicker-toggle>
+                          <mat-datepicker #repicker></mat-datepicker>                                            
+                        </mat-form-field>
+                      </div>
+                      <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 mb-2">
+                        <mat-form-field class="example-full-width mb-3" appearance="outline">
+                            <mat-label>Service Life Type</mat-label>                        
+                            <mat-select formControlName="serviceLifeTypeId" required>
+                              <mat-option  value="0">--Select--</mat-option >
+                                <mat-option *ngFor="let dropdown of selectedServiceLifeType" [value]="dropdown.value">
+                                    {{dropdown.text}} 
+                                  </mat-option>                          
+                            </mat-select>
+                            <mat-error *ngIf="ItemStorForm.get('serviceLifeTypeId').hasError('required')">
+                              Service Life Type is Required!
+                            </mat-error>
+                        </mat-form-field>
+                      </div>
+                      <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 mb-2">
+                        <mat-form-field class="example-full-width mb-3" appearance="outline">
+                          <mat-label>Service Life</mat-label>
+                          <input matInput formControlName="serviceLife" required>
+                          <mat-error *ngIf="ItemStorForm.get('serviceLife').hasError('required')">
+                            Service Life is required
+                          </mat-error>
+                        </mat-form-field>
+                      </div>
+                      <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 mb-2">
+                        <mat-form-field class="example-full-width mb-3" appearance="outline">
+                            <mat-label>Expir Duration</mat-label>                        
+                            <mat-select formControlName="endLifeTypeId" required>
+                              <mat-option  value="0">--Select--</mat-option >
+                                <mat-option *ngFor="let dropdown of selectedEndLifeType" [value]="dropdown.value">
+                                    {{dropdown.text}} 
+                                  </mat-option>                          
+                            </mat-select>
+                            <mat-error *ngIf="ItemStorForm.get('endLifeTypeId').hasError('required')">
+                              Expir Duration is Required!
+                            </mat-error>
+                        </mat-form-field>
+                      </div>
+                      <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 mb-2">
+                        <mat-form-field class="example-full-width mb-3" appearance="outline">
+                          <mat-label>End Life Time</mat-label>
+                          <input matInput formControlName="endLifeTime" required>
+                          <mat-error *ngIf="ItemStorForm.get('endLifeTime').hasError('required')">
+                            endLifeTime is required
+                          </mat-error>
+                        </mat-form-field>
+                      </div>
+                      <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 mb-2">
+                        <mat-form-field class="example-full-width mb-3" appearance="outline">
+                          <mat-label>Stock Register Page No</mat-label>
+                          <input matInput formControlName="stockRegisterPageNo" required>
+                          <mat-error *ngIf="ItemStorForm.get('stockRegisterPageNo').hasError('required')">
+                            Stock Register Page No is required
+                          </mat-error>
+                        </mat-form-field>
+                      </div>
+  
+                      <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 mb-2">
+                        <mat-form-field class="example-full-width mb-3" appearance="outline">
+                          <mat-label>remarks</mat-label>
+                          <textarea matInput formControlName="remarks" ></textarea>
+                        </mat-form-field>
+                      </div>
+  
+                      
+                    </div>
+                  </div>
+                  
+                  
+                </div>
+                <div class="row">
+                  <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                    <button class="btn-space" [disabled]="!ItemStorForm.valid " mat-raised-button
+                      color="primary">{{btnText}}</button>
+                    <!-- <button type="button" mat-button routerLink="/spares-management/itemstor-list">Cancel</button> -->
+                  </div>
+                </div>
+              </form>
+
+              <div class="responsive_table">
+                <div class="materialTableHeader">
+                  <div class="row">
+                    <div class="col-8">
+                      <ul class="header-buttons-left ml-0">
+                        
+                        <li class="dropdown">
+                          <input placeholder="Search" type="text" [(ngModel)]="searchText"  #filter class="browser-default search-field"
+                            aria-label="Search box">
+                        </li>
+                        <li>
+                          <div class="icon-button-demo m-l-10">
+                            <button mat-mini-fab (click)="applyFilter(searchText)" color="primary">Go
+                              <!-- <mat-icon class="col-white">search</mat-icon> -->
+                            </button>
+                          </div>
+                        </li>
+                      </ul>
+                    </div>
+                    <div class="col-4">
+                      <ul class="header-buttons">
+                        <li>
+                          <!-- <div class="icon-button-demo">
+                            <button class="btn-space"  mat-raised-button
+                            color="primary" routerLink="/spares-management/add-itemstor"> Add
+                              <mat-icon class="col-white">add</mat-icon>
+                            </button>
+                          </div> -->
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+                <mat-table #table [dataSource]="dataSource" matSort class="mat-cell">
+                  <ng-container matColumnDef="ser">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header> Ser. </mat-header-cell>
+                    <mat-cell *matCellDef="let element; let i = index;"> {{ ((paging.pageIndex-1) *  paging.pageSize) + i+1}} </mat-cell>
+                  </ng-container> 
+                  <ng-container matColumnDef="partNo">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header> Part No & Item Name </mat-header-cell>
+                    <mat-cell *matCellDef="let element"> <span>{{element.partNo}} - {{element.nameOfItem}} </span> </mat-cell>
+                  </ng-container> 
+                  <ng-container matColumnDef="itemSerNo">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header> Item Ser No </mat-header-cell>
+                    <mat-cell *matCellDef="let element"> {{element.itemSerNo}} </mat-cell>
+                  </ng-container> 
+                  <ng-container matColumnDef="warrantyStartDate">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header> Warranty Start Date</mat-header-cell>
+                    <mat-cell *matCellDef="let element"> {{element.warrantyStartDate | date:'dd/MMM/yyyy'}} </mat-cell>
+                  </ng-container>   
+                  <ng-container matColumnDef="warrantyEndDate">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header> Warranty End Date</mat-header-cell>
+                    <mat-cell *matCellDef="let element"> {{element.warrantyEndDate | date:'dd/MMM/yyyy'}} </mat-cell>
+                  </ng-container> 
+                  <ng-container matColumnDef="itemReceivedDate">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header> Warranty Received Date</mat-header-cell>
+                    <mat-cell *matCellDef="let element"> {{element.itemReceivedDate | date:'dd/MMM/yyyy'}} </mat-cell>
+                  </ng-container> 
+                  
+                  <ng-container matColumnDef="actions">
+                    <mat-header-cell *matHeaderCellDef class="pr-0">Actions</mat-header-cell>
+                    <mat-cell *matCellDef="let row; let i=index;" class="pr-0">
+                      <button mat-icon-button color="accent" class="btn-tbl-edit" 
+                      [routerLink]="['/spares-management/update-itemstor-returnable', row.itemStorId]">
+                        <mat-icon aria-label="Edit" class="col-white">edit</mat-icon>
+                      </button>
+                      <button mat-icon-button color="accent" class="btn-tbl-delete" (click)="$event.stopPropagation()"
+                        (click)="deleteItem(row)">
+                        <mat-icon aria-label="Delete" class="col-white">delete</mat-icon> 
+                      </button>
+                    </mat-cell>
+                  </ng-container>
+                
+                  
+                  <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                  <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+                </mat-table>
+                
+                <mat-paginator [length]="paging.length" [showFirstLastButtons]="masterData.paging.showFirstLastButtons"
+                  [pageSize]="paging.pageSize" [pageSizeOptions]="masterData.paging.pageSizeOptions"
+                  (page)="pageChanged($event)">
+                </mat-paginator>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  

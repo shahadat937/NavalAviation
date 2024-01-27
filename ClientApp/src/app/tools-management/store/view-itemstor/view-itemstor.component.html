@@ -1,0 +1,109 @@
+<section class="content">
+  <div class="container-fluid">
+    <div class="block-header">
+      <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+          <ul class="breadcrumb breadcrumb-style ">
+            <li class="breadcrumb-item">
+            </li>
+            <li class="breadcrumb-item bcrumb-1">
+              <a routerLink="/admin/dashboard/main"><i class="fas fa-home"></i></a>
+            </li>
+            <li class="breadcrumb-item bcrumb-2">
+              <a href="#" onClick="return false;">Store Details</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="row clearfix">
+      <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+        <div class="card">
+          <div class="body">
+
+            <div class="responsive_table">
+              <div class="materialTableHeader">
+                <div class="row"> 
+                  <div class="col-8">
+                    <ul class="header-buttons-left ml-0">
+                      <li class="dropdown">
+                        <h4>Store Details</h4>
+                      </li>
+                    </ul> 
+                  </div>
+                  <div class="col-4">
+                    <ul class="header-buttons">
+                      <li>
+                        <div class="icon-button-demo">
+                          <button class="btn-space"  mat-raised-button
+                          color="warn" [routerLink]="['/tools-management/add-toolstore']"> 
+                          <mat-icon class="col-white">keyboard_backspace</mat-icon> Back
+                          </button>
+                          <button class="btn-space"  mat-raised-button
+                          [routerLink]="['/tools-management/update-itemstors',this.itemStorId]"> Update
+                            <mat-icon class="col-white">Update</mat-icon>
+                          </button>
+                        </div>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+              <table class="table table-bordered">
+                <thead>
+                  
+                </thead>
+                <tbody>
+                  <tr>
+                    <th scope="row">Flight Line/Squadron </th>
+                    <td>{{departmentName}}</td>
+                    <th scope="row">Patt No</th>
+                    <td>{{partNo}}</td>
+                  </tr>
+                  <tr>
+                    <th scope="row">Name of Item</th>
+                    <td>{{nameOfItem}}</td>
+                    <th scope="row">Ser No</th>
+                    <td>{{itemSerNo}}</td>
+                  </tr>
+                  <tr>
+                    <th scope="row">Deno</th>
+                    <td>{{deno}}</td>
+                    <th scope="row">Qty</th>
+                    <td>{{totalReceivedQty}}</td>
+                  </tr>
+                  <tr>
+                    <th scope="row"> Type of Item</th>
+                    <td>{{sparesCategory}}</td>
+                    <th scope="row">Condition</th>
+                    <td>{{condition}}</td>
+                  </tr>
+                  <tr>
+                    <th scope="row">Location</th>
+                    <td>{{toolsLocation }}</td>
+                    <th scope="row">IMC No</th>
+                    <td>{{icmNo}}</td>
+                  </tr>
+                  <tr>
+                    <th scope="row">Manufacturing Date</th>
+                    <td>{{manufacturingDate | date:'dd/MMM/yyyy'}}</td>
+                    <th scope="row">Life Limit</th>
+                    <td>{{lifeLimitItem}}</td>
+                  </tr>
+                  <tr>
+                    <th scope="row">Life Limit Upto</th>
+                    <td>
+                      <span *ngIf="lifeLimitItem != 'N/A'">{{warrantyEndDate | date:'dd/MMM/yyyy'}}</span>
+                    </td>
+                    <th scope="row">Document</th>
+                    <td class="otherDoc" > <img src={{otherDoc}} /></td>
+                  </tr>
+                </tbody>
+              </table>          
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

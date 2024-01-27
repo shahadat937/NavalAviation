@@ -1,0 +1,105 @@
+<!-- <section class="content">
+  <div class="container-fluid">
+    <div class="block-header">
+      <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+          <ul class="breadcrumb breadcrumb-style ">
+            <li class="breadcrumb-item">
+              <h4 class="page-title">Demand</h4>
+            </li>
+            <li class="breadcrumb-item bcrumb-1">
+              <a routerLink="/admin/dashboard/main">
+                <i class="fas fa-home"></i> </a>
+            </li>
+            <li class="breadcrumb-item bcrumb-2">
+              <a href="#" onClick="return false;">Demand</a>
+            </li>
+            <li class="breadcrumb-item active">All</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+        <div class="card">
+          <div class="body">
+            <div class="responsive_table">
+              <div class="row dash-cd-m-0">
+                <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 div-class div-left">
+
+                  <h3>Spares View - <span class="count-color"> {{StatusByDeptName}} ( {{CountStatus}} ) </span></h3>
+                </div>
+                <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 div-class div-right">
+                  <div class="dialog m-b-10">
+                    <button class="all" (click)="StatusByDept(masterData.department.all, 'All')"
+                      mat-raised-button>All</button> |
+                    <button color="accent" (click)="StatusByDept(masterData.department.mpa, 'MPA')"
+                      mat-raised-button>MPA</button> |
+                    <button color="primary" (click)="StatusByDept(masterData.department.hel, 'HEL')"
+                      mat-raised-button>HEL</button> |
+                    <button color="warn" (click)="StatusByDept(masterData.department.uav, 'UAV')"
+                      mat-raised-button>UAV</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <mat-table #table [dataSource]="StatusList" matSort
+                class="mat-cell  db-tbl db-avl-qty-tbl content-center-align">
+                <ng-container matColumnDef="ser">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header> Ser. </mat-header-cell>
+                  <mat-cell *matCellDef="let element; let i = index;"> {{ ((paging.pageIndex-1) * paging.pageSize) +
+                    i+1}} </mat-cell>
+                </ng-container>
+                <ng-container matColumnDef="demandNo">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header> Demand No </mat-header-cell>
+                  <mat-cell *matCellDef="let element"> {{element.demandNo}} </mat-cell>
+                </ng-container>
+                <ng-container matColumnDef="partNo">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header> Part No </mat-header-cell>
+                  <mat-cell *matCellDef="let element"> {{element.partNo}} </mat-cell>
+                </ng-container>
+                <ng-container matColumnDef="demandCompleteStatus">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header> Demand Status </mat-header-cell>
+                  <mat-cell *matCellDef="let element">
+                    <div *ngIf="element.demandCompleteStatus === 1;else demandCompleteStatus">
+                      <span class="att-completed">Completed</span>
+                    </div>
+                    <ng-template #demandCompleteStatus><span class="att-due">Due</span> </ng-template>
+                  </mat-cell>
+                </ng-container>
+                <ng-container matColumnDef="nameOfItem">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header> Item Name</mat-header-cell>
+                  <mat-cell *matCellDef="let element"> {{element.nameOfItem}} </mat-cell>
+                </ng-container>
+                <ng-container matColumnDef="procurementCompleteStatus">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header> Procurement Status </mat-header-cell>
+                  <mat-cell *matCellDef="let element">
+                    <div *ngIf="element.procurementCompleteStatus === 1; else procurementCompleteStatus">
+                      <span class="att-completed">Completed</span>
+                    </div>
+                    <ng-template #procurementCompleteStatus><span class="att-due">Due</span> </ng-template>
+                  </mat-cell>
+                </ng-container>
+                <ng-container matColumnDef="sftStatus">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header> SFT Status </mat-header-cell>
+                  <mat-cell *matCellDef="let element">
+                    <div *ngIf="element.sftStatus === 1;else sftStatus">
+                      <span class="att-completed">Completed</span>
+                    </div>
+                    <ng-template #sftStatus><span class="att-due">Due</span> </ng-template>
+                  </mat-cell>
+                </ng-container>
+
+                <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+              </mat-table>
+            </div>
+
+            
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section> -->

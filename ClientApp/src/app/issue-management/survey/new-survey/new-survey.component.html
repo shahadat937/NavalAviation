@@ -1,0 +1,205 @@
+<section class="content">
+  <div class="container-fluid">
+    <div class="block-header">
+      <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+          <ul class="breadcrumb breadcrumb-style ">
+            <li class="breadcrumb-item">
+              <h4 class="page-title">{{pageTitle}}</h4>
+            </li>
+            <li class="breadcrumb-item bcrumb-1">
+              <a routerLink="/admin/dashboard/main"><i class="fas fa-home"></i></a>
+            </li>
+            <li class="breadcrumb-item bcrumb-2">
+              <a href="#" onClick="return false;">Equipment Name</a>
+            </li>
+            <li class="breadcrumb-item active">{{destination}}</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="row clearfix">
+      <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+        <div class="card">
+          <div class="body">
+            <form class="m-4" [formGroup]="SurveyForm" (ngSubmit)="onSubmit()">
+              <div class="row">
+
+                <div *ngIf="role == userRole.SuperAdmin" class="col-xl-4 col-lg-4 col-md-4 col-sm-12 mb-2">
+                  <mat-form-field class="example-full-width mb-3" appearance="outline">
+                    <mat-label>Flight Line/Squadron </mat-label>
+                    <mat-select formControlName="departmentNameId" required (selectionChange)="onSurveyListByDepartmentNameSelectionChange()">
+                      <mat-option  *ngFor="let dropdown of departmentName" [value]="dropdown.value">
+                        {{dropdown.text}}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+                <!-- <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 mb-2">
+                  <mat-form-field class="example-full-width mb-3" appearance="outline">
+                    <mat-label>Item Name </mat-label>
+                    <mat-select formControlName="issueRegisterId" (selectionChange)="onItemNameSelectionChange()" required>
+                      <mat-option  *ngFor="let dropdown of itemName" [value]="dropdown.value">
+                        {{dropdown.text}}
+                      </mat-option>
+                    </mat-select>
+                    <mat-error *ngIf="SurveyForm.get('issueRegisterId').hasError('required')">
+                      Item Name is required
+                    </mat-error>
+                  </mat-form-field>
+                </div> -->
+                <div class="col-xl-4 col-lg-4 col-md-6 col-sm-12 mb-2">
+                  <mat-form-field
+                    class="example-full-width mb-3"
+                    appearance="outline"
+                  >
+                    <mat-label>Item Name</mat-label>
+                    <input
+                      formControlName="nameOfItem" 
+                      required
+                      matInput
+                      type="text"
+                      [matAutocomplete]="auto1"
+                    />
+                    <mat-autocomplete #auto1="matAutocomplete">
+                      <mat-option
+                        *ngFor="let item of filteredOptions"
+                        [value]="item"
+                        (onSelectionChange)="onPartNoSelectionChanged(item)"
+                      >
+                        {{ item.text }}
+                      </mat-option>
+                    </mat-autocomplete>
+                    <mat-error
+                      *ngIf="
+                      SurveyForm.get('nameOfItem').hasError('required')
+                      "
+                    >
+                      Patt No is required
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+                <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 mb-2">
+                  <h5 class="b-t-8">IMC No: <span class="c-color">{{imcNumber}}</span> </h5>
+                </div>
+                <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 mb-2">
+                  <mat-form-field class="example-full-width mb-3" appearance="outline">
+                    <mat-label>Survey Qty</mat-label>
+                    <input matInput formControlName="surveyQty" required>
+                    <mat-error *ngIf="SurveyForm.get('surveyQty').hasError('required')">
+                      surveyQty is required
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+                <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 mb-2">
+                  <mat-form-field class="example-full-width mb-3" appearance="outline">
+                    <mat-label>Survey Number</mat-label>
+                    <input matInput formControlName="surveyNumber" required>
+                    <mat-error *ngIf="SurveyForm.get('surveyNumber').hasError('required')">
+                      Survey Number is required
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+                <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 mb-2">
+                  <mat-form-field
+                    class="example-full-width mb-3"
+                    appearance="outline"
+                  >
+                    <mat-label>Survey Date</mat-label>
+                    <input
+                      matInput
+                      [matDatepicker]="dateOfTenderFloatpicker"
+                      formControlName="surveyDate"
+                      required
+                    />
+                    <mat-datepicker-toggle
+                      matSuffix
+                      [for]="dateOfTenderFloatpicker"
+                    ></mat-datepicker-toggle>
+                    <mat-datepicker
+                      #dateOfTenderFloatpicker
+                    ></mat-datepicker>
+                    <mat-error *ngIf="SurveyForm.get('surveyDate').hasError('required')">
+                      Survey Date is required
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+
+                <!-- <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 mb-2">
+                  <mat-form-field class="example-full-width mb-3" appearance="outline">
+                    <mat-label>Remarks</mat-label>
+                    <input matInput formControlName="remarks">
+                  </mat-form-field>
+                </div> -->
+               
+
+              </div>
+              <div class="row">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                  <button class="btn-space" [disabled]="!SurveyForm.valid " mat-raised-button
+                    color="primary">{{btnText}}</button>
+                  <!-- <button type="button" mat-button routerLink="/basic-setup/aircraftname-list">Cancel</button> -->
+                </div>
+              </div>
+            </form>
+            <div *ngIf="isShown" class="row create-table db-tbl cls-rtn">
+              <h3 class="text-center table-title">Equipment Name List </h3>
+              <div class="container">
+                <mat-table #table [dataSource]="surveyList" matSort class="mat-cell">
+                  <ng-container matColumnDef="ser">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header> Ser. </mat-header-cell>
+                    <mat-cell *matCellDef="let element; let i = index;"> {{ ((paging.pageIndex-1) * paging.pageSize) +
+                      i+1}} </mat-cell>
+                  </ng-container>
+
+                  <ng-container matColumnDef="departmentName">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header> Flight Line/Squadron </mat-header-cell>
+                    <mat-cell *matCellDef="let element"> {{element.departmentName}} </mat-cell>
+                  </ng-container>
+                  <ng-container matColumnDef="itemName">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header>  Item Name </mat-header-cell>
+                    <mat-cell *matCellDef="let element"> {{element.itemName}} </mat-cell>
+                  </ng-container>
+                  
+                  <ng-container matColumnDef="itemCategory">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header>Item Category </mat-header-cell>
+                    <mat-cell *matCellDef="let element"> {{element.itemCategory}} </mat-cell>
+                  </ng-container>
+                  <ng-container matColumnDef="surveyNumber">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header>Survey Number </mat-header-cell>
+                    <mat-cell *matCellDef="let element"> {{element.surveyNumber}} </mat-cell>
+                  </ng-container>
+                  <ng-container matColumnDef="surveyDate">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header>Survey Date </mat-header-cell>
+                    <mat-cell *matCellDef="let element"> {{element.surveyDate | date:'dd/MMM/yyyy'}} </mat-cell>
+                  </ng-container>
+  
+                  <ng-container matColumnDef="actions">
+                    <mat-header-cell *matHeaderCellDef class="pr-0">Actions</mat-header-cell>
+                    <mat-cell *matCellDef="let row; let i=index;" class="pr-0">
+                      <!-- <button mat-icon-button color="accent" class="btn-tbl-edit"
+                        [routerLink]="['/basic-setup/view-aircraftname',  row.equipmentNameId]">
+                        <mat-icon aria-label="Edit" class="col-white">visibility</mat-icon>
+                      </button> -->
+                      <button mat-icon-button color="accent" class="btn-tbl-edit"
+                        [routerLink]="['/issue-management/update-survey', row.surveyId]">
+                        <mat-icon aria-label="Edit" class="col-white">edit</mat-icon>
+                      </button>
+                      <button mat-icon-button color="accent" class="btn-tbl-delete" (click)="$event.stopPropagation()"
+                        (click)="deleteItem(row)">
+                        <mat-icon aria-label="Delete" class="col-white">delete</mat-icon>
+                      </button>
+                    </mat-cell>
+                  </ng-container>
+
+                  <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                  <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+                </mat-table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,255 @@
+<section class="content">
+  <div class="container-fluid">
+    <div class="block-header">
+      <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+          <ul class="breadcrumb breadcrumb-style">
+            <li class="breadcrumb-item">
+              <h4 class="page-title">Spares Inventory History</h4>
+            </li>
+            <li class="breadcrumb-item bcrumb-1">
+              <a routerLink="/admin/dashboard/main"
+                ><i class="fas fa-home"></i
+              ></a>
+            </li>
+            <li class="breadcrumb-item bcrumb-2">
+              <a href="#" onClick="return false;">Spares Inventory</a>
+            </li>
+            <li class="breadcrumb-item active">All</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="row clearfix">
+      <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+        <div class="card">
+          <div class="body">
+            <form
+              *ngIf="role != userRole.CO"
+              class="m-4"
+              [formGroup]="SearchForm"
+              (ngSubmit)="onSubmit()"
+            >
+              <div class="row">
+                <div
+                  *ngIf="role == userRole.SuperAdmin"
+                  class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-2"
+                >
+                  <mat-form-field
+                    class="example-full-width mb-3"
+                    appearance="outline"
+                  >
+                    <mat-label>Flight Line/Squadron </mat-label>
+                    <mat-select
+                      formControlName="departmentNameId"
+                      (selectionChange)="onDepartmentSelectionChange()"
+                    >
+                      <mat-option value="0">--Select--</mat-option>
+                      <mat-option
+                        *ngFor="let dropdown of selectedDepartmentName"
+                        [value]="dropdown.value"
+                      >
+                        {{ dropdown.text }}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+                <div
+                  *ngIf="role == userRole.SuperAdmin"
+                  class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-2"
+                ></div>
+
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-">
+                  <mat-form-field class="example-full-width mb-3" appearance="outline" >
+                    <mat-label>Patt No</mat-label>
+                    <input formControlName="part" matInput type="text" [matAutocomplete]="auto" required />
+                    <mat-autocomplete #auto="matAutocomplete">
+                      <mat-option *ngFor="let item of filteredOptions" [value]="item" (onSelectionChange)="onTraineeSelectionChanged(item)">
+                        {{ item.text }}
+                      </mat-option>
+                    </mat-autocomplete>
+                  </mat-form-field>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-2">
+                  <!-- <h5 class="m-t-20">
+                    Item Name : <span class="c-color">{{ itemValue }}</span>
+                  </h5> -->
+                </div>
+                
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div *ngIf="isShown" class="row">
+      <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+        <div class="card">
+          <div class="body">
+            <div class="responsive_table">
+              <div class="materialTableHeader auto">
+                <div class="row">
+                  <div class="col-8">
+                    <ul class="header-buttons-left ml-0"></ul>
+                  </div>
+                  <!-- <div class="col-4 in-p">
+                    <button
+                      class="btn-space"
+                      mat-raised-button
+                      color="primary"
+                      (click)="printSingle()"
+                    >
+                      <mat-icon class="col-white">print</mat-icon>
+                    </button>
+
+                  </div> -->
+                </div>
+                <div class="row">
+                  <div class="table-title">
+                    <h3>{{nameOfItem}}</h3>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-lg-6 col-md-6 col-sm-6">
+                    <h3 class="count-value">No of Items:  {{ itemCount }}</h3>
+                  </div>
+                  <div  class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <ul class="header-buttons-left right-align ml-0">
+                      <!-- <li><h5></h5></li> -->
+                      <!-- <li *ngIf="role == userRole.CO || role == userRole.SuperAdmin" class="dept-dropdown">
+                        <mat-select placeholder="Flight Line" class="browser-default dept-field" [(ngModel)]="departmentNameId" (selectionChange)="onDepartmentSelectionChange()">
+                          <mat-option selected value="0">--All--</mat-option>
+                          <mat-option
+                            *ngFor="let dropdown of selectedDepartmentName"
+                            [value]="dropdown.value"
+                          >
+                            {{ dropdown.text }}
+                          </mat-option>
+                        </mat-select>
+                      </li> -->
+                      <!-- <li><h5>Type Of Demand</h5></li> -->
+                      <!-- <li class="dept-dropdown">
+                        <mat-select
+                          placeholder="Type Of Demand"
+                          [(ngModel)]="demandTypeId"
+                          class="browser-default dept-field"
+                          required
+                        >
+                          <mat-option selected value="0">--Select--</mat-option>
+                          <mat-option
+                            *ngFor="let dropdown of selectedTypeOfDemandValue"
+                            [value]="dropdown.value"
+                          >
+                            {{ dropdown.text }}
+                          </mat-option>
+                        </mat-select>
+                      </li> -->
+                      <!-- <li class="dropdown">
+                        <input
+                          placeholder="Search"
+                          type="text"
+                          [(ngModel)]="searchText"
+                          #filter
+                          class="browser-default search-field custom-search"
+                          aria-label="Search box"
+                        />
+                      </li>
+                      <li>
+                        <div class="icon-button-demo m-l-10">
+                          <button
+                            mat-mini-fab
+                            (click)="applyDropdown()"
+                            color="primary"
+                          >Go
+                            <mat-icon class="col-white">search</mat-icon>
+                          </button>
+                        </div>
+                      </li> -->
+                    
+                      <li>
+                        <div
+                          class="col-xl-4 col-lg-4 col-md-4 col-sm-12 mb-2 db-p"
+                        >
+                          <button
+                            class="btn-space"
+                            mat-raised-button
+                            color="primary"
+                            (click)="printSingle()"
+                          >
+                            <mat-icon class="col-white">print</mat-icon>
+                          </button>
+                        </div>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+
+              <div id="print-routine">
+                <table class="table tbl-by-group db-li-s-in">
+                  <thead>
+                    <tr>
+                      <th ><h5>Item Ser No</h5></th>
+                      <th ><h5>SFT Date</h5></th>
+                      <!-- <th class="cl-nm-rnk"> <h5>Name of Item</h5> </th> -->
+                      <th class="cl-partno"><h5>Demand No (Date)</h5></th>
+                      <th ><h5>Condition</h5></th>
+                      <th ><h5>Supplier</h5></th>
+                      <th ><h5>Price</h5></th>
+                      <!-- <th class="cl-itemname"> <h5>Tender No</h5> </th>
+                      <th class="cl-trade"><h5>Work Order No</h5></th>                       -->
+                      <th class="cl-trade"><h5>Documents</h5></th>                      
+                  </thead>
+                  <tbody>
+                    <ng-container>
+                      <tr *ngFor="let number of itemDetailByDepartmentId">
+                        <td class="cl-trade">{{ number.itemserno }}</td>
+                        <td class="cl-trade">{{ number.sftdate | date: "dd/MMM/yyyy"}}</td>
+                        <!-- <td class="cl-partno">{{ number.nameofitem }}</td> -->
+                        <td class="cl-itemname">{{ number.demandno }} ( {{number.demanddate | date: "dd/MMM/yyyy"}} )</td>
+                        <td class="cl-trade">{{ number.itemCondition }}</td>
+                        <td class="cl-trade">{{ number.companyname }}</td>
+                        <td class="cl-trade">{{ number.purchaseprice }}</td>
+                        <!-- <td class="cl-trade">{{ number.tenderNumber }}</td>
+                        <td>{{ number.workorderno }}</td> -->
+                        <td>
+                          <a target="_blank" [href]="'/Content/'+number.demandLetterNo">
+                            <i *ngIf="number.demandLetterNo != 'http://192.168.8.102:8030/Content/files/demand/'" matTooltip="Documents" class="far fa-file-pdf tbl-pdf" ></i>
+                          </a>
+                          |
+                          <a target="_blank" [href]="'/Content/'+number.specDoc">
+                            <i *ngIf="number.specDoc != 'http://192.168.8.102:8030/Content/files/demand/'" matTooltip="Technical Spec" class="far fa-file-pdf tbl-pdf" ></i>
+                          </a>
+                          |
+                          <a target="_blank" [href]="'/Content/'+number.tenderSpecification">
+                            <i *ngIf="number.tenderSpecification != 'http://192.168.8.102:8030/Content/files/procurements/'" matTooltip="Attach Doc" class="far fa-file-pdf tbl-pdf" ></i>
+                          </a>
+                          |
+                          <a target="_blank" [href]="'/Content/'+number.tenderNotice">
+                            <i *ngIf="number.tenderNotice != 'http://192.168.8.102:8030/Content/files/procurements/'" matTooltip="Attach CST" class="far fa-file-pdf tbl-pdf" ></i>
+                          </a>
+                          |
+                          <a target="_blank" [href]="'/Content/'+number.procurementDocument">
+                            <i *ngIf="number.procurementDocument != 'http://192.168.8.102:8030/Content/files/procurements/'" matTooltip="Attach Purchase Order Doc" class="far fa-file-pdf tbl-pdf" ></i>
+                          </a>
+                          |
+                          <a target="_blank" [href]="'/Content/'+number.acceptanceDocument">
+                            <i *ngIf="number.acceptanceDocument != 'http://192.168.8.102:8030/Content/files/acceptances/'" matTooltip="SFT Document" class="far fa-file-pdf tbl-pdf" ></i>
+                          </a>
+                        </td>
+                      </tr>
+                    </ng-container>
+                  </tbody>
+                </table>
+              </div>
+              <!-- <mat-paginator [length]="paging.length" [showFirstLastButtons]="masterData.paging.showFirstLastButtons"
+                [pageSize]="paging.pageSize" [pageSizeOptions]="masterData.paging.pageSizeOptions"
+                (page)="pageChanged($event)">
+              </mat-paginator> -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,423 @@
+<section class="content">
+  <div class="container-fluid">
+    <div class="block-header">
+      <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+          <ul class="breadcrumb breadcrumb-style">
+            <li class="breadcrumb-item">
+              <h4 class="page-title">{{ pageTitle }}</h4>
+            </li>
+            <li class="breadcrumb-item bcrumb-1">
+              <a routerLink="/admin/dashboard/main"
+                ><i class="fas fa-home"></i
+              ></a>
+            </li>
+            <li class="breadcrumb-item bcrumb-2">
+              <a href="#" onClick="return false;">Tools Issue Register</a>
+            </li>
+            <li class="breadcrumb-item active">{{ destination }}</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="row clearfix">
+      <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+        <div class="card">
+          <div class="body">
+            <form
+              class="m-4"
+              [formGroup]="IssueRegisterForm"
+              (ngSubmit)="onSubmit()"
+            >
+              <div class="row">
+                <div class="row">
+                  <div
+                    *ngIf="role == userRole.SuperAdmin"
+                    class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-2"
+                  >
+                    <mat-form-field
+                      class="example-full-width mb-3"
+                      appearance="outline"
+                    >
+                      <mat-label>Flight Line/Squadron </mat-label>
+                      <mat-select
+                        formControlName="departmentNameId"
+                        (selectionChange)="onDepartmentSelectionChange()"
+                        required
+                      >
+                        <mat-option value="0">--Select--</mat-option>
+                        <mat-option
+                          *ngFor="let dropdown of selectedDepartmentNames"
+                          [value]="dropdown.value"
+                        >
+                          {{ dropdown.text }}
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </div>
+                  <div
+                    *ngIf="role == userRole.SuperAdmin"
+                    class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-2"
+                  ></div>
+                  <!-- <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width mb-3" appearance="outline">
+                      <mat-label>Type of Item</mat-label>
+                      <mat-select formControlName="sparesCategoryId"
+                        (selectionChange)="onSparesCategorySelectionChange($event.value)" required>
+                        <mat-option value="0">--Select--</mat-option>
+                        <mat-option *ngFor="let dropdown of selectedSparesCategory" [value]="dropdown.value">
+                          {{dropdown.text}}
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </div>
+                  <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-2">
+                  </div> -->
+                  <!-- <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width mb-3" appearance="outline">
+                          <mat-label>Part No</mat-label>
+                          <mat-select formControlName="itemDetailId" (selectionChange)="onPartNoSelectionChange($event.value)" required>
+                          <mat-option  value="0">--Select--</mat-option >                      
+                            <mat-option *ngFor="let dropdown of selectedItemDetails" [value]="dropdown.value">
+                                  {{dropdown.text}} 
+                                </mat-option>                          
+                          </mat-select>
+                      </mat-form-field>
+                    </div> -->
+                  <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-2">
+                    <mat-form-field
+                      class="example-full-width mb-3"
+                      appearance="outline"
+                    >
+                      <mat-label>Patt No</mat-label>
+                      <input
+                        formControlName="partNo"
+                        required
+                        matInput
+                        type="text"
+                        [matAutocomplete]="auto1"
+                      />
+                      <mat-autocomplete #auto1="matAutocomplete">
+                        <mat-option
+                          *ngFor="let item of filteredOptions"
+                          [value]="item"
+                          (onSelectionChange)="onPartNoSelectionChanged(item)"
+                        >
+                          {{ item.text }}
+                        </mat-option>
+                      </mat-autocomplete>
+                      <mat-error
+                        *ngIf="
+                          IssueRegisterForm.get('partNo').hasError('required')
+                        "
+                      >
+                        Patt No is required
+                      </mat-error>
+                    </mat-form-field>
+                  </div>
+                  <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-2">
+                    <h5 class="clsh3">
+                      Item Name : <span class="c-color">{{ getitemname }}</span>
+                    </h5>
+                  </div>
+                </div>
+
+                <!-- Basic Table -->
+                <div *ngIf="isShown" class="row clearfix">
+                  <div
+                    class="col-lg-12 col-md-12 col-sm-12 col-xs-12 p-0 ex-mrk-entry-li"
+                  >
+                    <div class="card">
+                      <div class="body table-responsive">
+                        <table class="table ex-mrk-entry issue-res">
+                          <thead>
+                            <tr>
+                              <th class="cl-srl">
+                                <h5>Ser</h5>
+                              </th>
+                              <!-- <th class="cl-mrk"><h5>Part No</h5></th>
+                              <th class="cl-mrk"><h5>Item Name</h5></th> -->
+                              <!-- <th class="cl-mrk">
+                                <h5>Item Received Date</h5>
+                              </th>-->
+                              <!-- <th class="cl-mrk">
+                                <h5>Life Limit Up to</h5>
+                              </th> -->
+                              <!-- <th class="cl-mrk">
+                                <h5>Location</h5>
+                              </th>
+
+                              <th class="cl-mrk">
+                                <h5>Received QTY</h5>
+                              </th> -->
+                              <th class="cl-mrk">
+                                <h5>Present Stock</h5>
+                              </th>
+                              <th class="cl-nm-rnk">
+                                <h5>Issued QTY</h5>
+                              </th>
+                              <!-- <th class="cl-mrk"><h5>ItemSerNo | date:'dd/MMM/yyyy'</h5></th> -->
+                              <!-- <th class="cl-nm-rnk"><h5>Deno</h5></th> -->
+                              <th class="cl-nm-rnk">
+                                <h5>Issue QTY</h5>
+                              </th>
+                              <!-- <th class="cl-nm-rnk">
+                                <h5>Returnable</h5>
+                              </th> -->
+                              <th class="cl-mrk">
+                                <h5>Present Stock After Issue</h5>
+                              </th>
+                              <th class="cl-mrk">
+                                <h5> Issue Status </h5>
+                              </th>
+                              <th class="cl-nm-rnk">
+                                <h5>Issued</h5>
+                              </th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <tr
+                              *ngFor="
+                                let unit of IssueRegisterForm.get(
+                                  'ItemStoreList'
+                                )['controls'];
+                                let i = index
+                              "
+                              [formGroup]="unit"
+                            >
+                              <th class="cl-srl" scope="row">{{ i + 1 }}</th>
+
+                              <!-- <td  class="cl-nm-rnk"> 
+                                {{getControlLabel(i,'partNo')}}
+                              </td>warrantyEndDate -->
+                              <!-- <td class="cl-nm-rnk">
+                                {{getControlLabel(i,'itemReceivedDate')| date:'dd/MMM/yyyy'}}
+                              </td>-->
+                              <!-- <td class="cl-nm-rnk">
+                                {{getControlLabel(i,'warrantyEndDate')| date:'dd/MMM/yyyy'}}
+                              </td> -->
+                              <!--<td class="cl-nm-rnk">
+                                {{getControlLabel(i,'acctStore')}}
+                              </td> 
+                               <td  class="cl-nm-rnk"> 
+                                {{getControlLabel(i,'itemDetail')}}
+                              </td> -->
+
+                              <!-- <td class="cl-nm-rnk">
+                                {{getControlLabel(i,'totalReceivedQty')}}
+                              </td> -->
+                              <td class="cl-nm-rnk">
+                                {{ getControlLabel(i, "availableQty") }}
+                              </td>
+
+                              <td class="cl-nm-rnk">
+                                {{ getControlLabel(i, "issuedQty") }}
+                              </td>
+                              <!-- <td class="cl-mrk">
+                                <mat-form-field class="example-full-width mb-3" appearance="outline">
+                                  <input matInput  type="text" formControlName="totalReceivedQty"/>
+                                </mat-form-field>
+                              </td> -->
+
+                              <!-- <td class="cl-mrk">
+                                <mat-form-field class="example-full-width mb-3" appearance="outline">
+                                  <input matInput  type="text" formControlName="availableQty"/>
+                                </mat-form-field>
+                              </td> -->
+                              <!-- <td  class="cl-nm-rnk"> 
+                                {{getControlLabel(i,'totalReceivedQty')}}
+                              </td>
+
+                              <td  class="cl-nm-rnk"> 
+                                {{getControlLabel(i,'availableQty')}}
+                              </td> -->
+
+                              <!-- <td  class="cl-nm-rnk"> 
+                                {{getControlLabel(i,'itemSerNo')}}
+                              </td> -->
+
+                              <!-- <td  class="cl-nm-rnk"> 
+                                {{getControlLabel(i,'deno')}}
+                              </td> -->
+
+                              <td class="cl-mrk">
+                                <mat-form-field
+                                  class="example-full-width mb-3"
+                                  appearance="outline"
+                                >
+                      <input matInput type="text" formControlName="issueQty" (change)=" OnTextCheck($event.target.value, i,'availableQty')"/>
+                                </mat-form-field>
+                              </td>
+                              <!-- <td class="cl-mrk">
+                                <input type="checkbox" formControlName="isRefundable" #checkBox
+                                  [ngClass]="'tbl-checkbox'">
+                              </td> -->
+                              <td class="cl-nm-rnk">
+                                {{ getControlLabel(i, "returnQty") }}
+                              </td>
+                              <td class="cl-mrk-rmrk">
+                                <mat-form-field class="example-full-width mb-3" appearance="outline">
+                                  <mat-select formControlName="issueStatusId">
+                                    <mat-option  value="">--Select--</mat-option >
+                                    <mat-option *ngFor="let dropdown of selectedIssueStatuses" [value]="dropdown.value">
+                                      {{dropdown.text}} 
+                                    </mat-option>                          
+                                  </mat-select>
+                                </mat-form-field>    
+                              </td>
+                              <td class="cl-mrk">
+                                <input
+                                  type="checkbox"
+                                  formControlName="isChecked"
+                                  #checkBox
+                                  [(ngModel)]="unit.isChecked"
+                                  (change)="onCheckboxChange($event, unit)"
+                                  [ngClass]="'tbl-checkbox'"
+                                />
+                              </td>
+                              <!-- <td  class="cl-nm-rnk"> 
+                                <button type="button" mat-button class="label l-bg-green shadow-style btndesign">Issued</button>
+                              </td> -->
+                              <!-- <td class="cl-mrk">
+                                <mat-form-field class="example-full-width mb-3" appearance="outline">
+                                  <input matInput  type="text" formControlName="status"/>
+                                </mat-form-field>
+                              </td> -->
+
+                              <!-- <td class="cl-mrk-rmrk">
+                                <mat-form-field class="example-full-width mb-3" appearance="outline">
+                                  <mat-select formControlName="examMarkRemarksId">
+                                    <mat-option  value="">--Select--</mat-option >
+                                    <mat-option *ngFor="let dropdown of selectedmarkremarks" [value]="dropdown.value">
+                                      {{dropdown.text}} 
+                                    </mat-option>                          
+                                  </mat-select>
+                                </mat-form-field>    
+                              </td> -->
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="row" *ngIf="isDynamicFormShown">
+                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-2">
+                      <mat-form-field
+                        class="example-full-width mb-3"
+                        appearance="outline"
+                      >
+                        <mat-label>Issue Date</mat-label>
+                        <input
+                          matInput
+                          [matDatepicker]="dateOfTenderFloatpicker"
+                          formControlName="issueDate"
+                          required
+                        />
+                        <mat-datepicker-toggle
+                          matSuffix
+                          [for]="dateOfTenderFloatpicker"
+                        ></mat-datepicker-toggle>
+                        <mat-datepicker
+                          #dateOfTenderFloatpicker
+                        ></mat-datepicker>
+                        <mat-error
+                          *ngIf="
+                            IssueRegisterForm.get('issueDate').hasError(
+                              'required'
+                            )
+                          "
+                        >
+                          Issue Date is Required
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div
+                      class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-2"
+                    ></div>
+                    <!-- <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width mb-3" appearance="outline">
+                      <mat-label>Issued To</mat-label>
+                      <input matInput formControlName="issuedTo">
+                    </mat-form-field>
+                  </div> -->
+                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-2">
+                      <mat-form-field
+                        class="example-full-width mb-3"
+                        appearance="outline"
+                      >
+                        <mat-label>Issued To</mat-label>
+                        <input
+                          formControlName="pno"
+                          required
+                          matInput
+                          type="text"
+                          [matAutocomplete]="auto1"
+                        />
+                        <mat-autocomplete #auto1="matAutocomplete">
+                          <mat-option
+                            *ngFor="let item of filteredOptions"
+                            [value]="item"
+                            (onSelectionChange)="
+                              onTraineeSelectionChanged(item)
+                            "
+                          >
+                            {{ item.text }}
+                          </mat-option>
+                        </mat-autocomplete>
+                        <mat-error
+                          *ngIf="
+                            IssueRegisterForm.get('pno').hasError('required')
+                          "
+                        >
+                          Pno is required
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div
+                      class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-2"
+                    ></div>
+                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-2">
+                      <mat-form-field
+                        class="example-full-width mb-3"
+                        appearance="outline"
+                      >
+                        <mat-label>Reason</mat-label>
+                        <input matInput formControlName="reason" />
+                      </mat-form-field>
+                    </div>
+                    <div
+                      class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-2"
+                    ></div>
+                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-2">
+                      <mat-form-field
+                        class="example-full-width mb-3"
+                        appearance="outline"
+                      >
+                        <mat-label>Remarks</mat-label>
+                        <textarea matInput formControlName="remarks"></textarea>
+                      </mat-form-field>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div *ngIf="IsButtonShow" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                  <button
+                    class="btn-space"
+                    [disabled]="!IssueRegisterForm.valid"
+                    mat-raised-button
+                    color="primary"
+                  >
+                    {{ btnText }}
+                  </button>
+                  <!-- <button type="button" mat-button routerLink="/issue-management/issueregister-list">Cancel</button> -->
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,319 @@
+<section class="content">
+  <div class="container-fluid">
+    <div class="block-header">
+      <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+          <ul class="breadcrumb breadcrumb-style">
+            <li class="breadcrumb-item">
+              <h4 class="page-title">{{ pageTitle }}</h4>
+            </li>
+            <li class="breadcrumb-item bcrumb-1">
+              <a routerLink="/admin/dashboard/main"
+                ><i class="fas fa-home"></i
+              ></a>
+            </li>
+            <li class="breadcrumb-item bcrumb-2">
+              <a href="#" onClick="return false;">Approve Maint-Sheet </a>
+            </li>
+            <li class="breadcrumb-item active">{{ destination }}</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="row clearfix">
+      <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+        <div class="card">
+          <div class="body">
+            <form
+              class="m-4"
+              [formGroup]="MaintenanceSubCategoryForm"
+              (ngSubmit)="onSubmit()"
+            >
+              <div class="row">
+                <div
+                  *ngIf="role == userRole.CO"
+                  class="col-xl-3 col-lg-3 col-md-3 col-sm-12 mb-2"
+                >
+                  <mat-form-field
+                    class="example-full-width mb-3"
+                    appearance="outline"
+                  >
+                    <mat-label>Flight Line/Squadron </mat-label>
+                    <mat-select
+                      formControlName="departmentNameId"
+                      (selectionChange)="onDepartmentSelectionChange()"
+                      required
+                    >
+                      <mat-option
+                        *ngFor="let dropdown of selectedDepartmentName"
+                        [value]="dropdown.value"
+                      >
+                        {{ dropdown.text }}
+                      </mat-option>
+                    </mat-select>
+                    <mat-error
+                      *ngIf="
+                        MaintenanceSubCategoryForm.get(
+                          'departmentNameId'
+                        ).hasError('required')
+                      "
+                    >
+                      Flight Line/Squadron is Required!
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+
+                <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 mb-2">
+                  <mat-form-field
+                    class="example-full-width mb-3"
+                    appearance="outline"
+                  >
+                    <mat-label>Maintenance Type</mat-label>
+                    <mat-select formControlName="maintenanceTypeId" (selectionChange)="onMaintenanceTypeSelectionChange()" required>
+                      <mat-option value="0">--Select--</mat-option>
+                      <mat-option *ngFor="let code of selectedMaintenanceType" [value]="code.value" >
+                        {{ code.text }}
+                      </mat-option>
+                    </mat-select>
+                    <mat-error *ngIf="MaintenanceSubCategoryForm.get('maintenanceTypeId').hasError('required')" >
+                      Select Any maintenance Type
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+
+                <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 mb-2">
+                  <mat-form-field
+                    class="example-full-width mb-3"
+                    appearance="outline"
+                  >
+                    <mat-label>Maintenance Category</mat-label>
+                    <mat-select
+                      formControlName="maintenanceCategoryId"
+                      (selectionChange)="
+                        onMaintenanceCategorySelectionChange($event.value)
+                      "
+                      required
+                    >
+                      <mat-option value="0">--Select--</mat-option>
+                      <mat-option
+                        *ngFor="
+                          let dropdown of selectedMaintenanceCategoryByDepartment
+                        "
+                        [value]="dropdown.value"
+                      >
+                        {{ dropdown.text }}
+                      </mat-option>
+                    </mat-select>
+                    <mat-error
+                      *ngIf="
+                        MaintenanceSubCategoryForm.get(
+                          'maintenanceCategoryId'
+                        ).hasError('required')
+                      "
+                    >
+                      maintenance Category Name is Required!
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+
+                <!-- <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 mb-2">
+                  <mat-form-field
+                    class="example-full-width mb-3"
+                    appearance="outline"
+                  >
+                    <mat-label>Sub Category Name</mat-label>
+                    <input
+                      matInput
+                      formControlName="subCategoryName"
+                      required
+                    />
+                    <mat-error
+                      *ngIf="
+                        MaintenanceSubCategoryForm.get(
+                          'subCategoryName'
+                        ).hasError('required')
+                      "
+                    >
+                      Accout Type is required
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+
+                <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 mb-2">
+                  <mat-form-field
+                    class="example-full-width mb-3"
+                    appearance="outline"
+                  >
+                    <mat-label>Allowed Extension</mat-label>
+                    <input
+                      matInput
+                      formControlName="allowedExtension"
+                      required
+                    />
+                    <mat-error
+                      *ngIf="
+                        MaintenanceSubCategoryForm.get(
+                          'allowedExtension'
+                        ).hasError('required')
+                      "
+                    >
+                      Accout Type is required
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+
+                <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 mb-2">
+                  <mat-form-field
+                    class="example-full-width mb-3"
+                    appearance="outline"
+                  >
+                    <mat-label>Total Days</mat-label>
+                    <input matInput formControlName="totalDaysCount" required />
+                    <mat-error
+                      *ngIf="
+                        MaintenanceSubCategoryForm.get(
+                          'totalDaysCount'
+                        ).hasError('required')
+                      "
+                    >
+                      Accout Type is required
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+
+                <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 mb-2">
+                  <mat-form-field
+                    class="example-full-width mb-3"
+                    appearance="outline"
+                  >
+                    <mat-label>Remarks</mat-label>
+                    <textarea matInput formControlName="remarks"></textarea>
+                  </mat-form-field>
+                </div> -->
+              </div>
+              <div class="row">
+                <!-- <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                  <button
+                    class="btn-space"
+                    [disabled]="!MaintenanceSubCategoryForm.valid"
+                    mat-raised-button
+                    color="primary"
+                  >
+                    {{ btnText }}
+                  </button>
+                  
+                </div> -->
+              </div>
+            </form>
+            <div *ngIf="isShown" class="row create-table db-tbl cls-rtn">
+              <!-- <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 div-class div-left"> -->
+              <h3 class="text-center table-title">
+                Approve Maint-Sheet List
+              </h3>
+              <!-- </div> -->
+              <div class="container">
+                <mat-table
+                  #table
+                  [dataSource]="
+                    selectedMaintenanceSubCategoryByDepartmentAndMaintenenceCategory
+                  "
+                  matSort
+                  class="mat-cell"
+                >
+                  <ng-container matColumnDef="ser">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header>
+                      Ser.
+                    </mat-header-cell>
+                    <mat-cell *matCellDef="let element; let i = index">
+                      {{ (paging.pageIndex - 1) * paging.pageSize + i + 1 }}
+                    </mat-cell>
+                  </ng-container>
+                  <ng-container matColumnDef="maintenanceCategory">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header
+                      >Maintenance Category</mat-header-cell
+                    >
+                    <mat-cell *matCellDef="let element">
+                      {{ element.maintenanceCategory }}
+                    </mat-cell>
+                  </ng-container>
+
+                  <ng-container matColumnDef="subCategoryName">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header
+                      >Sub Category Name
+                    </mat-header-cell>
+                    <mat-cell *matCellDef="let element">
+                      {{ element.subCategoryName }}
+                    </mat-cell>
+                  </ng-container>
+                  <ng-container matColumnDef="allowedExtension">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header>
+                      Allowed Extension
+                    </mat-header-cell>
+                    <mat-cell *matCellDef="let element">
+                      {{ element.allowedExtension }}
+                    </mat-cell>
+                  </ng-container>
+                  <ng-container matColumnDef="departmentName">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header>
+                      Flight Line/Squadron
+                    </mat-header-cell>
+                    <mat-cell *matCellDef="let element">
+                      {{ element.departmentName }}
+                    </mat-cell>
+                  </ng-container>
+                  <ng-container matColumnDef="totalDaysCount">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header>
+                      Total Days
+                    </mat-header-cell>
+                    <mat-cell *matCellDef="let element">
+                      {{ element.totalDaysCount }}
+                    </mat-cell>
+                  </ng-container>
+
+                  <!-- <ng-container matColumnDef="actions">
+                    <mat-header-cell *matHeaderCellDef class="pr-0"
+                      >Actions</mat-header-cell
+                    >
+                    <mat-cell *matCellDef="let row; let i = index" class="pr-0">
+                      <button
+                        mat-icon-button
+                        color="accent"
+                        class="btn-tbl-edit"
+                        [routerLink]="[
+                          '/maintenence-planning/update-maintenancesubcategory',
+                          row.maintenanceSubCategoryId
+                        ]"
+                      >
+                        <mat-icon aria-label="Edit" class="col-white"
+                          >edit</mat-icon
+                        >
+                      </button>
+                      <button
+                        mat-icon-button
+                        color="accent"
+                        class="btn-tbl-delete"
+                        (click)="$event.stopPropagation()"
+                        (click)="deleteItem(row)"
+                      >
+                        <mat-icon aria-label="Delete" class="col-white"
+                          >delete</mat-icon
+                        >
+                      </button>
+                    </mat-cell>
+                  </ng-container> -->
+
+                  <mat-header-row
+                    *matHeaderRowDef="displayedColumns"
+                  ></mat-header-row>
+                  <mat-row
+                    *matRowDef="let row; columns: displayedColumns"
+                  ></mat-row>
+                </mat-table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

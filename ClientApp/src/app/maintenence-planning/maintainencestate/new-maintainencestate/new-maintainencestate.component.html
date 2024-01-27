@@ -1,0 +1,135 @@
+<section class="content">
+    <div class="container-fluid">
+      <div class="block-header">
+        <div class="row">
+          <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+            <ul class="breadcrumb breadcrumb-style ">
+              <li class="breadcrumb-item">
+                <h4 class="page-title">{{pageTitle}}</h4>
+              </li>
+              <li class="breadcrumb-item bcrumb-1">
+                <a routerLink="/admin/dashboard/main"><i class="fas fa-home"></i></a>
+              </li>
+              <li class="breadcrumb-item bcrumb-2">
+                <a href="#" onClick="return false;">Maintenence State</a>
+              </li>
+              <li class="breadcrumb-item active">{{destination}}</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="row clearfix">
+        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+          <div class="card">
+            <div class="body">
+              <form class="m-4" [formGroup]="CallibrationStateForm" (ngSubmit)="onSubmit()">
+                <div class="row">
+                  <div *ngIf="role == userRole.SuperAdmin" class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width mb-3" appearance="outline">
+                        <mat-label>Flight Line/Squadron </mat-label>                        
+                        <mat-select formControlName="departmentNameId" required>
+                            <mat-option *ngFor="let dropdown of selectedDepartmentNames" [value]="dropdown.value">
+                                {{dropdown.text}} 
+                              </mat-option>                          
+                        </mat-select>
+                        <mat-error *ngIf="CallibrationStateForm.get('departmentNameId').hasError('required')">
+                          Flight Line/Squadron  is Required!
+                        </mat-error>
+                    </mat-form-field>
+                  </div>
+                  <div *ngIf="role == userRole.SuperAdmin" class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-2">
+                  </div>
+                  <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width mb-3" appearance="outline">
+                      <mat-label>Patt No</mat-label>
+                      <input matInput formControlName="serNo" required>
+                      <mat-error *ngIf="CallibrationStateForm.get('serNo').hasError('required')">
+                        Ser No is required
+                      </mat-error>
+                    </mat-form-field>
+                  </div>
+                  <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-2">
+                  </div>
+                  <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width mb-3" appearance="outline">
+                      <mat-label>Item Name</mat-label>
+                      <input matInput formControlName="itemName" required>
+                      <mat-error *ngIf="CallibrationStateForm.get('itemName').hasError('required')">
+                        Item Name is required
+                      </mat-error>
+                    </mat-form-field>
+                  </div>
+                  <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-2">
+                  </div>
+                  <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width mb-3" appearance="outline">
+                        <mat-label>Trade </mat-label>                        
+                        <mat-select formControlName="tradeId" required>
+                            <mat-option *ngFor="let dropdown of selectedTrades" [value]="dropdown.value">
+                                {{dropdown.text}} 
+                              </mat-option>                          
+                        </mat-select>
+                        <mat-error *ngIf="CallibrationStateForm.get('tradeId').hasError('required')">
+                          Trade is Required!
+                        </mat-error>
+                    </mat-form-field>
+                  </div>
+                  
+                  <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-2">
+                  </div>
+                  <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width mb-3" appearance="outline">
+                      <mat-label>Last Date of Calibrated</mat-label>
+                      <input matInput [matDatepicker]="frompicker" formControlName="lastDateofCalibrated">
+                      <mat-datepicker-toggle matSuffix [for]="frompicker"></mat-datepicker-toggle>
+                      <mat-datepicker #frompicker></mat-datepicker>
+                    </mat-form-field>
+                  </div>
+                  <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-2">
+                  </div>
+                  <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width mb-3" appearance="outline">
+                      <mat-label>Next Due Date</mat-label>
+                      <input matInput [matDatepicker]="ndpicker" formControlName="nextDueDate">
+                      <mat-datepicker-toggle matSuffix [for]="ndpicker"></mat-datepicker-toggle>
+                      <mat-datepicker #ndpicker></mat-datepicker>
+                    </mat-form-field>
+                  </div>
+                  <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-2">
+                  </div>
+                  <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width mb-3" appearance="outline">
+                      <mat-label>Present State</mat-label>
+                      <input matInput formControlName="presentState" required>
+                      <mat-error *ngIf="CallibrationStateForm.get('presentState').hasError('required')">
+                        Present State is required
+                      </mat-error>
+                    </mat-form-field>
+                  </div>
+                  <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-2">
+                  </div>
+                  
+                  <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width mb-3" appearance="outline">
+                      <mat-label>Remarks</mat-label>
+                      <textarea matInput formControlName="remarks" ></textarea>
+                    </mat-form-field>
+                  </div>
+                  
+
+                </div>
+                <div class="row">
+                  <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                    <button class="btn-space" [disabled]="!CallibrationStateForm.valid " mat-raised-button
+                      color="primary">{{btnText}}</button>
+                    <button type="button" mat-button routerLink="/maintenence-planning/callibrationstate-list">Cancel</button>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  

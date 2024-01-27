@@ -1,0 +1,736 @@
+<section class="content">
+  <div class="container-fluid">
+    <div class="block-header">
+      <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+          <ul class="breadcrumb breadcrumb-style">
+            <li class="breadcrumb-item">
+              <h4 class="page-title">{{ pageTitle }}</h4>
+            </li>
+            <li class="breadcrumb-item bcrumb-1">
+              <a routerLink="/admin/dashboard/main"
+                ><i class="fas fa-home"></i
+              ></a>
+            </li>
+            <li class="breadcrumb-item bcrumb-2">
+              <a href="#" onClick="return false;">Procurement</a>
+            </li>
+            <li class="breadcrumb-item active">{{ destination }}</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="row clearfix">
+      <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+        <div class="card">
+          <div class="body">
+            <form
+              *ngIf="role != userRole.CO"
+              class="m-4"
+              [formGroup]="ProcurementForm"
+              (ngSubmit)="onSubmit()"
+            >
+              <div class="row exam-mark procurement">
+                <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 mb-2">
+                  <div class="row left-row">
+                    <div
+                      *ngIf="role == userRole.SuperAdmin"
+                      class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2"
+                    >
+                      <mat-form-field
+                        class="example-full-width mb-3"
+                        appearance="outline"
+                      >
+                        <mat-label>Flight Line/Squadron </mat-label>
+                        <mat-select
+                          formControlName="departmentNameId"
+                          (selectionChange)="getselectedDemands()"
+                          required
+                        >
+                          <mat-option value="0">--Select--</mat-option>
+                          <mat-option
+                            *ngFor="let code of departmentName"
+                            [value]="code.value"
+                          >
+                            {{ code.text }}
+                          </mat-option>
+                        </mat-select>
+                        <mat-error
+                          *ngIf="
+                            ProcurementForm.get('departmentNameId').hasError(
+                              'required'
+                            )
+                          "
+                        >
+                          Select Any Flight Line/Squadron
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <!-- <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-2">
+                    </div> -->
+                    <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field
+                        class="example-full-width mb-3"
+                        appearance="outline"
+                      >
+                        <mat-label>Patt No / Item Name</mat-label>
+                        <mat-select
+                          formControlName="demandId"
+                          (selectionChange)="getDemandData()"
+                        >
+                          <mat-option value="0">--Select--</mat-option>
+                          <mat-option
+                            *ngFor="let code of selectedPartNo"
+                            [value]="code.value"
+                          >
+                            {{ code.text }}
+                          </mat-option>
+                        </mat-select>
+                        <mat-error
+                          *ngIf="
+                            ProcurementForm.get('demandId').hasError('required')
+                          "
+                        >
+                          Select Any Patt No
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                  </div>
+                </div>
+
+                <div
+                  *ngIf="isShown"
+                  class="col-xl-8 col-lg-8 col-md-8 col-sm-12 mb-2"
+                >
+                  <div class="row right-row">
+                    <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                      <div class="row">
+                        <div
+                          class="container col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2 mt-2 sticky-table ex-mrk-li pro-top-list"
+                        >
+                          <h4 class="align-center">Demand Information</h4>
+                          <mat-table
+                            #table
+                            [dataSource]="demandData"
+                            matSort
+                            class="mat-cell ex-mrk-lft-tbl"
+                          >
+                            <ng-container matColumnDef="sl">
+                              <mat-header-cell
+                                *matHeaderCellDef
+                                mat-sort-header
+                              >
+                                Ser.
+                              </mat-header-cell>
+                              <mat-cell
+                                *matCellDef="let element; let i = index"
+                              >
+                                {{
+                                  (paging.pageIndex - 1) * paging.pageSize +
+                                    i +
+                                    1
+                                }}
+                              </mat-cell>
+                            </ng-container>
+
+                            <ng-container matColumnDef="itemName">
+                              <mat-header-cell
+                                *matHeaderCellDef
+                                mat-sort-header
+                              >
+                                Item Name</mat-header-cell
+                              >
+                              <mat-cell *matCellDef="let element"
+                                >{{ element.itemName }}
+                              </mat-cell>
+                            </ng-container>
+
+                            <ng-container matColumnDef="conditionOfItem">
+                              <mat-header-cell *matHeaderCellDef mat-sort-header
+                                >Condition</mat-header-cell
+                              >
+                              <mat-cell *matCellDef="let element"
+                                >{{ element.conditionOfItem }}
+                              </mat-cell>
+                            </ng-container>
+
+                            <ng-container matColumnDef="authority">
+                              <mat-header-cell
+                                *matHeaderCellDef
+                                mat-sort-header
+                              >
+                                Authority</mat-header-cell
+                              >
+                              <mat-cell *matCellDef="let element"
+                                >{{ element.authority }}
+                              </mat-cell>
+                            </ng-container>
+
+                            <ng-container matColumnDef="occasionOfDemand">
+                              <mat-header-cell *matHeaderCellDef mat-sort-header
+                                >Occasion</mat-header-cell
+                              >
+                              <mat-cell *matCellDef="let element"
+                                >{{ element.occasionOfDemand }}
+                              </mat-cell>
+                            </ng-container>
+
+                            <ng-container matColumnDef="deno">
+                              <mat-header-cell *matHeaderCellDef mat-sort-header
+                                >Deno</mat-header-cell
+                              >
+                              <mat-cell *matCellDef="let element"
+                                >{{ element.deno }}
+                              </mat-cell>
+                            </ng-container>
+
+                            <ng-container matColumnDef="manufacture">
+                              <mat-header-cell *matHeaderCellDef mat-sort-header
+                                >Manufacturer</mat-header-cell
+                              >
+                              <mat-cell *matCellDef="let element"
+                                >{{ element.manufacture }}
+                              </mat-cell>
+                            </ng-container>
+
+                            <ng-container matColumnDef="demandDate">
+                              <mat-header-cell
+                                *matHeaderCellDef
+                                mat-sort-header
+                              >
+                                Date</mat-header-cell
+                              >
+                              <mat-cell *matCellDef="let element"
+                                >{{ element.demandDate | date: "dd/MMM/yyyy" }}
+                              </mat-cell>
+                            </ng-container>
+
+                            <ng-container matColumnDef="demandQty">
+                              <mat-header-cell *matHeaderCellDef mat-sort-header
+                                >Qty</mat-header-cell
+                              >
+                              <mat-cell *matCellDef="let element"
+                                >{{ element.demandQty }}
+                              </mat-cell>
+                            </ng-container>
+
+                            <mat-header-row
+                              *matHeaderRowDef="displayedColumns"
+                            ></mat-header-row>
+                            <mat-row
+                              *matRowDef="let row; columns: displayedColumns"
+                            ></mat-row>
+                          </mat-table>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!-- <hr class="c-hr"> -->
+              <div class="row procurement-box">
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 mb-2">
+                  <mat-form-field
+                    class="example-full-width mb-3"
+                    appearance="outline"
+                  >
+                    <mat-label>Qty</mat-label>
+                    <input matInput formControlName="qty" required />
+                    <mat-error
+                      *ngIf="ProcurementForm.get('qty').hasError('required')"
+                    >
+                      Qty is Required!
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-2"></div>
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-2">
+                  <mat-form-field
+                    class="example-full-width mb-3"
+                    appearance="outline">
+                    <mat-label>Tender Floating Date</mat-label>
+                    <input matInput [matDatepicker]="dateOfTenderFloatpicker"
+                      formControlName="dateOfTenderFloat"/>
+                    <mat-datepicker-toggle
+                      matSuffix
+                      [for]="dateOfTenderFloatpicker">
+                    </mat-datepicker-toggle>
+                    <mat-datepicker #dateOfTenderFloatpicker></mat-datepicker>
+                  </mat-form-field>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-2"></div>
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-2">
+                  <mat-form-field
+                    class="example-full-width mb-3"
+                    appearance="outline">
+                    <mat-label>Tender Number</mat-label>
+                    <input matInput formControlName="tenderNumber" />
+                    <!-- <mat-error
+                      *ngIf="
+                        ProcurementForm.get('tenderNumber').hasError('required')">
+                      Tender Number is required
+                    </mat-error> -->
+                  </mat-form-field>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-2"></div>
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-2">
+                  <mat-form-field
+                    class="example-full-width mb-3"
+                    appearance="outline"
+                  >
+                    <mat-label>Attach Doc (PDF)</mat-label>
+                    <ngx-mat-file-input
+                      (change)="onFileChanged($event)"
+                      accept=".txt,.pdf,.xls,.xlsx,.doc,.docx,.ppt,.pptx"
+                    >
+                    </ngx-mat-file-input>
+                    <mat-icon matSuffix>attachment</mat-icon>
+                  </mat-form-field>
+                </div>
+
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-2"></div>
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-2">
+                  <mat-form-field
+                    class="example-full-width mb-3"
+                    appearance="outline">
+                    <mat-label>Tender Opening Date</mat-label>
+                    <input matInput [matDatepicker]="tenderopeningDatepicker"
+                      formControlName="tenderopeningDate"/>
+                    <mat-datepicker-toggle
+                      matSuffix
+                      [for]="tenderopeningDatepicker"
+                    ></mat-datepicker-toggle>
+                    <mat-datepicker #tenderopeningDatepicker></mat-datepicker>
+                  </mat-form-field>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-2"></div>
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-2">
+                  <mat-form-field
+                    class="example-full-width mb-3"
+                    appearance="outline"
+                  >
+                    <mat-label>CST/TEC</mat-label>
+                    <mat-select formControlName="cstTecId">
+                      <mat-option value="0">--Select--</mat-option>
+                      <mat-option
+                        *ngFor="let code of cstTec"
+                        [value]="code.value"
+                      >
+                        {{ code.text }}
+                      </mat-option>
+                    </mat-select>
+                    <!-- <mat-error
+                      *ngIf="
+                        ProcurementForm.get('cstTecId').hasError('required')
+                      "
+                    >
+                      CST/TEC is required
+                    </mat-error> -->
+                  </mat-form-field>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-2"></div>
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-2">
+                  <mat-form-field
+                    class="example-full-width mb-3"
+                    appearance="outline"
+                  >
+                    <mat-label>Attach CST</mat-label>
+                    <ngx-mat-file-input
+                      (change)="onFileNChanged($event)"
+                      accept=".txt,.pdf,.xls,.xlsx,.doc,.docx,.ppt,.pptx"
+                    >
+                    </ngx-mat-file-input>
+                    <mat-icon matSuffix>attachment</mat-icon>
+                  </mat-form-field>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-2"></div>
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-2">
+                  <mat-form-field
+                    class="example-full-width mb-3"
+                    appearance="outline"
+                  >
+                    <mat-label>Purchase Order No</mat-label>
+                    <input matInput formControlName="workOrder"/>
+                    <!-- <mat-error
+                      *ngIf="
+                        ProcurementForm.get('workOrder').hasError('required')
+                      "
+                    >
+                      Purchase Order No is required
+                    </mat-error> -->
+                  </mat-form-field>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-2"></div>
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-2">
+                  <mat-form-field
+                    class="example-full-width mb-3"
+                    appearance="outline"
+                  >
+                    <mat-label>Purchase Order Date</mat-label>
+                    <input
+                      matInput
+                      [matDatepicker]="workOrderDatepicker"
+                      formControlName="workOrderDate"
+                    />
+                    <mat-datepicker-toggle
+                      matSuffix
+                      [for]="workOrderDatepicker"
+                    ></mat-datepicker-toggle>
+                    <mat-datepicker #workOrderDatepicker></mat-datepicker>
+                  </mat-form-field>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-2"></div>
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-2">
+                  <mat-form-field
+                    class="example-full-width mb-3"
+                    appearance="outline"
+                  >
+                    <mat-label>Supplier</mat-label>
+                    <mat-select formControlName="supplierId">
+                      <mat-option value="0">--Select--</mat-option>
+                      <mat-option
+                        *ngFor="let code of Supplier"
+                        [value]="code.value"
+                      >
+                        {{ code.text }}
+                      </mat-option>
+                    </mat-select>
+                    <!-- <mat-error
+                      *ngIf="
+                        ProcurementForm.get('supplierId').hasError('required')
+                      "
+                    >
+                      Supplier is required
+                    </mat-error> -->
+                  </mat-form-field>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-2 reload">
+                  <span (click)="reloadSuppliers()"
+                    ><mat-icon>autorenew</mat-icon></span
+                  >
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-2">
+                  <mat-form-field
+                    class="example-full-width mb-3"
+                    appearance="outline"
+                  >
+                    <mat-label> Expected Delivery Date</mat-label>
+                    <input
+                      matInput
+                      [matDatepicker]="dateOfDeliverypicker"
+                      formControlName="dateOfDelivery"
+                    />
+                    <mat-datepicker-toggle
+                      matSuffix
+                      [for]="dateOfDeliverypicker"
+                    ></mat-datepicker-toggle>
+                    <mat-datepicker #dateOfDeliverypicker></mat-datepicker>
+                  </mat-form-field>
+                </div>
+
+                <!-- <div *ngIf="cstTecYes==4" class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-2">
+                </div>
+                <div *ngIf="cstTecYes==4" class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-2">
+                  <mat-form-field class="example-full-width mb-3" appearance="outline">
+                    <mat-label>Principal</mat-label>
+                    <mat-select formControlName="principalNameId" >
+                      <mat-option value="0">--Select--</mat-option>
+                      <mat-option *ngFor="let code of principalName" [value]="code.value">
+                        {{code.text}}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+                <div *ngIf="cstTecYes==4" class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-2">
+                </div>
+                <div *ngIf="cstTecYes==4" class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-2">
+                  <mat-form-field class="example-full-width mb-3" appearance="outline">
+                    <mat-label>OEM</mat-label>
+                    <mat-select formControlName="manufactureId" >
+                      <mat-option value="0">--Select--</mat-option>
+                      <mat-option *ngFor="let code of selectManufacture" [value]="code.value">
+                        {{code.text}}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div> -->
+
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-2"></div>
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-2">
+                  <mat-form-field
+                    class="example-full-width mb-3"
+                    appearance="outline"
+                  >
+                    <mat-label>Attach Purchase Order Doc</mat-label>
+                    <ngx-mat-file-input
+                      (change)="onFileFChanged($event)"
+                      accept=".txt,.pdf,.xls,.xlsx,.doc,.docx,.ppt,.pptx"
+                    >
+                    </ngx-mat-file-input>
+                    <mat-icon matSuffix>attachment</mat-icon>
+                  </mat-form-field>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-2"></div>
+
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-2">
+                  <mat-form-field
+                    class="example-full-width mb-3"
+                    appearance="outline"
+                  >
+                    <mat-label>Remarks</mat-label>
+                    <textarea matInput formControlName="remarks" ></textarea>
+                  </mat-form-field>
+                </div>
+              </div>
+
+              <br />
+              <div class="row">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                  <button
+                    class="btn-space"
+                    [disabled]="!ProcurementForm.valid"
+                    mat-raised-button
+                    color="primary"
+                  >
+                    {{ btnText }}
+                  </button>
+                  <!-- <button type="button" mat-button routerLink="/spares-management/procurement-list">Cancel</button> -->
+                </div>
+              </div>
+            </form>
+            <div *ngIf="isShown" class="row create-table db-tbl cls-rtn">
+              <!-- <h3 class="text-center table-title">Spares Procurement LIST</h3> -->
+              <div class="materialTableHeader auto">
+                <div class="row">
+                  <div class="table-title">
+                    <h3>Procurement List</h3>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <h3 class="count-value">No of Items: {{ itemCount }}</h3>
+                  </div>
+                  <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <ul class="header-buttons-left right-align ml-0">
+                      <!-- <li><h5></h5></li> -->
+                      <li class="dropdown">
+                        <input
+                          placeholder="Search"
+                          type="text"
+                          [(ngModel)]="searchText"
+                          #filter
+                          class="browser-default search-field custom-search"
+                          aria-label="Search box"
+                        />
+                      </li>
+                      <li
+                        *ngIf="
+                          role == userRole.CO || role == userRole.SuperAdmin
+                        "
+                        class="dept-dropdown"
+                      >
+                        <mat-select
+                          placeholder="Flight Line"
+                          class="browser-default dept-field"
+                          [(ngModel)]="departmentNameId"
+                        >
+                          <mat-option selected value="0">--All--</mat-option>
+                          <mat-option
+                            *ngFor="let dropdown of departmentName"
+                            [value]="dropdown.value"
+                          >
+                            {{ dropdown.text }}
+                          </mat-option>
+                        </mat-select>
+                      </li>
+                      <!-- <li><h5>Type Of Demand</h5></li> -->
+                      <!-- <li class="dept-dropdown">
+                        <mat-select
+                          placeholder="Type Of Demand"
+                          [(ngModel)]="demandTypeId"
+                          class="browser-default dept-field"
+                          required
+                        >
+                          <mat-option selected value="0">--Select--</mat-option>
+                          <mat-option
+                            *ngFor="let dropdown of selectedTypeOfDemandValue"
+                            [value]="dropdown.value"
+                          >
+                            {{ dropdown.text }}
+                          </mat-option>
+                        </mat-select>
+                      </li> -->
+                      <li>
+                        <div class="icon-button-demo m-l-10">
+                          <button
+                            *ngIf="
+                              role == userRole.CO || role == userRole.SuperAdmin
+                            "
+                            mat-mini-fab
+                            (click)="
+                              applyDropdown(searchText, departmentNameId)
+                            "
+                            color="primary"
+                          >Go
+                            <!-- <mat-icon class="col-white">search</mat-icon> -->
+                          </button>
+                          <button
+                            *ngIf="
+                              role == userRole.User || role == userRole.admin
+                            "
+                            mat-mini-fab
+                            (click)="applyFilter(searchText)"
+                            color="primary"
+                          >Go
+                            <!-- <mat-icon class="col-white">search</mat-icon> -->
+                          </button>
+                        </div>
+                      </li>
+                      <li>
+                        <div
+                          class="col-xl-4 col-lg-4 col-md-4 col-sm-12 mb-2 db-p"
+                        >
+                          <button
+                            class="btn-space"
+                            mat-raised-button
+                            color="primary"
+                            (click)="printSingle()"
+                          >
+                            <mat-icon class="col-white">print</mat-icon>
+                          </button>
+                        </div>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+              <div class="container no-padding">
+                <div id="print-routine">
+                  <table class="table tbl-by-group db-li-s-in">
+                    <thead>
+                      <tr>
+                        <th class="cl-nm-rnk"><h5>Flight Line</h5></th>
+                        <th class="cl-mrk"><h5>Patt No</h5></th>
+                        <th class="cl-mrk-rmrk"><h5>Item Name</h5></th>
+                        <th class="cl-mrk-rmrk"><h5>Qty</h5></th>
+                        <th class="cl-mrk-rmrk"><h5>Delivery Date</h5></th>
+                        <th class="cl-mrk-rmrk"><h5>Supplier</h5></th>
+                        <th *ngIf="role == userRole.SuperAdmin" class="thbm"><h5>Approved</h5></th>
+                        <th class="cl-action"><h5>Actions</h5></th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <ng-container
+                        *ngFor="let data of groupArrays; let i = index"
+                      >
+                        <tr>
+                          <td [attr.rowspan]="data.datas.length + 1">
+                            {{ data.departmentName }}
+                          </td>
+                        </tr>
+                        <tr *ngFor="let number of data.datas">
+                          <td>{{ number.itemDetail }}</td>
+                          <td>{{ number.itemName }}</td>
+                          <td>{{ number.qty }}</td>
+                          <td>
+                            {{ number.dateOfDelivery | date: "dd/MMM/yyyy" }}
+                          </td>
+                          <td>{{ number.supplier }}</td>
+                          <td *ngIf="role == userRole.SuperAdmin">
+                            <button mat-raised-button class="custom-btn courseplan-apr"  (click)="inActiveItem(number)"  (click)="$event.stopPropagation()">{{ number.verificationCompletStatus == 0 ? 'Not Approved' : 'Approved' }}</button>
+                          </td>
+                          <td class="cl-action">
+                            <div fxLayout="row" fxLayoutGap="20px">
+                              <a 
+                                target="_blank"
+                                [href]="number.tenderSpecification"
+                              >
+                                <i *ngIf="number.tenderSpecification != 'http://192.168.8.102:8030/Content/files/procurements/'"
+                                  matTooltip="Attach Doc"
+                                  class="far fa-file-pdf tbl-pdf"
+                                ></i> </a
+                              >|
+                              <a target="_blank" [href]="number.tenderNotice">
+                                <i *ngIf="number.tenderNotice != 'http://192.168.8.102:8030/Content/files/procurements/'"
+                                  matTooltip="Attach CST"
+                                  class="far fa-file-pdf tbl-pdf"
+                                ></i> </a
+                              >|
+                              <a
+                                target="_blank"
+                                [href]="number.procurementDocument"
+                              >
+                                <i *ngIf="number.procurementDocument != 'http://192.168.8.102:8030/Content/files/procurements/'"
+                                  matTooltip="Attach Purchase Order Doc"
+                                  class="far fa-file-pdf tbl-pdf"
+                                ></i> </a
+                              >|
+                              <!-- <a target="_blank" [href]="row.tenderSpecification"><mat-icon>picture_as_pdf</mat-icon></a>|
+                            <a target="_blank" [href]="row.tenderNotice"><mat-icon>picture_as_pdf</mat-icon></a>|
+                            <a target="_blank" [href]="row.procurementDocument"><mat-icon>picture_as_pdf</mat-icon></a>| -->
+                              <button
+                                mat-icon-button
+                                color="accent"
+                                class="btn-tbl-edit"
+                                [routerLink]="[
+                                  '/spares-management/view-procurement',
+                                  number.procurementId
+                                ]"
+                              >
+                                <mat-icon aria-label="Edit" class="col-white"
+                                  >visibility</mat-icon
+                                >
+                              </button> 
+                              <!-- *ngIf="(role != userRole.CO && (role == userRole.User && number.verificationCompletStatus == 0))|| role == userRole.SuperAdmin" -->
+                              <button 
+                                *ngIf="(role != userRole.CO&& (role == userRole.User && number.verificationCompletStatus == 0))|| role == userRole.SuperAdmin"
+                                mat-icon-button
+                                color="accent"
+                                class="btn-tbl-edit"
+                                [routerLink]="[
+                                  '/spares-management/update-procurement',
+                                  number.procurementId
+                                ]"
+                              >
+                                <mat-icon aria-label="Edit" class="col-white"
+                                  >edit</mat-icon
+                                >
+                              </button>
+                              <button
+                              *ngIf="(role != userRole.CO&& (role == userRole.User && number.verificationCompletStatus == 0))|| role == userRole.SuperAdmin"
+                                mat-icon-button
+                                color="accent"
+                                class="btn-tbl-delete"
+                                (click)="$event.stopPropagation()"
+                                (click)="deleteItem(number)"
+                              >
+                                <mat-icon aria-label="Delete" class="col-white"
+                                  >delete</mat-icon
+                                >
+                              </button>
+                            </div>
+                          </td>
+                        </tr>
+                      </ng-container>
+                    </tbody>
+                  </table>
+                </div>
+
+                <!-- <mat-paginator
+                  [length]="paging.length"
+                  [showFirstLastButtons]="
+                    masterData.paging.showFirstLastButtons
+                  "
+                  [pageSize]="paging.pageSize"
+                  [pageSizeOptions]="masterData.paging.pageSizeOptions"
+                  (page)="pageChanged($event)"
+                >
+                </mat-paginator> -->
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

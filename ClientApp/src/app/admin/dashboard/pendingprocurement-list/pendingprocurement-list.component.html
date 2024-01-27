@@ -1,0 +1,128 @@
+<section class="content">
+  <div class="container-fluid">
+    <div class="block-header">
+      <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+          <ul class="breadcrumb breadcrumb-style ">
+            <li class="breadcrumb-item">
+              <h4 class="page-title">Pending Procurements List</h4>
+            </li>
+            <li class="breadcrumb-item bcrumb-1">
+              <a routerLink="/admin/dashboard/main"><i class="fas fa-home"></i></a>
+            </li>
+            <li class="breadcrumb-item bcrumb-2">
+              <a href="#" onClick="return false;">Pending Procurements List</a>
+            </li>
+            <li class="breadcrumb-item active">All</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+        <div class="card">
+          <div class="body">
+            <div class="responsive_table">
+              <div class="row dash-cd-m-0">
+                <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 div-class div-left">
+                  
+                  <h3>Pending Procurements - <span class="count-color"> {{ProcurementName}} ( {{CountpendingProcurement}} ) </span></h3> 
+                </div>
+                <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 div-class div-right">
+                  <div  class="dialog m-b-10">
+                    <button class="back" [routerLink]="['/admin/dashboard/main']" mat-raised-button> <mat-icon>keyboard_backspace</mat-icon> Back</button> |
+                    <button  class="all" (click)="inActiveItem(masterData.department.all, 'All')" mat-raised-button>All</button> | 
+                    <button  color="accent" (click)="inActiveItem(masterData.department.mpa, 'MPA')" mat-raised-button>MPA</button> | 
+                    <button   color="primary" (click)="inActiveItem(masterData.department.hel, 'HEL')" mat-raised-button>HEL</button>  |
+                    <button   color="warn" (click)="inActiveItem(masterData.department.uav, 'UAV')" mat-raised-button>UAV</button>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <mat-table #table [dataSource]="pendingProcurementList" matSort class="mat-cell content-center-align">
+                  <ng-container matColumnDef="ser">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header> Ser. </mat-header-cell>
+                    <mat-cell *matCellDef="let element; let i = index;"> {{ ((paging.pageIndex-1) *  paging.pageSize) + i+1}} </mat-cell>
+                  </ng-container> 
+                  <ng-container matColumnDef="itemType">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header> Type of Item </mat-header-cell>
+                    <mat-cell *matCellDef="let element"> {{element.spareName}} </mat-cell>
+                  </ng-container>  
+                  <ng-container matColumnDef="deptName">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header> Dept Name </mat-header-cell>
+                    <mat-cell *matCellDef="let element"> {{element.deptName}} </mat-cell>
+                  </ng-container>  
+                  <ng-container matColumnDef="tenderNumber">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header> Tender Number </mat-header-cell>
+                    <mat-cell *matCellDef="let element"> {{element.tenderNumber}} </mat-cell>
+                  </ng-container>  
+                  <ng-container matColumnDef="itemName">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header> Item Name </mat-header-cell>
+                    <mat-cell *matCellDef="let element"> {{element.nameOfItem}} </mat-cell>
+                  </ng-container>  
+                  <ng-container matColumnDef="itemDetail">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header> Part No </mat-header-cell>
+                    <mat-cell *matCellDef="let element"> {{element.partNo}} </mat-cell>
+                  </ng-container>  
+                  
+                  <ng-container matColumnDef="dateOfTenderFloat">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header> Tender Float </mat-header-cell>
+                    <mat-cell *matCellDef="let element"> {{element.dateOfTenderFloat | date:'dd/MMM/yyyy'}} </mat-cell>
+                  </ng-container>
+                  <!-- <ng-container matColumnDef="tenderNotice">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header>Tender Notice</mat-header-cell>
+                    <mat-cell class="icon-d" *matCellDef="let element"> <mat-lebel *ngIf="element.tenderNotice"><a target="_blank" [href]="element.tenderNotice"></a></mat-lebel> </mat-cell>
+                  </ng-container> -->
+                  <!-- <ng-container matColumnDef="tenderNotice">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header> Tender Notice </mat-header-cell>
+                    <mat-cell *matCellDef="let element" class="notice"><img src={{element.tenderNotice}} /> </mat-cell>
+                  </ng-container> -->
+                  <ng-container matColumnDef="dateOfDelivery">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header> Delivery Date   </mat-header-cell>
+                    <mat-cell *matCellDef="let element"> {{element.dateOfDelivery | date:'dd/MMM/yyyy'}} </mat-cell>
+                  </ng-container>
+                  <ng-container matColumnDef="qty">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header> Qty </mat-header-cell>
+                    <mat-cell *matCellDef="let element"> {{element.qty}} </mat-cell>
+                  </ng-container>
+                  <ng-container matColumnDef="isActive">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header> Status </mat-header-cell>
+                    <mat-cell class="col-pending-status" *matCellDef="let element"> {{element.isActive == 'true' ? 'Completed' : 'Pending'}} </mat-cell>
+                  </ng-container>
+                  
+                  <!-- <ng-container matColumnDef="actions">
+                    <mat-header-cell *matHeaderCellDef class="pr-0 procurement-act">Actions</mat-header-cell>
+                    <mat-cell *matCellDef="let row; let i=index;" class="pr-0 procurement-act">
+                      <a target="_blank" [href]="row.tenderNotice">	<mat-icon matTooltip="Tender Notice"> insert_drive_file</mat-icon></a>
+                      <a target="_blank" [href]="row.tenderSpecification">	<mat-icon matTooltip="Tender Specification"> insert_drive_file</mat-icon></a>
+                      <a target="_blank" [href]="row.financialApproval">	<mat-icon matTooltip="Financial Approval"> insert_drive_file</mat-icon></a>
+                      <a target="_blank" [href]="row.workOrder">	<mat-icon matTooltip="Work Order"> insert_drive_file</mat-icon></a>
+                      <button mat-icon-button color="accent" class="btn-tbl-edit" 
+                      [routerLink]="['/spares-management/update-procurement', row.procurementId]">
+                        <mat-icon aria-label="Edit" class="col-white">edit</mat-icon>
+                      </button>
+                      <button mat-icon-button color="accent" class="btn-tbl-delete" (click)="$event.stopPropagation()"
+                        (click)="deleteItem(row)">
+                        <mat-icon aria-label="Delete" class="col-white">delete</mat-icon> 
+                      </button>
+                    </mat-cell>
+                  </ng-container> -->
+                
+                  <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                  <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+                </mat-table>
+              </div>
+              
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
+
+
+ 

@@ -1,0 +1,191 @@
+<section class="content">
+  <div class="container-fluid">
+    <div class="block-header">
+      <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+          <ul class="breadcrumb breadcrumb-style ">
+            <li class="breadcrumb-item">
+            </li>
+            <li class="breadcrumb-item bcrumb-1">
+              <a routerLink="/admin/dashboard/main"><i class="fas fa-home"></i></a>
+            </li>
+            <li class="breadcrumb-item bcrumb-2">
+              <a href="#" onClick="return false;">Previous Item Store Details</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="row clearfix">
+      <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+        <div class="card">
+          <div class="body">
+
+            <div class="responsive_table">
+              <div class="materialTableHeader">
+                <div class="row"> 
+                  <div class="col-8">
+                    <ul class="header-buttons-left ml-0">
+                      <li class="dropdown">
+                        <h4>Previous Item Store Details</h4>
+                      </li>
+                    </ul> 
+                  </div>
+                  <div class="col-4">
+                    <ul class="header-buttons">
+                      <li>
+                        <div class="icon-button-demo">
+                          <button class="btn-space"  mat-raised-button
+                          color="warn" [routerLink]="['/spares-management/previousitemstore-list']"> 
+                          <mat-icon class="col-white">keyboard_backspace</mat-icon> Back
+                          </button>
+                          <button class="btn-space"  mat-raised-button
+                          [routerLink]="['/spares-management/update-previousitemstore',this.previousItemStoreId]"> Update
+                            <mat-icon class="col-white">Update</mat-icon>
+                          </button>
+                        </div>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+              <table class="table table-bordered">
+                <thead>
+                  
+                </thead>
+                <tbody>
+                  <tr>
+                    <th scope="row">Flight Line/Squadron </th>
+                    <td>{{departmentName}}</td>
+                    <th scope="row">Patt No</th>
+                    <td>{{pattNo}}</td>
+                  </tr>
+                  <tr>
+                    <th scope="row">Name of Item</th>
+                    <td>{{itemDetail}}</td>
+                    <th scope="row">Tools Box Name</th>
+                    <td>{{toolsBoxName}}</td>
+                  </tr>
+                  <tr>
+                    <th scope="row">Tools Location</th>
+                    <td>{{toolsLocation}}</td>
+                    <th scope="row">Tools Type</th>
+                    <td>{{toolsType}}</td>
+                  </tr>
+                  <tr>
+                    <th scope="row"> Deno</th>
+                    <td>{{deno}}</td>
+                    <th scope="row">Item Category</th>
+                    <td>{{itemCategory}}</td>
+                  </tr>
+                  <tr>
+                    <th scope="row">Service Life Type</th>
+                    <td>{{servisLifeType}}</td>
+                    <th scope="row">Type of Item</th>
+                    <td>{{sparesCategory}}</td>
+                  </tr>
+                  <tr>
+                    <th scope="row">End Life Type</th>
+                    <td>{{endLifeType}}</td>
+                    <th scope="row">Acct Store</th>
+                    <td>{{acctStore}}</td>
+                  </tr>
+                  <tr>
+                    <th scope="row">Overhawling Type</th>
+                    <td>{{overhawlingType}}</td>
+                    <th scope="row">Retirment Type</th>
+                    <td>{{retirmentType}}</td>
+                  </tr>
+                  <tr>
+                    <th scope="row">Ser No</th>
+                    <td>{{itemSerNo}}</td>
+                    <th scope="row">IMC No </th>
+                    <td>{{icmNo}}</td>
+                  </tr>
+                  <tr>
+                    <th scope="row">Shelf Life</th>
+                    <td>{{shelfLife}}</td>
+                    <th scope="row">End Shalf Life</th>
+                    <td> {{endShalfLife}}</td>
+                  </tr>
+                  <tr>
+                    <th scope="row">Warranty Start Date</th>
+                    <td>{{warrantyStartDate | date:'dd/MMM/yyyy'}}</td>
+                    <th scope="row">Warranty End Date</th>
+                    <td>{{warrantyEndDate | date:'dd/MMM/yyyy'}}</td>
+                  </tr>
+                  <tr>
+                    <th scope="row">Item Received Date</th>
+                    <td>{{itemReceivedDate | date:'dd/MMM/yyyy'}}</td>
+                    <th scope="row">Total Received Qty</th>
+                    <td> {{totalReceivedQty}}</td>
+                  </tr>
+                  <tr>
+                    <th scope="row">Issued Qty</th>
+                    <td>{{issuedQty}}</td>
+                    <th scope="row">Available Qty</th>
+                    <td> {{availableQty}}</td>
+                  </tr>
+                  <tr>
+                    <th scope="row">Location</th>
+                    <td>{{location}}</td>
+                    <th scope="row">Service Life</th>
+                    <td> {{serviceLife}}</td>
+                  </tr>
+                  <tr>
+                    <th scope="row">End Life Time</th>
+                    <td>{{endLifeTime}}</td>
+                    <th scope="row">Accessories</th>
+                    <td> {{accessories}}</td>
+                  </tr>
+                  <tr>
+                    <th scope="row">Stock Register Page No</th>
+                    <td>{{stockRegisterPageNo}}</td>
+                    <th scope="row">Retirment Life</th>
+                    <td> {{retirmentLife}}</td>
+                  </tr>
+                  <tr>
+                    <th scope="row">Demand Qty</th>
+                    <td>{{demandQty}}</td>
+                    <th scope="row">Demand Date</th>
+                    <td> {{demandDate | date:'dd/MMM/yyyy'}}</td>
+                  </tr>
+                  <tr>
+                    <th scope="row">Letter Outer No</th>
+                    <td>{{letterOuterNo}}</td>
+                    <th scope="row">Ref Po No</th>
+                    <td> {{refPoNo}}</td>
+                  </tr>
+                  <tr>
+                    <th scope="row">Tender Number</th>
+                    <td>{{tenderNumber}}</td>
+                    <th scope="row">Tender Floating Date</th>
+                    <td> {{dateOfTenderFloat | date:'dd/MMM/yyyy'}}</td>
+                  </tr>
+                  <tr>
+                    <th scope="row">Tender Opening Date</th>
+                    <td>{{tenderopeningDate | date:'dd/MMM/yyyy'}}</td>
+                    <th scope="row">Tender Publish Date</th>
+                    <td> {{tenderPublishDate | date:'dd/MMM/yyyy'}}</td>
+                  </tr>
+                  <tr>
+                    <th scope="row">Tender Notice</th>
+                    <td>{{tenderNotice}}</td>
+                    <th scope="row">Calibration Date</th>
+                    <td> {{calibrationDate | date:'dd/MMM/yyyy'}}</td>
+                  </tr>
+                  <tr>
+                    <th scope="row">Next Calibration Date</th>
+                    <td>{{nextCalibrationDate | date:'dd/MMM/yyyy'}}</td>
+                    <th scope="row">Remarks</th>
+                    <td> {{remarks}}</td>
+                  </tr>
+                </tbody>
+              </table>          
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

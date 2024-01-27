@@ -1,0 +1,322 @@
+<section class="content">
+  <div class="container-fluid">
+    <div class="block-header">
+      <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+          <ul class="breadcrumb breadcrumb-style ">
+            <li class="breadcrumb-item">
+              <h4 class="page-title">Maintenance Schedule List</h4>
+            </li>
+            <li class="breadcrumb-item bcrumb-1">
+              <a routerLink="/admin/dashboard/main"><i class="fas fa-home"></i></a>
+            </li>
+            <li class="breadcrumb-item bcrumb-2">
+              <a href="#" onClick="return false;">Maintenance Schedule</a>
+            </li>
+            <li class="breadcrumb-item active">All</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+        <div class="card">
+          <div class="body">
+            <div class="responsive_table">
+              <div class="materialTableHeader">
+                <div class="row">
+                  <div class="col-8">
+                    <ul class="header-buttons-left ml-0">
+                      
+                      <!-- <li class="dropdown">
+                        <input placeholder="Search" type="text" [(ngModel)]="searchText"  #filter class="browser-default search-field"
+                          aria-label="Search box">
+                      </li>
+                      <li>
+                        <div class="icon-button-demo m-l-10">
+                          <button mat-mini-fab (click)="applyFilter(searchText)" color="accent">
+                            <mat-icon class="col-white">search</mat-icon>
+                          </button>
+                        </div>
+                      </li> -->
+                    </ul>
+                  </div>
+                  <div class="col-4">
+                    <ul class="header-buttons">
+                      <li >
+                        <div class="icon-button-demo">
+                          <button class="btn-space"  mat-raised-button
+                          color="primary" routerLink="/maintenence-planning/add-maintenanceschedule"> Add
+                            <mat-icon class="col-white">add</mat-icon>
+                          </button>
+                        </div>
+                      </li>
+                        <li>
+                        <div
+                        class="col-xl-4 col-lg-4 col-md-4 col-sm-12 mb-2 db-p">
+                        <button class="btn-space" mat-raised-button color="primary" (click)="printSingle()">
+                          <mat-icon class="col-white">print</mat-icon>
+                        </button>
+                      </div>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+              <!-- <mat-table #table [dataSource]="dataSource" matSort class="mat-cell">
+                <ng-container matColumnDef="ser">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header> Ser. </mat-header-cell>
+                  <mat-cell *matCellDef="let element; let i = index;"> {{ ((paging.pageIndex-1) *  paging.pageSize) + i+1}} </mat-cell>
+                </ng-container> 
+                <ng-container matColumnDef="departmentName">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header> Department Name</mat-header-cell>
+                  <mat-cell *matCellDef="let element"> {{element.departmentName }} </mat-cell>
+                </ng-container>
+                <ng-container matColumnDef="airCraftName">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header> Air Craft Name </mat-header-cell>
+                  <mat-cell *matCellDef="let element"> {{element.airCraftName}} </mat-cell>
+                </ng-container>
+                <ng-container matColumnDef="categoryType">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header> Maintenance Type </mat-header-cell>
+                  <mat-cell *matCellDef="let element"> {{element.categoryType}} </mat-cell>
+                </ng-container> 
+                <ng-container matColumnDef="category">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header> Maintenance Category </mat-header-cell>
+                  <mat-cell *matCellDef="let element"> {{element.category}} </mat-cell>
+                </ng-container>        
+                <ng-container matColumnDef="subCategory">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header> Sub Category </mat-header-cell>
+                  <mat-cell *matCellDef="let element"> {{element.subCategory}} </mat-cell>
+                </ng-container>
+                <ng-container matColumnDef="mpStatus">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header> M.P.Status </mat-header-cell>
+                  <mat-cell *matCellDef="let element"> {{element.mpStatus}} </mat-cell>
+                </ng-container>
+                
+                
+                <ng-container matColumnDef="actions">
+                  <mat-header-cell *matHeaderCellDef class="pr-0">Actions</mat-header-cell>
+                  <mat-cell *matCellDef="let row; let i=index;" class="pr-0">
+                    <button mat-icon-button color="accent" class="btn-tbl-edit" 
+                    [routerLink]="['/maintenence-planning/update-maintenanceplanning', row.maintenancePlanningId]">
+                      <mat-icon aria-label="Edit" class="col-white">edit</mat-icon>
+                    </button>
+                    <button mat-icon-button color="accent" class="btn-tbl-delete" (click)="$event.stopPropagation()"
+                      (click)="deleteItem(row)">
+                      <mat-icon aria-label="Delete" class="col-white">delete</mat-icon> 
+                    </button>
+                  </mat-cell>
+                </ng-container>
+              
+                
+                <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+              </mat-table> -->
+              <form>
+                
+              </form>
+              <div id="print-routine">
+              <table class="table tbl-by-group db-li-s-in mnt-scdle-lst">
+                <thead>
+                  <tr>
+                    <th class="cl-srl">
+                      <h5>Ser</h5>
+                    </th>
+                    
+                    <th class="cl-mrk">
+                      <h5>Aircraft</h5>
+                    </th>
+                    <th class="cl-mrk">
+                      <h5>Type of Maintenance</h5>
+                    </th>
+
+                    
+                    <!-- <th class="cl-mrk">
+                      <h5> Allow Extension </h5>
+                    </th> -->
+                    <th class="cl-nm-rnk">
+                      <h5>Last Insp. Date</h5>
+                    </th>
+                    <th class="cl-nm-rnk">
+                      <h5>Last Insp. FH</h5>
+                    </th>
+                    <th class="cl-nm-rnk">
+                      <h5>Last Insp. OH</h5>
+                    </th>
+                    <th class="cl-nm-rnk">
+                      <h5>Commencing  Date</h5>
+                    </th>
+                    <th class="cl-nm-rnk">
+                      <h5>Planned Completion Date</h5>
+                    </th>
+                    <!-- <th class="cl-nm-rnk">
+                      <h5>Planned Completion Date</h5>
+                    </th> -->
+                    <!-- <th *ngIf="role != userRole.CO" class="cl-nm-rnk">
+                      <h5>Extension</h5>
+                    </th> -->
+                    <th *ngIf="role != userRole.CO" class="cl-mrk custom-date">
+                      <h5>Complete Date</h5>
+                    </th>
+                    <th  class="cl-mrk-progress">
+                      <h5>Progress </h5>
+                    </th>
+                    <th *ngIf="role != userRole.CO" class="cl-mrk-document">
+                      <h5>Document</h5>
+                    </th>
+                    <th class="cl-mrk-document">
+                      <h5>Job Card</h5>
+                    </th>
+                    <!-- <th *ngIf="role == userRole.SuperAdmin" class="thbm"><h5>Approved</h5></th> -->
+                    <th *ngIf="role != userRole.CO" class="action">
+                      <h5>Status</h5>
+                    </th>
+                    
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let unit of MaintanenceScheduleForm.get('MaintanenceScheduleList')['controls']; let i = index" [formGroup]="unit">
+                    <td class="cl-srl" scope="row">{{ i + 1 }}</td>                    
+                    <td class="cl-nm-rnk">
+                      {{ getControlLabel(i, "airCraftName") }}
+                    </td>
+                    
+                    <td class="cl-nm-rnk">
+                      {{ getControlLabel(i, "subCategory") }}
+                    </td>
+                    
+                    
+                    
+                    <!-- <td class="cl-nm-rnk">
+                      {{ getControlLabel(i, "extensionDays") }} Days
+                    </td> -->
+                    
+                    <td class="cl-nm-rnk">
+                      <span *ngIf="getControlLabel(i, 'category') == 'Calender'">{{ getControlLabel(i, "maintenancePlanning") | date: "dd/MMM/yyyy" }} </span>
+                      
+                    </td>   
+                     
+                    <td class="cl-nm-rnk">
+                      {{getControlLabel(i, "lastInspectiobFh")}}
+                    </td>   
+                    <td class="cl-nm-rnk">
+                      {{getControlLabel(i, "lastInspectiobOh")}}
+                    </td>   
+                    <td class="cl-nm-rnk">
+                      {{ getControlLabel(i, "startInspDate") | date: "dd/MMM/yyyy" }}
+                    </td>
+                    
+                    <td class="cl-nm-rnk">
+                      {{ getControlLabel(i, "endInspDate") | date: "dd/MMM/yyyy" }} 
+                    </td>
+                    <td *ngIf="role != userRole.CO" class="cl-mrk custom-date">
+                      <mat-form-field class="example-full-width mb-3" appearance="outline">
+                        <input class="custom-date-picker" matInput [matDatepicker]="datepicker" formControlName="completedDate">
+                        <mat-datepicker-toggle matSuffix [for]="datepicker"></mat-datepicker-toggle>
+                        <mat-datepicker #datepicker></mat-datepicker>
+                      </mat-form-field>
+                    </td>  
+                    <td  class="cl-mrk-progress">
+                      <mat-form-field *ngIf="role != userRole.CO" class="example-full-width mb-3-progress" appearance="outline">
+                        <input matInput type="text" formControlName="progressBar"/>
+                      </mat-form-field>
+                      <span *ngIf="role == userRole.CO" >{{ getControlLabel(i, "progressBar") }}</span>
+                    </td>
+                    <td *ngIf="role != userRole.CO" class="cl-mrk-document">
+                      <mat-form-field class="example-full-width mb-3-progress" appearance="outline">
+                        <!-- <input matInput type="text" formControlName="doc"/> -->
+                        <ngx-mat-file-input (change)="onFileChanged($event,i)" accept=".txt,.pdf,.xls,.xlsx,.doc,.docx,.ppt,.pptx" ></ngx-mat-file-input>
+                        <mat-icon matSuffix>attachment</mat-icon>
+                      </mat-form-field>
+                    </td>
+                    <td class="cl-mrk-document">
+                      <a target="_blank" [href]='[this.fileUrl+getControlLabel(i, "jobCard")]'>
+                        <i matTooltip="Maintenance Document" class="far fa-file-pdf tbl-pdf" >
+                      </i ></a>
+                    </td>
+                    <!-- <td *ngIf="role == userRole.SuperAdmin">
+                      <button mat-raised-button class="custom-btn courseplan-apr"  (click)="inActiveItem(unit)"  (click)="$event.stopPropagation()">{{ getControlLabel(i,"verificationCompletStatus") == 0 ? 'Not Approved' : 'Approved' }}<i style="font-size:20px;color:red"> </i></button>
+                    </td> -->
+                    <!-- <td class="cl-nm-rnk">
+
+                    </td> -->
+                    <!-- <td *ngIf="role != userRole.CO"></td>
+                    <td *ngIf="role != userRole.CO"></td> -->
+                    <!-- *ngIf="(role == userRole.admin || (role == userRole.User && getControlLabel(i,'verificationCompletStatus') == 0))|| role == userRole.SuperAdmin" -->
+                    <td *ngIf="role != userRole.CO" class="action">
+                      <button 
+                       mat-icon-button color="accent" class="btn-tbl-delete" (click)="$event.stopPropagation()"
+                        (click)="deleteItem(unit)">
+                        <mat-icon aria-label="Delete" class="col-white">delete</mat-icon> 
+                      </button>
+                      <button title="Progress Update"   class="btn-space custom" (click)="onCompletedButtonClick($event,unit,i,0)"><i class="fa fa-calendar-check"></i></button> 
+                      <button title="Work Completed"   class="btn-space custom" (click)="onCompletedButtonClick($event,unit,i,1)"><i class="fa fa-check"></i></button> 
+                    </td>
+
+                    
+                    
+
+                    <!-- <td class="cl-mrk">
+                      <mat-form-field *ngIf="getControlLabel(i,'completedStatus') === 1"
+                        class="example-full-width mb-3"
+                        appearance="outline"
+                      >
+                        <input
+                          matInput
+                          type="text"
+                          formControlName="issuedQty"
+                          (change)="
+                            OnTextCheck(
+                              $event.target.value,
+                              i,
+                              'availableQty'
+                            )
+                          "
+                        />
+                      </mat-form-field>
+                    </td>
+                    <td class="cl-nm-rnk">
+                      {{ getControlLabel(i, "returnQty") }}
+                    </td>
+                    <td class="cl-mrk-rmrk">
+                      <mat-form-field class="example-full-width mb-3" appearance="outline">
+                        <mat-select formControlName="issueStatusId">
+                          <mat-option  value="">--Select--</mat-option >
+                          <mat-option *ngFor="let dropdown of selectedIssueStatuses" [value]="dropdown.value">
+                            {{dropdown.text}} 
+                          </mat-option>                          
+                        </mat-select>
+                      </mat-form-field>    
+                    </td>
+                    <td class="cl-mrk">
+                      <input
+                        type="checkbox"
+                        formControlName="isChecked"
+                        #checkBox
+                        [(ngModel)]="unit.isChecked"
+                        (change)="onCheckboxChange($event, unit)"
+                        [ngClass]="'tbl-checkbox'"
+                      />
+                    </td> -->
+                    
+                  </tr>
+                </tbody>
+              </table>
+              </div>
+              <!-- <mat-paginator [length]="paging.length" [showFirstLastButtons]="masterData.paging.showFirstLastButtons"
+                [pageSize]="paging.pageSize" [pageSizeOptions]="masterData.paging.pageSizeOptions"
+                (page)="pageChanged($event)">
+              </mat-paginator> -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
+
+
+ 

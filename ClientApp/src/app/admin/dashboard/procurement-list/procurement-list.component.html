@@ -1,0 +1,105 @@
+<section class="content">
+  <div class="container-fluid">
+    <div class="block-header">
+      <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+          <ul class="breadcrumb breadcrumb-style ">
+            <li class="breadcrumb-item">
+              <h4 class="page-title">Procurement List</h4>
+            </li>
+            <li class="breadcrumb-item bcrumb-1">
+              <a routerLink="/admin/dashboard/main"><i class="fas fa-home"></i></a>
+            </li>
+            <li class="breadcrumb-item bcrumb-2">
+              <a href="#" onClick="return false;">Procurement List</a>
+            </li>
+            <li class="breadcrumb-item active">All</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+        <div class="card">
+          <div class="body">
+            <div class="responsive_table">
+              <div class="row dash-cd-m-0 dash-half-row">
+                <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 div-class div-left">
+                  <h3>Procurement List - <span class="count-color"> {{RemainProcurement}} ( {{CountRemainProcurement}} )
+                    </span> </h3>
+                </div>
+                <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 div-class div-right">
+                  <div class="dialog m-b-10">
+                    <button class="back" [routerLink]="['/admin/dashboard/main']" mat-raised-button> <mat-icon>keyboard_backspace</mat-icon> Back</button> |
+                    <button class="all" (click)="RemainProcurementQty(masterData.department.all, 'All')"
+                      mat-raised-button>All</button> |
+                    <button color="accent" (click)="RemainProcurementQty(masterData.department.mpa, 'MPA')"
+                      mat-raised-button>MPA</button> |
+                    <button color="primary" (click)="RemainProcurementQty(masterData.department.hel, 'HEL')"
+                      mat-raised-button>HEL</button> |
+                    <button color="warn" (click)="RemainProcurementQty(masterData.department.uav, 'UAV')"
+                      mat-raised-button>UAV</button>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <mat-table #table [dataSource]="RemainProcurementQtyList" matSort matSort
+                  class="mat-cell  db-tbl db-avl-qty-tbl content-center-align">
+                  <ng-container matColumnDef="sl">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header> Ser. </mat-header-cell>
+                    <mat-cell *matCellDef="let element; let i = index;"> {{ ((paging.pageIndex-1) * paging.pageSize) +
+                      i+1}} </mat-cell>
+                  </ng-container>
+
+                  <ng-container matColumnDef="tenderNumber">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header> Tender No</mat-header-cell>
+                    <mat-cell *matCellDef="let element">{{element.tenderNumber}}
+                    </mat-cell>
+                  </ng-container>
+
+                  <ng-container matColumnDef="dateOfDelivery">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header>Delivery</mat-header-cell>
+                    <mat-cell *matCellDef="let element">{{element.dateOfDelivery | date:'dd/MMM/yyyy'}}
+                    </mat-cell>
+                  </ng-container>
+
+                  <ng-container matColumnDef="dateOfTenderFloat">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header>Float Date</mat-header-cell>
+                    <mat-cell *matCellDef="let element">{{element.dateOfTenderFloat | date:'dd/MMM/yyyy'}}
+                    </mat-cell>
+                  </ng-container>
+
+                  <ng-container matColumnDef="cstTec">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header> CST / TEC</mat-header-cell>
+                    <mat-cell *matCellDef="let element">{{element.cstTec}}
+                    </mat-cell>
+                  </ng-container>
+
+                  <ng-container matColumnDef="qty">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header>Qty</mat-header-cell>
+                    <mat-cell *matCellDef="let element">{{element.qty}}
+                    </mat-cell>
+                  </ng-container>
+                  <ng-container matColumnDef="sftQty">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header>SFT Qty</mat-header-cell>
+                    <mat-cell *matCellDef="let element">{{element.sftQty}}
+                    </mat-cell>
+                  </ng-container>
+
+                  <mat-header-row *matHeaderRowDef="procurementColumns"></mat-header-row>
+                  <mat-row *matRowDef="let row; columns: procurementColumns;"></mat-row>
+                </mat-table>
+              </div>
+
+            </div>
+
+            <!-- <mat-paginator [length]="paging.length" [showFirstLastButtons]="masterData.paging.showFirstLastButtons"
+              [pageSize]="paging.pageSize" [pageSizeOptions]="masterData.paging.pageSizeOptions"
+              (page)="pageChanged($event)">
+            </mat-paginator> -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

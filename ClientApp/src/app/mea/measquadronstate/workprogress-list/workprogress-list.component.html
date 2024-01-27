@@ -1,0 +1,237 @@
+<section class="content">
+  <div class="container-fluid">
+    <div class="block-header">
+      <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+          <ul class="breadcrumb breadcrumb-style">
+            <li class="breadcrumb-item">
+              <h4 class="page-title">MEA Squadron State</h4>
+            </li>
+            <li class="breadcrumb-item bcrumb-1">
+              <a routerLink="/admin/dashboard/main"
+                ><i class="fas fa-home"></i
+              ></a>
+            </li>
+            <li class="breadcrumb-item bcrumb-2">
+              <a href="#" onClick="return false;">MEA Squadron State</a>
+            </li>
+            <li class="breadcrumb-item active">All</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+        <div class="card">
+          <div class="body">
+            <div class="responsive_table">
+              <div class="materialTableHeader previous">
+                <div class="row">
+                  <div class="col-8">
+                    <ul class="header-buttons-left ml-0">
+                      <li class="dropdown">
+                        <input
+                          placeholder="Search"
+                          type="text"
+                          [(ngModel)]="searchText"
+                          #filter
+                          class="browser-default search-field"
+                          aria-label="Search box"
+                        />
+                      </li>
+                      <li>
+                        <div class="icon-button-demo m-l-10">
+                          <button
+                            mat-mini-fab
+                            (click)="applyFilter(searchText)"
+                            color="primary"
+                          >Go
+                            <!-- <mat-icon class="col-white">search</mat-icon> -->
+                          </button>
+                        </div>
+                      </li>
+                    </ul>
+                  </div>
+                  <div class="col-4">
+                    <ul class="header-buttons">
+                      <li>
+                        <div class="icon-button-demo">
+                          <!-- <button *ngIf="roleDisable"
+                            class="btn-space"
+                            mat-raised-button
+                            color="primary"
+                            routerLink="/mea/add-workprogress"
+                          >
+                            Add
+                            <mat-icon class="col-white">add</mat-icon>
+                          </button> -->
+                        </div>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+              <table class="table tbl-by-group db-li-s-in">
+                <thead>
+                  <tr>
+                    <th class="thbm"><h5>Ser</h5></th>
+                    <th class="thbm"><h5>Item Name</h5></th>
+                    <th class="thbm"><h5>Trade</h5></th>
+                    <th class="thbm"><h5>Work Order No</h5></th>
+                    <th class="thbm"><h5>Date of Submition</h5></th>
+                    <th class="thbm"><h5>Work Shop</h5></th>
+                    <th class="thbm"><h5>Control No</h5></th>
+                    <th class="thbm"><h5>Progress</h5></th>
+                    <!-- <th class="thbm"><h5>Document</h5></th> -->
+                    <th class="thbm"><h5>status</h5></th>
+                    <th class="thbm"><h5></h5></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let unit of MeaSquadronStateForm.get('meaSquadronStateList')['controls']; let i = index" [formGroup]="unit">
+                    <td class="cl-srl" scope="row">{{ i + 1 }}</td>                    
+                    <td class="cl-nm-rnk">
+                      {{ getControlLabel(i, "itemName") }}
+                    </td>
+                    
+                    <td class="cl-nm-rnk">
+                      {{ getControlLabel(i, "trad") }}
+                    </td>
+                    
+                    <td class="cl-nm-rnk">
+                      {{ getControlLabel(i, "workOrderNo") }} 
+                    </td>   
+                    
+                    <td class="cl-nm-rnk">
+                      {{ getControlLabel(i, "dateofSubmition") | date: "dd/MMM/yyyy" }}
+                    </td>
+                    <td class="cl-nm-rnk">
+                      {{ getControlLabel(i, "workShop")  }}
+                    </td>
+                    <td class="cl-nm-rnk">
+                      {{ getControlLabel(i, "controlNo")  }}
+                    </td>
+                    <td  class="cl-mrk">
+                      <mat-form-field  class="example-full-width" appearance="outline">
+                        <textarea matInput type="text" formControlName="remarks"></textarea>
+                      </mat-form-field>
+                    </td>
+                    <!-- <td  class="cl-mrk">
+                      <mat-form-field  class="example-full-width" appearance="outline">
+                        <ngx-mat-file-input
+                          (change)="onFileChanged($event)"
+                          accept=".txt,.pdf,.xls,.xlsx,.doc,.docx,.ppt,.pptx"
+                        >
+                        </ngx-mat-file-input>
+                        <mat-icon matSuffix>attachment</mat-icon>
+                      </mat-form-field>
+                    </td> -->
+                  
+                    
+                    <td >
+                      <button   class="btn-space custom"  title="Completed" (click)="inCompletedItem(unit)"  (click)="$event.stopPropagation()"><i class="fa fa-check"> </i></button>
+                      <button class="btn-space custom"  style="background-color:red"   title="Pending" (click)="inUnCompletedItem(unit)"  (click)="$event.stopPropagation()"><i class="fa fa-times-circle"></i></button>
+                    </td>
+                    <td >
+                      <button title="Remarks"   class="btn-space custom" (click)="onCompletedButtonClick($event,unit,i)"><i class="fa fa-check"> Save</i></button> 
+                    </td>
+
+                   
+                    
+                  </tr>
+                  <!-- <ng-container
+                    *ngFor="
+                      let data of dataSource.data;
+                      let i = index
+                    "
+                  >
+                    <tr>
+                      <td>
+                        {{
+                          (paging.pageIndex - 1) * paging.pageSize + i + 1
+                        }}
+                      </td>
+                      <td>
+                        {{ data.itemName }}
+                      </td>
+                      <td>
+                        {{ data.trad }}
+                      </td>
+                      <td>
+                        {{ data.workOrderNo }}
+                      </td>
+                      <td>
+                        {{ data.dateofSubmition | date: "dd/MMM/yyyy"}}
+                      </td>
+                      <td>
+                        {{ data.workShop }}
+                      </td>
+                      <td  class="cl-mrk">
+                        <mat-form-field  class="example-full-width mb-3" appearance="outline">
+                          <input matInput type="text" formControlName="progressBar"/>
+                        </mat-form-field>
+                       
+                      </td>
+                      <td >
+                        <button  mat-icon-button class="btn-space custom"  title="Completed" (click)="inCompletedItem(data)"  (click)="$event.stopPropagation()"><i class="fa fa-check"> </i></button>
+                        <button  mat-icon-button  title="Pending" (click)="inUnCompletedItem(data)"  (click)="$event.stopPropagation()"><i class="fas fa-window-close" style="font-size:43px;color:red"> </i></button>
+                        
+                      </td> -->
+                     
+                      <!-- <td *ngIf="status !=1" class="cl-action">
+                        <div>
+                          <button  mat-icon-button  color="primary" title="Accept" (click)="inActiveItem(data)"  (click)="$event.stopPropagation()"><mat-icon>check_circle</mat-icon></button>
+                    <button *ngIf="data.jobStatus != 1"  mat-icon-button class="accent" title="Cancel"  (click)="inUnActiveItem(data)"  (click)="$event.stopPropagation()"><mat-icon> cancel_presentation</mat-icon></button>
+                    <button mat-icon-button color="accent" class="btn-tbl-edit" [routerLink]="['/mea/view-measquadronstate', data.meaSquadronStateId]">
+                                <mat-icon aria-label="Edit" class="col-white"
+                                  >visibility</mat-icon
+                                >
+                              </button>
+                    <button *ngIf="role == userRole.SuperAdmin || (roleDisable && (role == userRole.User && data.jobStatus != 1))"
+                      mat-icon-button
+                      color="accent"
+                      class="btn-tbl-edit"
+                      [routerLink]="[
+                        '/mea/update-workprogress',
+                        data.meaSquadronStateId
+                      ]"
+                    >
+                      <mat-icon aria-label="Edit" class="col-white"
+                        >edit</mat-icon
+                      >
+                    </button>
+                    <button *ngIf="role == userRole.SuperAdmin || (roleDisable && (role == userRole.User && data.jobStatus != 1))"
+                      mat-icon-button
+                      color="accent"
+                      class="btn-tbl-delete"
+                      (click)="$event.stopPropagation()"
+                      (click)="deleteItem(data)"
+                    >
+                      <mat-icon aria-label="Delete" class="col-white"
+                        >delete</mat-icon
+                      >
+                    </button>
+                        </div>
+                        {{ data.actions }}
+                      </td> -->
+                    <!-- </tr>
+                  </ng-container> -->
+                </tbody>
+              </table>
+              
+
+              <mat-paginator
+                [length]="paging.length"
+                [showFirstLastButtons]="masterData.paging.showFirstLastButtons"
+                [pageSize]="paging.pageSize"
+                [pageSizeOptions]="masterData.paging.pageSizeOptions"
+                (page)="pageChanged($event)"
+              >
+              </mat-paginator>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

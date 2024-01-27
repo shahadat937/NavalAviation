@@ -1,0 +1,18 @@
+using Microsoft.AspNetCore.Http;
+using System;
+using System.Collections.Generic;
+using System.Text;
+
+namespace SchoolManagement.Application.DTOs.MeaBlankFormat
+{
+    public class CreateMeaBlankFormatDto : IMeaBlankFormatDto
+    {
+        public int MeaBlankFormatId { get; set; }
+        public string? Name { get; set; }
+        public string? Doc { get; set; }
+        public string? Remarks { get; set; }
+        public int? MenuPosition { get; set; }
+        public bool IsActive { get; set; }
+        public IFormFile? Document { get; set; }
+     }
+}

@@ -1,0 +1,230 @@
+<section class="content">
+  <div class="container-fluid">
+    <div class="block-header">
+      <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+          <ul class="breadcrumb breadcrumb-style">
+            <li class="breadcrumb-item">
+              <h4 class="page-title">{{ pageTitle }}</h4>
+            </li>
+            <li class="breadcrumb-item bcrumb-1">
+              <a routerLink="/admin/dashboard/main">
+                <i class="fas fa-home"></i>
+              </a>
+            </li>
+            <li class="breadcrumb-item bcrumb-2">
+              <a href="#" onClick="return false;">Supplier</a>
+            </li>
+            <li class="breadcrumb-item active">{{ destination }}</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="row clearfix">
+      <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+        <div class="card">
+          <div class="body">
+            <form
+              class="m-4"
+              [formGroup]="SupplierForm"
+              (ngSubmit)="onSubmit()"
+            >
+              <div class="row">
+                <div class="col-xl-3 col-lg-3 col-md-3 col-sm-3 mb-2">
+                  <mat-form-field
+                    class="example-full-width mb-3"
+                    appearance="outline"
+                  >
+                    <mat-label>Company Name</mat-label>
+                    <input matInput formControlName="companyName" required />
+                    <mat-error
+                      *ngIf="
+                        SupplierForm.get('companyName').hasError('required')
+                      "
+                    >
+                      Company Name is required
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+                <div class="col-xl-3 col-lg-3 col-md-3 col-sm-3 mb-2">
+                  <mat-form-field
+                    class="example-full-width mb-3"
+                    appearance="outline"
+                  >
+                    <mat-label>Present Address</mat-label>
+                    <input matInput formControlName="presentAddress" required />
+                    <mat-error
+                      *ngIf="
+                        SupplierForm.get('presentAddress').hasError('required')
+                      "
+                    >
+                      Present Address is required
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+
+                <div class="col-xl-3 col-lg-3 col-md-3 col-sm-3 mb-2">
+                  <mat-form-field
+                    class="example-full-width mb-3"
+                    appearance="outline"
+                  >
+                    <mat-label>Permanent Address</mat-label>
+                    <input
+                      matInput
+                      formControlName="permanentAddress"
+                      required
+                    />
+                    <mat-error
+                      *ngIf="
+                        SupplierForm.get('permanentAddress').hasError(
+                          'required'
+                        )
+                      "
+                    >
+                      Permanent Address is required
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+                <div class="col-xl-3 col-lg-3 col-md-3 col-sm-3 mb-2">
+                  <mat-form-field
+                    class="example-full-width mb-3"
+                    appearance="outline"
+                  >
+                    <mat-label>Phone Number</mat-label>
+                    <input matInput formControlName="phoneNumber" required />
+                    <mat-error
+                      *ngIf="
+                        SupplierForm.get('phoneNumber').hasError('required')
+                      "
+                    >
+                      Phone Number is required
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+                <!-- <div class="col-xl-3 col-lg-3 col-md-3 col-sm-3 mb-2">
+                    <mat-form-field class="example-full-width mb-3" appearance="outline">
+                      <mat-label>Telephone Number</mat-label>
+                      <input matInput formControlName="telephoneNumber" >
+                      <mat-error *ngIf="SupplierForm.get('telephoneNumber').hasError('required')">
+                        Telephone Number is required
+                      </mat-error>
+                    </mat-form-field>
+                  </div> -->
+                <div class="col-xl-3 col-lg-3 col-md-3 col-sm-3 mb-2">
+                  <mat-form-field
+                    class="example-full-width mb-3"
+                    appearance="outline"
+                  >
+                    <mat-label>Email Address</mat-label>
+                    <input matInput formControlName="emailAddress" />
+                    <mat-error
+                      *ngIf="
+                        SupplierForm.get('emailAddress').hasError('required')
+                      "
+                    >
+                      Email Address is required
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+                <div class="col-xl-3 col-lg-3 col-md-3 col-sm-3 mb-2">
+                  <mat-form-field
+                    class="example-full-width mb-3"
+                    appearance="outline"
+                  >
+                    <mat-label>Fax</mat-label>
+                    <input matInput formControlName="fax" />
+                  </mat-form-field>
+                </div>
+                <div class="col-xl-3 col-lg-3 col-md-3 col-sm-3 mb-2">
+                  <mat-form-field
+                    class="example-full-width mb-3"
+                    appearance="outline"
+                  >
+                    <mat-label>Enlisted Type</mat-label>
+                    <mat-select formControlName="enlistedType">
+                      <mat-option value="0">--Select--</mat-option>
+                      <mat-option value="true">Yes</mat-option>
+                      <mat-option value="false">No</mat-option>
+                    </mat-select>
+                    <mat-error
+                      *ngIf="
+                        SupplierForm.get('enlistedType').hasError('required')
+                      "
+                    >
+                      Enlisted Type is required
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+                <div class="col-xl-3 col-lg-3 col-md-3 col-sm-3 mb-2">
+                  <mat-form-field
+                    class="example-full-width mb-3"
+                    appearance="outline"
+                  >
+                    <mat-label>Contract Person Name</mat-label>
+                    <input matInput formControlName="contractPersonName" />
+                    <mat-error
+                      *ngIf="
+                        SupplierForm.get('contractPersonName').hasError(
+                          'required'
+                        )
+                      "
+                    >
+                      Contract Person Name is required
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+                <div class="col-xl-3 col-lg-3 col-md-3 col-sm-3 mb-2">
+                  <mat-form-field
+                    class="example-full-width mb-3"
+                    appearance="outline"
+                  >
+                    <mat-label>Contract Person Number</mat-label>
+                    <input matInput formControlName="contractPersonNumber" />
+                    <mat-error
+                      *ngIf="
+                        SupplierForm.get('contractPersonNumber').hasError(
+                          'required'
+                        )
+                      "
+                    >
+                      Contract Person Number is required
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+                <div class="col-xl-3 col-lg-3 col-md-3 col-sm-3 mb-2">
+                  <mat-form-field
+                    class="example-full-width mb-3"
+                    appearance="outline"
+                  >
+                    <mat-label>Remarks</mat-label>
+                    <textarea matInput formControlName="remarks" ></textarea>
+                  </mat-form-field>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                  <button
+                    class="btn-space"
+                    [disabled]="!SupplierForm.valid"
+                    mat-raised-button
+                    color="primary"
+                  >
+                    {{ btnText }}
+                  </button>
+                  <button
+                    type="button"
+                    mat-button
+                    routerLink="/basic-setup/supplier-list"
+                  >
+                    Cancel
+                  </button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

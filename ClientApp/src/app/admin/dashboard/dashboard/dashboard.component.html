@@ -1,0 +1,287 @@
+<div class="scrollbar">
+  <div class="row">
+    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+      <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+        <div class="card usefullink">
+          <div class="body"> 
+            <div class="row">
+              <div class="col-xs-6 col-sm-6 col-md-4 col-lg-custom">
+                <a [routerLink]="['/admin/dashboard/aircraftflying-list']">
+                  <div class=" outer-bond navyblue-border">
+                    <div class="row inner-top navyblue">
+                      <div class="col-xs-5 col-sm-5 col-md-5">
+                        <mat-icon>calendar_today</mat-icon>
+                      </div>
+                      <div class="col-xs-7 col-sm-7 col-md-7">
+                        <h2 class="title-count">
+                          {{CountAricraftFlyingSchedule}}
+                        </h2>
+                        <p class="title-desc">Flying Schedule</p>
+                      </div>
+                    </div>
+                    <div class="row inner-bottom ">
+                      <div>
+                        <p class="btn-details navyblue-text">View Details<span class="clickable-btn"><a [routerLink]="['/admin/dashboard/aircraftflying-list']">></a></span></p>
+                      </div>
+                      <div></div>
+                    </div>
+                  </div>
+                </a>
+                <!-- <br> -->
+            
+              </div>
+           
+              <div class="col-xs-6 col-sm-6 col-md-4 col-lg-custom">
+                <a [routerLink]="['/admin/dashboard/aircraftstatus-list']">
+                  <div class=" outer-bond navyblue-border">
+                    <div class="row inner-top navyblue bg-operational">
+                      <div class="col-xs-5 col-sm-5 col-md-5">
+                        <mat-icon> flight</mat-icon>
+                      </div>
+                      <div class="col-xs-7 col-sm-7 col-md-7">
+                        <h2 class="title-count">
+                          {{this.aircraftStatusCount}}
+                        </h2>
+                        <p class="title-desc">Aircraft Status</p>
+                      </div>
+                    </div>
+                    <div class="row inner-bottom ">
+                      <div>
+                        <p class="btn-details navyblue-text">View Details<span class="clickable-btn"><a [routerLink]="['/admin/dashboard/aircraftstatus-list']">></a></span></p>
+                      </div>
+                      <div></div>
+                    </div>
+                  </div>
+                </a>
+                <!-- <br> -->
+            
+              </div>
+
+              <div class="col-xs-6 col-sm-6 col-md-4 col-lg-custom">
+                <a [routerLink]="['/admin/dashboard/aircraftundermaintenance-list']">
+                  <div class=" outer-bond navyblue-border">
+                    <div class="row inner-top navyblue bg-nonoperational">
+                      <div class="col-xs-5 col-sm-5 col-md-5">
+                        <mat-icon>  
+                          <i class="fa fa-wrench" style="font-size:48px;color:rgb(255, 255, 255)"></i>
+                        </mat-icon>
+                      </div>
+                      <div class="col-xs-7 col-sm-7 col-md-7">
+                        <h2 class="title-count">
+                          {{this.underMaint}}
+                        </h2>
+                        <p class="title-desc">Aircraft Under Maintenence</p>
+                      </div>
+                    </div>
+                    <div class="row inner-bottom ">
+                      <div>
+                        <p class="btn-details navyblue-text">View Details<span class="clickable-btn"><a [routerLink]="['/admin/dashboard/aircraftundermaintenance-list']">></a></span></p>
+                      </div>
+                      <div></div>
+                    </div>
+                  </div>
+                </a>
+              </div>
+              <div class="col-xs-6 col-sm-6 col-md-4 col-lg-custom">
+                <a [routerLink]="['/admin/dashboard/logistisissues-list']">
+                  <div class=" outer-bond navyblue-border">
+                    <div class="row inner-top navyblue bglogistic">
+                      <div class="col-xs-5 col-sm-5 col-md-5">
+                        <mat-icon>  
+                          <i class='fas fa-dolly'></i>
+                        </mat-icon>
+                      </div>
+                      <div class="col-xs-7 col-sm-7 col-md-7">
+                        <h2 class="title-count">
+                          {{TotalLogisticCount}}
+                        </h2>
+                        <p class="title-desc">Logistic Issues</p>
+                      </div>
+                    </div>
+                    <div class="row inner-bottom ">
+                      <div>
+                        <p class="btn-details navyblue-text">View Details<span class="clickable-btn"><a [routerLink]="['/admin/dashboard/logistisissues-list']">></a></span></p>
+                      </div>
+                      <div></div>
+                    </div>
+                  </div>
+                </a>
+              </div>
+              <div class="col-xs-6 col-sm-6 col-md-4 col-lg-custom">
+                <a [routerLink]="['/admin/dashboard/personalstate-list']">
+                  <div class=" outer-bond navyblue-border">
+                    <div class="row inner-top navyblue bg-personnel">
+                      <div class="col-xs-5 col-sm-5 col-md-5">
+                        <mat-icon>  
+                          <i class='fas fa-user-friends'></i>
+                        </mat-icon>
+                      </div>
+                      <div class="col-xs-7 col-sm-7 col-md-7">
+                        <h2 class="title-count">
+                          {{totalCount}}
+                        </h2>
+                        <p class="title-desc">Personnel State</p>
+                      </div>
+                    </div>
+                    <div class="row inner-bottom ">
+                      <div>
+                        <p class="btn-details navyblue-text">View Details<span class="clickable-btn"><a [routerLink]="['/admin/dashboard/personalstate-list']">></a></span></p>
+                      </div>
+                      <div></div>
+                    </div>
+                  </div>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div> 
+  <div class="row">
+    
+    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 table-head">
+          
+      <div class="card">
+        <div class="body">
+          <div class="responsive_table">
+            <div class="row dash-cd-m-0">
+                <h4 class="noticeHeader">Aircraft In Flight</h4>
+            </div>              
+            <div class="row">
+              <div class="table-wrapper-scroll-y my-custom-scrollbar">
+                <table id="customers">                      
+                  <ng-container *ngFor="let data of groupArrayFlightStatus;let i= index;">
+                    <tr class="trAircraftinFlight" *ngFor="let number of data.courses;">
+                      <td class="air-name">
+                        {{number.airCraftName}}
+                      </td>
+                      <td class="air-time">
+                        <span>Startup : </span>
+                        {{number.startUp}}
+                      </td>
+                      <td class="flyingtd">
+                          <div class="progressBar">
+                           
+                            <!-- <div  *ngIf="number.runningPercentage<=100 && number.runningPercentage>=0" class="w3-green"   [ngStyle]="{'width': number.runningPercentage+'%', 'height': 30+'px','display':'inline','float':'left'}">
+                              <span>{{number.runningPercentage}} %</span> <i class="fa fa-plane ml-2"></i> 
+                            </div>
+                            <div  class="w3-red" *ngIf="number.restPercentage>=0 && number.restPercentage<=100"   [ngStyle]="{'width': number.restPercentage+'%', 'height': 30+'px','display':'inline','float':'left'}">
+                              <span>{{number.restPercentage}} %</span> 
+                            </div> -->
+                            <div  *ngIf="number.runningPercentage<=100 && number.runningPercentage>=0" class="w3-green"   [ngStyle]="{'width': number.runningPercentage+'%', 'height': 20+'px','text-align': 'center','display':'inline','float':'left'}">
+                              <span class="absolute-value">{{number.runningPercentage}}%</span>
+                            </div>
+                            <div  class="w3-red" *ngIf="number.restPercentage>=0 && number.restPercentage<=100"   [ngStyle]="{'width': number.restPercentage+'%', 'height': 20+'px','text-align': 'center','display':'inline','float':'left'}">
+                              <span class="absolute-value">{{number.restPercentage}}%</span> 
+                            </div>
+                            <div  *ngIf="number.runningPercentage>=100" class="w3-green"   [ngStyle]="{'width': 100+'%', 'height': 20+'px','text-align': 'center','display':'inline','float':'left'}">
+                              <span class="absolute-value">Flg Complete</span>
+                            </div>
+                          </div>
+                      </td>
+                    </tr>
+                  </ng-container>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 table-head">
+      <div class="card">
+        <div class="body">
+          <div class="responsive_table">
+            <div class="row dash-cd-m-0">
+                <h4 class="noticeHeadersub">Notice Board</h4>
+            </div>
+            <div class="row">
+              <div class="table-wrapper-scroll-y my-custom-scrollbar">
+                <table class="table table-striped tblbg notice-board-db">
+                  <thead class="bg">
+                    <tr>
+                      <th class="dept-name"><h6>Flight Line</h6></th>
+                      <!-- <th class="thbg-n"><h6>Date</h6></th> -->
+                      <th class="thbg-n"><h6>Event</h6></th>
+                      <!-- <th class="thbg-n"><h6>Order By</h6></th>
+                      <th class="thbg-n"><h6>Remarks</h6></th> -->
+                      <th class="doc-cl"><h6>Doc</h6></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <ng-container *ngFor="let data of groupArraysDept;let i= index;">
+                      
+                      <tr>
+                        <td class="dept-name" [attr.rowspan]="data.courses.length + 1">
+                          <!-- {{data.departmentName}} -->
+                          <span *ngIf="data.departmentName =='null'"> All </span>    
+                          <span *ngIf="data.departmentName !='null'"> {{data.departmentName}} </span>  
+                        </td>
+                      </tr>
+                      <tr *ngFor="let number of data.courses;">
+                        <!-- <td>
+                          {{number.date | date:'dd/MMM/yyyy'}}
+                        </td> -->
+                        <td>
+                          {{number.event}}
+                        </td>
+                        <!-- <td>
+                          {{number.orderBy}}
+                        </td>
+                        <td>
+                          {{number.remarks}}
+                        </td> -->
+                        <td class="doc-cl">
+                          <a target="_blank" title="Notice Detail" [href]="'/content/'+number.noticeDocument">	<i matTooltip="Notice Document" class="far fa-file-pdf tbl-pdf"></i>	</a> -  
+                          <a [routerLink]="['/admin/dashboard/view-noticeboard', number.noticeBoardId]">	<i matTooltip="View More" class="far fa-eye tbl-pdf"></i>	</a>
+                        </td>
+                        
+                      </tr>
+                    </ng-container>
+                  </tbody>
+                </table>
+              </div>
+          </div>
+            <!-- <div class="row">
+              <div class="container">               
+                <table class="table">
+                  <thead class="thNotice">
+                    <tr class="trNotice">
+                      <th class="course-name-col"><h5>Department Name</h5></th>
+                      <th class="course-name-col"><h5>Date</h5></th>
+                      <th class="course-name-col"><h5>Event</h5></th>
+                      <th class="cl-mrk"><h5>Order By</h5></th>
+                      <th class="cl-mrk"><h5>Remarks</h5></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <ng-container *ngFor="let data of groupArraysDept;let i= index;">
+                      <tr>
+                        <td class="cl-srl" [attr.rowspan]="data.courses.length + 1">{{data.departmentName}}</td>
+                      </tr>
+                      <tr *ngFor="let number of data.courses;">
+                        <td>
+                          {{number.date | date:'dd/MMM/yyyy'}}
+                        </td>
+                        <td>
+                          {{number.event}}
+                        </td>
+                        <td>
+                          {{number.orderBy}}
+                        </td>
+                        <td>
+                          {{number.remarks}}
+                        </td>
+                      </tr>
+                    </ng-container>
+                  </tbody>
+                </table>
+              </div>
+            </div> -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

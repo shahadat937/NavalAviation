@@ -1,0 +1,87 @@
+<section class="content">
+  <div class="container-fluid">
+    <div class="block-header">
+      <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+          <ul class="breadcrumb breadcrumb-style ">
+            <li class="breadcrumb-item">
+            </li>
+            <li class="breadcrumb-item bcrumb-1">
+              <a routerLink="#"><i class="fas fa-home"></i></a>
+            </li>
+            <li class="breadcrumb-item bcrumb-2">
+              <a href="#" onClick="return false;">Notice Details</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="row clearfix">
+      <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+        <div class="card">
+          <div class="body">
+
+            <div class="responsive_table">
+              <div class="materialTableHeader">
+                <div class="row"> 
+                  <div class="col-8">
+                    <ul class="header-buttons-left ml-0">
+                      <li class="dropdown">
+                        <h4>Notice Details</h4>
+                      </li>
+                    </ul> 
+                  </div>
+                  <div class="col-4">
+                    <ul class="header-buttons">
+                      <li>
+                        <div class="icon-button-demo">
+                          <button class="btn-space"  mat-raised-button
+                          color="warn" [routerLink]="['/admin/dashboard/main']"> 
+                          <mat-icon class="col-white">keyboard_backspace</mat-icon> Back
+                          </button>
+                          <!-- <button class="btn-space"  mat-raised-button
+                          [routerLink]="['/mea/update-measquadronstate',this.meaSquadronStateId]"> Update
+                            <mat-icon class="col-white">Update</mat-icon>
+                          </button> -->
+                        </div>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+              <table class="table table-bordered">
+                <thead>
+                  
+                </thead>
+                <tbody>
+                  <tr>
+                    <th scope="row">Flight Line/Squadron </th>
+                    <td>
+                      <span *ngIf="departmentName == null"> All </span>    
+                      <span *ngIf="departmentName != null"> {{departmentName}} </span>  
+                    </td>
+                    <th scope="row">Date</th>
+                    <td>{{date | date:'dd/MMM/yyyy'}}</td>
+                  </tr>
+                  <tr>
+                    <th scope="row">Event</th>
+                    <td>{{event}}</td>
+                    <th scope="row">orderBy</th>
+                    <td>{{orderBy}}</td>
+                  </tr>
+                  <tr>
+                    <th scope="row">Remarks</th>
+                    <td>{{remarks}}</td>
+                    <th scope="row">Doc</th>
+                    <td><a target="_blank" [href]="noticeDocument">	<i matTooltip="Notice Document" class="far fa-file-pdf tbl-pdf"></i></a></td>                    
+                  </tr>
+                  
+                </tbody>
+              </table>          
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

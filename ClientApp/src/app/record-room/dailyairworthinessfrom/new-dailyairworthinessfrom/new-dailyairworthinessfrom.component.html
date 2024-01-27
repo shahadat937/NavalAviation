@@ -1,0 +1,228 @@
+<section class="content">
+  <div class="container-fluid">
+    <div class="block-header">
+      <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+          <ul class="breadcrumb breadcrumb-style">
+            <li class="breadcrumb-item">
+              <h4 class="page-title">{{ pageTitle }}</h4>
+            </li>
+            <li class="breadcrumb-item bcrumb-1">
+              <a routerLink="/admin/dashboard/main"
+                ><i class="fas fa-home"></i
+              ></a>
+            </li>
+            <li class="breadcrumb-item bcrumb-2">
+              <a href="#" onClick="return false;">Daily Airworthiness From</a>
+            </li>
+            <li class="breadcrumb-item active">{{ destination }}</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="row clearfix">
+      <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+        <div class="card">
+          <div class="body">
+            <form
+              class="m-4"
+              [formGroup]="DailyAirworthinessFromForm"
+              (ngSubmit)="onSubmit()"
+            >
+              <div class="row">
+                <div
+                  *ngIf="role == userRole.SuperAdmin || role == userRole.EXO"
+                  class="col-xl-4 col-lg-4 col-md-4 col-sm-12 mb-2"
+                >
+                  <mat-form-field
+                    class="example-full-width mb-3"
+                    appearance="outline"
+                  >
+                    <mat-label>Flight Line/Squadron </mat-label>
+                    <mat-select
+                      formControlName="departmentNameId"
+                      required
+                      (selectionChange)="
+                        onDailyAirworthinessFromListByDepartmentNameSelectionChange()
+                      "
+                    >
+                      <mat-option
+                        *ngFor="let dropdown of departmentName"
+                        [value]="dropdown.value"
+                      >
+                        {{ dropdown.text }}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+                <!-- <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 mb-2">
+                  <mat-form-field class="example-full-width mb-3" appearance="outline">
+                    <mat-label> Aircraft Name </mat-label>
+                    <mat-select formControlName="airCraftNameId" required >
+                      <mat-option  *ngFor="let dropdown of AircraftNamevalue" [value]="dropdown.value">
+                        {{dropdown.text}}
+                      </mat-option>
+                    </mat-select>
+                    <mat-error *ngIf="DailyAirworthinessFromForm.get('airCraftNameId').hasError('required')">
+                      Aircraft Name is required
+                    </mat-error>
+                  </mat-form-field>
+                </div> -->
+                <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 mb-2">
+                  <mat-form-field
+                    class="example-full-width mb-3"
+                    appearance="outline"
+                  >
+                    <mat-label>Type of Form </mat-label>
+                    <mat-select
+                      formControlName="dailyAirworthinessFromCategoryId"
+                      required
+                    >
+                      <mat-option
+                        *ngFor="let dropdown of FromCategory"
+                        [value]="dropdown.value"
+                      >
+                        {{ dropdown.text }}
+                      </mat-option>
+                    </mat-select>
+                    <mat-error
+                      *ngIf="
+                        DailyAirworthinessFromForm.get(
+                          'dailyAirworthinessFromCategoryId'
+                        ).hasError('required')
+                      "
+                    >
+                      Type of Form is required
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+
+                <!-- <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 mb-2">
+                  <mat-form-field
+                    class="example-full-width mb-3"
+                    appearance="outline"
+                  >
+                    <mat-label>Document Name</mat-label>
+                    <input matInput formControlName="name" required />
+                    <mat-error
+                      *ngIf="
+                        DailyAirworthinessFromForm.get('name').hasError(
+                          'required'
+                        )
+                      "
+                    >
+                      Document Name is required
+                    </mat-error>
+                  </mat-form-field>
+                </div> -->
+                <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 mb-2">
+                  <mat-form-field
+                    class="example-full-width mb-3"
+                    appearance="outline"
+                  >
+                    <mat-label>Document</mat-label>
+                    <ngx-mat-file-input
+                      (change)="onFileChanged($event)"
+                      accept=".txt,.pdf,.xls,.xlsx,.doc,.docx,.ppt,.pptx"
+                    >
+                    </ngx-mat-file-input>
+                    <mat-icon matSuffix>attachment</mat-icon>
+                  </mat-form-field>
+                </div>
+
+                <!-- <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 mb-2">
+                  <mat-form-field class="example-full-width mb-3" appearance="outline">
+                    <mat-label>Doc</mat-label>
+                    <input matInput formControlName="doc">
+                  </mat-form-field>
+                </div> -->
+              </div>
+              <div class="row">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                  <button
+                    class="btn-space"
+                    [disabled]="!DailyAirworthinessFromForm.valid"
+                    mat-raised-button
+                    color="primary"
+                  >
+                    {{ btnText }}
+                  </button>
+                  <!-- <button type="button" mat-button routerLink="/record-room/aircraftname-list">Cancel</button> -->
+                </div>
+              </div>
+            </form>
+            <div *ngIf="isShown" class="row create-table db-tbl cls-rtn">
+              <h3 class="text-center table-title">
+                Daily Airworthiness Blank From
+              </h3>
+              <div class="container">
+                <table class="table tbl-by-group db-li-s-in">
+                  <thead>
+                    <tr>
+                      <th class="cl-nm-rnk"><h5>Type of Form</h5></th>
+                      <!-- <th class="cl-mrk"><h5>Airworthiness From</h5></th> -->
+                      <!-- <th class="cl-mrk-rmrk"><h5>Item Name</h5></th>
+                      <th class="cl-mrk-rmrk"><h5>Condition</h5></th>
+                      <th class="cl-mrk-rmrk"><h5>Deno</h5></th>
+                      <th class="cl-mrk-rmrk"><h5>Qty</h5></th>
+                      <th class="cl-mrk-rmrk"><h5>Demand No</h5></th>
+                      <th class="cl-mrk-rmrk"><h5>Demand Date</h5></th>
+                      <th class="cl-mrk-rmrk"><h5>Type of Demand</h5></th> -->
+                      <th class="cl-action"><h5>Actions</h5></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <ng-container
+                      *ngFor="let data of groupArrays; let i = index"
+                    >
+                      <tr>
+                        <td [attr.rowspan]="data.datas.length + 1">
+                          {{ data.fromCategory }}
+                        </td>
+                      </tr>
+                      <tr *ngFor="let number of data.datas">
+                        <!-- <td>{{ number.name }}</td> -->
+
+                        <!-- <td>{{ number.itemName }}</td>
+                        <td>{{ number.conditionOfItem }}</td>
+                        <td>{{ number.deno }}</td>
+                        <td>{{ number.demandQty }}</td>
+                        <td>{{ number.demandNo }}</td>
+                        <td>{{ number.demandDate | date: "dd/MMM/yyyy" }}</td>
+                        <td>{{ number.demandType }}</td> -->
+                        <td class="cl-action">
+                          <div fxLayout="row" fxLayoutGap="20px">
+                            <a target="_blank" [href]="number.doc">
+                              <i *ngIf="number.doc != 'http://192.168.8.102:8030/Content/files/daily-airworthiness-from/'"
+                                matTooltip="Document"
+                                class="far fa-file-pdf tbl-pdf"
+                              >
+                              </i
+                            ></a>
+                            |
+
+                            <button
+                              mat-icon-button
+                              color="accent"
+                              class="btn-tbl-delete"
+                              (click)="$event.stopPropagation()"
+                              (click)="deleteItem(number)"
+                            >
+                              <mat-icon aria-label="Delete" class="col-white"
+                                >delete</mat-icon
+                              >
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                    </ng-container>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

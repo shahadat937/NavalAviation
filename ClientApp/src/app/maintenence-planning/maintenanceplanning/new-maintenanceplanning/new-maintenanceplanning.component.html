@@ -1,0 +1,747 @@
+<section class="content">
+  <div class="container-fluid">
+    <div class="block-header">
+      <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+          <ul class="breadcrumb breadcrumb-style">
+            <li class="breadcrumb-item">
+              <h4 class="page-title">{{ pageTitle }}</h4>
+            </li>
+            <li class="breadcrumb-item bcrumb-1">
+              <a routerLink="/admin/dashboard/main"
+                ><i class="fas fa-home"></i
+              ></a>
+            </li>
+            <li class="breadcrumb-item bcrumb-2">
+              <a href="#" onClick="return false;">Maintenance Planning</a>
+            </li>
+            <li class="breadcrumb-item active">{{ destination }}</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="row clearfix">
+      <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+        <div class="card">
+          <div class="body">
+            <form
+              class="m-4"
+              [formGroup]="MaintenancePlanningForm"
+              (ngSubmit)="onSubmit()"
+            >
+              <div class="row">
+                <div
+                  *ngIf="role == userRole.SuperAdmin || role == userRole.CO"
+                  class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-2"
+                >
+                  <mat-form-field
+                    class="example-full-width mb-3"
+                    appearance="outline"
+                  >
+                    <mat-label>Flight Line/Squadron </mat-label>
+                    <mat-select
+                      formControlName="departmentNameId"
+                      required
+                      (selectionChange)="
+                        onDepartmentNameSelectionChangeGetAirCraftName()
+                      "
+                    >
+                      <mat-option
+                        *ngFor="let dropdown of selectedDepartmentNames"
+                        [value]="dropdown.value"
+                      >
+                        {{ dropdown.text }}
+                      </mat-option>
+                    </mat-select>
+                    <mat-error
+                      *ngIf="
+                        MaintenancePlanningForm.get(
+                          'departmentNameId'
+                        ).hasError('required')
+                      "
+                    >
+                      Flight Line/Squadron is Required!
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+                <div
+                  *ngIf="role == userRole.SuperAdmin  || role == userRole.CO"
+                  class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-2"
+                ></div>
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-2">
+                  <mat-form-field
+                    class="example-full-width mb-3"
+                    appearance="outline"
+                  >
+                    <mat-label>Aircraft Name</mat-label>
+                    <mat-select formControlName="airCraftNameId" required>
+                      <mat-option value="0">--Select--</mat-option>
+                      <mat-option
+                        (onSelectionChange)="
+                          onMaintenancePlanningListSelectionChange($event)
+                        "
+                        *ngFor="let dropdown of selectedAirCraftName"
+                        [value]="dropdown.value"
+                      >
+                        {{ dropdown.text }}
+                      </mat-option>
+                    </mat-select>
+                    <mat-error
+                      *ngIf="
+                        MaintenancePlanningForm.get('airCraftNameId').hasError(
+                          'required'
+                        )
+                      "
+                    >
+                      Aircraft Name is Required!
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-2"></div>
+
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-2">
+                  <mat-form-field
+                    class="example-full-width mb-3"
+                    appearance="outline"
+                  >
+                    <mat-label>Maintenance Type</mat-label>
+                    <mat-select formControlName="maintenanceTypeId" required (selectionChange)="onDepartmentNameAndTypeSelectionChangeGetCategory()" >
+                      <mat-option value="0">--Select--</mat-option>
+                      <mat-option
+                        *ngFor="let dropdown of selectedType"
+                        [value]="dropdown.value"
+                      >
+                        {{ dropdown.text }}
+                      </mat-option>
+                    </mat-select>
+                    <mat-error
+                      *ngIf="
+                        MaintenancePlanningForm.get(
+                          'maintenanceTypeId'
+                        ).hasError('required')
+                      "
+                    >
+                      Maintenance Type is Required!
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-2"></div>
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-2">
+                  <mat-form-field
+                    class="example-full-width mb-3"
+                    appearance="outline"
+                  >
+                    <mat-label>Maintenance Category</mat-label>
+                    <mat-select
+                      formControlName="maintenanceCategoryId"
+                      required
+                      (selectionChange)="
+                        onDepartmentNameAndCategorySelectionChangeGetSubCategory(
+                          $event.value
+                        )
+                      "
+                    >
+                      <mat-option value="0">--Select--</mat-option>
+                      <mat-option
+                        (onSelectionChange)="
+                          onMaintenancePlanningLisByTypeAndCategorytSelectionChange(
+                            $event
+                          )
+                        "
+                        *ngFor="let dropdown of selectedCategory"
+                        [value]="dropdown.value"
+                      >
+                        {{ dropdown.text }}
+                      </mat-option>
+                    </mat-select>
+                    <mat-error
+                      *ngIf="
+                        MaintenancePlanningForm.get(
+                          'maintenanceCategoryId'
+                        ).hasError('required')
+                      "
+                    >
+                      Maintenance Category is Required!
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-2"></div>
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-2">
+                  <mat-form-field
+                    class="example-full-width mb-3"
+                    appearance="outline"
+                  >
+                    <mat-label> Maintenance Sub Category</mat-label>
+                    <mat-select
+                      formControlName="maintenanceSubCategoryId"
+                      required
+                      (selectionChange)="
+                        onSubCategorySelectionChangeGetExtension($event.value)
+                      "
+                    >
+                      <mat-option value="0">--Select--</mat-option>
+                      <mat-option
+                        (onSelectionChange)="
+                          onMaintenancePlanningLisByTypeAndCategoryAndSubCategorytSelectionChange(
+                            $event
+                          )
+                        "
+                        *ngFor="let dropdown of selectedSubCategory"
+                        [value]="dropdown.value"
+                      >
+                        {{ dropdown.text }}
+                      </mat-option>
+                    </mat-select>
+                    <mat-error
+                      *ngIf="
+                        MaintenancePlanningForm.get(
+                          'maintenanceSubCategoryId'
+                        ).hasError('required')
+                      "
+                    >
+                      Maintenance Sub Category is Required!
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-2">
+                  <h5 class="m-t-20">
+                    Extension/Tolerance :
+                    <span class="c-color">{{ getextensionname }}</span>
+                  </h5>
+                </div>
+                <!-- <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-2">
+                  <mat-form-field
+                    class="example-full-width mb-3"
+                    appearance="outline"
+                  >
+                    <mat-label>Commencing Date</mat-label>
+                    <input
+                      matInput
+                      [matDatepicker]="cdpicker"
+                      formControlName="commencingDate"
+                    />
+                    <mat-datepicker-toggle
+                      matSuffix
+                      [for]="cdpicker"
+                    ></mat-datepicker-toggle>
+                    <mat-datepicker #cdpicker></mat-datepicker>
+                  </mat-form-field>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-2"></div>
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-2">
+                  <mat-form-field
+                    class="example-full-width mb-3"
+                    appearance="outline"
+                  >
+                    <mat-label>Planned Completion Date</mat-label>
+                    <input
+                      matInput
+                      [matDatepicker]="pcpicker"
+                      formControlName="plannedCompletionDate"
+                    />
+                    <mat-datepicker-toggle
+                      matSuffix
+                      [for]="pcpicker"
+                    ></mat-datepicker-toggle>
+                    <mat-datepicker #pcpicker></mat-datepicker>
+                  </mat-form-field>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-2"></div> -->
+
+                <!-- <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-2">
+                  <mat-form-field class="example-full-width mb-3" appearance="outline">
+                    <mat-label>Last Inspection Days</mat-label>
+                    <input matInput formControlName="lastInspectionDay">
+                  </mat-form-field>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-2">
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-2">
+                  <mat-form-field class="example-full-width mb-3" appearance="outline">
+                    <mat-label>Next Inspection Days</mat-label>
+                    <input matInput formControlName="nextInspectionDay">
+                  </mat-form-field>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-2">
+                </div> -->
+                <div
+                  *ngIf="role != userRole.CO && (category == '2' || category == '36')"
+                  class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-2"
+                >
+                  <mat-form-field
+                    class="example-full-width mb-3"
+                    appearance="outline"
+                  >
+                    <mat-label>Last Inspection Date</mat-label>
+                    <input
+                      matInput
+                      [matDatepicker]="frompicker"
+                      formControlName="lastInspDate"
+                    />
+                    <mat-datepicker-toggle
+                      matSuffix
+                      [for]="frompicker"
+                    ></mat-datepicker-toggle>
+                    <mat-datepicker #frompicker></mat-datepicker>
+                  </mat-form-field>
+                </div>
+                <div
+                  *ngIf="role != userRole.CO && (category == '2' || category == '36')"
+                  class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-2"
+                ></div>
+                <!-- <div
+                  *ngIf="category == '2' || category == '36'"
+                  class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-2"
+                >
+                  <mat-form-field
+                    class="example-full-width mb-3"
+                    appearance="outline"
+                  >
+                    <mat-label>Next Inspection Date</mat-label>
+                    <input
+                      matInput
+                      [matDatepicker]="npicker"
+                      formControlName="nestInspDate"
+                    />
+                    <mat-datepicker-toggle
+                      matSuffix
+                      [for]="npicker"
+                    ></mat-datepicker-toggle>
+                    <mat-datepicker #npicker></mat-datepicker>
+                  </mat-form-field>
+                </div>
+                <div
+                  *ngIf="category == '2' || category == '36'"
+                  class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-2"
+                ></div> -->
+                <div
+                  *ngIf="role != userRole.CO && (category == '25' || category == '38')"
+                  class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-2"
+                >
+                  <mat-form-field
+                    class="example-full-width mb-3"
+                    appearance="outline"
+                  >
+                    <mat-label>Last Inspection FH</mat-label>
+                    <input matInput formControlName="lastInspectionFH" />
+                  </mat-form-field>
+                </div>
+                <div
+                  *ngIf="role != userRole.CO && (category == '25' || category == '38')"
+                  class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-2"
+                ></div>
+                <div
+                  *ngIf="role != userRole.CO && (category == '25' || category == '38')"
+                  class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-2"
+                >
+                  <mat-form-field
+                    class="example-full-width mb-3"
+                    appearance="outline"
+                  >
+                    <mat-label>Next Inspection FH</mat-label>
+                    <input matInput formControlName="nextInspectionFH" />
+                  </mat-form-field>
+                </div>
+                <div
+                  *ngIf="role != userRole.CO && (category == '25' || category == '38')"
+                  class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-2"
+                ></div>
+                <div
+                  *ngIf="role != userRole.CO && (category == '3' || category == '37')"
+                  class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-2"
+                >
+                  <mat-form-field
+                    class="example-full-width mb-3"
+                    appearance="outline"
+                  >
+                    <mat-label>Last Inspection OH</mat-label>
+                    <input matInput formControlName="lastInspectionOH" />
+                  </mat-form-field>
+                </div>
+                <div
+                  *ngIf="role != userRole.CO && (category == '3' || category == '37')"
+                  class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-2"
+                ></div>
+                <div
+                  *ngIf="role != userRole.CO && (category == '3' || category == '37')"
+                  class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-2"
+                >
+                  <mat-form-field
+                    class="example-full-width mb-3"
+                    appearance="outline"
+                  >
+                    <mat-label>Next Inspection OH</mat-label>
+                    <input matInput formControlName="nextInspectionOH" />
+                  </mat-form-field>
+                </div>
+                <div
+                  *ngIf="role != userRole.CO && (category == '3' || category == '37')"
+                  class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-2"
+                ></div>
+                <div *ngIf="role != userRole.CO" class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-2">
+                  <mat-form-field
+                    class="example-full-width mb-3"
+                    appearance="outline"
+                  >
+                    <mat-label>Job Card</mat-label>
+                    <ngx-mat-file-input
+                      (change)="onFileChanged($event)"
+                      accept=".txt,.pdf,.xls,.xlsx,.doc,.docx,.ppt,.pptx"
+                    >
+                    </ngx-mat-file-input>
+                    <mat-icon matSuffix>attachment</mat-icon>
+                  </mat-form-field>
+                </div>
+                <div *ngIf="role != userRole.CO" class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-2"></div>                
+                <div *ngIf="role != userRole.CO" class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-2">
+                  <mat-form-field
+                    class="example-full-width mb-3"
+                    appearance="outline"
+                  >
+                    <mat-label>Report Calculation Day</mat-label>
+                    <input matInput formControlName="reportCalculationDay" />
+                  </mat-form-field>
+                </div>
+                
+                <div *ngIf="role != userRole.CO" class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-2"></div>                
+                <div *ngIf="role != userRole.CO" class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-2">
+                  <mat-form-field
+                    class="example-full-width mb-3"
+                    appearance="outline"
+                  >
+                    <mat-label>Remarks</mat-label>
+                    <textarea matInput formControlName="remarks" ></textarea>
+                  </mat-form-field>
+                </div>
+              </div>
+              <div *ngIf="role != userRole.CO" class="row">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                  <button
+                    class="btn-space"
+                    [disabled]="!MaintenancePlanningForm.valid"
+                    mat-raised-button
+                    color="primary"
+                  >
+                    {{ btnText }}
+                  </button>
+                  <button
+                    type="button"
+                    mat-button
+                    routerLink="/maintenence-planning/add-maintenanceplanning"
+                  ></button>
+                </div>
+              </div>
+            </form>
+            <div *ngIf="isShown" class="row create-table db-tbl cls-rtn">
+              <div class="row">
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-2"><h3 class=" table-title">Maintenance Planning List</h3></div>
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-2"><h3 class="text-right table-title">Schedule: <button mat-icon-button color="accent" class="btn-tbl-edit" (click)="getPopup()">{{countMaintenanceSchedules}}</button></h3></div>
+              </div>
+              
+              
+              <div class="container">
+                <table class="table tbl-by-group db-li-s-in">
+                  <thead>
+                    <tr>
+                      <th class="thbm"><h5>Ser</h5></th>
+                      <th class="thbm"><h5>Aircraft Name</h5></th>
+                      <th class="thbm"><h5>Maintenance Type</h5></th>
+                      <th class="thbm"><h5> Maintenance Category</h5></th>
+                      <th class="thbm"><h5>Sub Category</h5></th>
+                      <th class="thbm"><h5>Last Inspaction</h5></th>
+                      <th class="thbm"><h5>Next Inspaction</h5></th>
+                      <th class="thbm"><h5>Maint Job Card</h5></th>
+                      <th *ngIf="role == userRole.SuperAdmin" class="thbm"><h5>Approved</h5></th>
+                      <th class="cl-action"><h5>Actions</h5></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <ng-container
+                      *ngFor="
+                        let data of maintenancePlanningList;
+                        let i = index
+                      "
+                    >
+                      <tr>
+                        <td>
+                          {{
+                            (paging.pageIndex - 1) * paging.pageSize + i + 1
+                          }}
+                        </td>
+                        <td>
+                          {{ data.airCraftName }}
+                        </td>
+                        <td>
+                          {{ data.categoryType }}
+                        </td>
+                        <td>
+                          {{ data.category }}
+                        </td>
+                        <td>
+                          {{ data.subCategory }}
+                        </td>
+                        <td>
+                          <span *ngIf="data.maintenanceCategoryId == 2 || data.maintenanceCategoryId == 36">{{ data.lastInspDate | date: "dd/MMM/yyyy"}}</span>
+                          <span *ngIf="data.maintenanceCategoryId == 3 || data.maintenanceCategoryId == 37">{{ data.lastInspectionOH }}</span>
+                          <span *ngIf="data.maintenanceCategoryId == 25 || data.maintenanceCategoryId == 38">{{ data.lastInspectionFH }}</span>                          
+                        </td>
+                        <td>
+                          <span *ngIf="data.maintenanceCategoryId == 2 || data.maintenanceCategoryId == 36">{{ data.nestInspDate | date: "dd/MMM/yyyy" }}</span>
+                          <span *ngIf="data.maintenanceCategoryId == 3 || data.maintenanceCategoryId == 37">{{ data.nextInspectionOH }}</span>
+                          <span *ngIf="data.maintenanceCategoryId == 25 || data.maintenanceCategoryId == 38">{{ data.nextInspectionFH }}</span>                          
+                        </td>
+                        <td>
+                          <a target="_blank" [href]="data.jobListDocument">
+                             <i *ngIf="data.jobListDocument" matTooltip="Maintenance Document" class="far fa-file-pdf tbl-pdf" > 
+                              </i ></a>
+                        </td>
+                        <td *ngIf="role == userRole.SuperAdmin">
+                          
+                          <button mat-raised-button class="custom-btn courseplan-apr"  (click)="inActiveItem(data)"  (click)="$event.stopPropagation()">{{ data.verificationCompletStatus == 0 ? 'Not Approved' : 'Approved' }}</button>
+                        </td>
+                       
+                        <td class="cl-action">
+                          <div>
+                            <button
+                          mat-icon-button
+                          color="accent"
+                          class="btn-tbl-edit"
+                          [routerLink]="[
+                            '/maintenence-planning/view-maintenanceplanning',
+                            data.maintenancePlanningId
+                          ]"
+                        >
+                          <mat-icon aria-label="Edit" class="col-white"
+                            >visibility</mat-icon
+                          >
+                        </button>
+                        <button 
+                        *ngIf="(role == userRole.admin || (role == userRole.User && data.verificationCompletStatus == 0))|| role == userRole.SuperAdmin"
+                          mat-icon-button
+                          color="accent"
+                          class="btn-tbl-edit"
+                          [routerLink]="[
+                            '/maintenence-planning/update-maintenanceplanning',
+                            data.maintenancePlanningId
+                          ]"
+                        >
+                          <mat-icon aria-label="Edit" class="col-white"
+                            >edit</mat-icon
+                          >
+                        </button>
+                        <button *ngIf="(role == userRole.admin || (role == userRole.User && data.verificationCompletStatus == 0))|| role == userRole.SuperAdmin"
+                          mat-icon-button
+                          color="accent"
+                          class="btn-tbl-delete"
+                          (click)="$event.stopPropagation()"
+                          (click)="deleteItem(data)"
+                        >
+                          <mat-icon aria-label="Delete" class="col-white"
+                            >delete</mat-icon
+                          >
+                        </button>
+                        <!-- <button title="Work Completed"   class="btn-space custom" (click)="onCompletedButtonClick($event,unit,i,1)"><i class="fa fa-check"></i></button>  -->
+                        <button *ngIf="role == userRole.User" title="Work Completed"   class="btn-space custom" (click)="inCompleteStatusItem(data)"  (click)="$event.stopPropagation()"><i class="fa fa-check"></i></button>
+                          </div>
+                          {{ data.actions }}
+                        </td>
+                      </tr>
+                    </ng-container>
+                  </tbody>
+                </table>
+                <!-- <mat-table
+                  #table
+                  [dataSource]="maintenancePlanningList"
+                  matSort
+                  class="mat-cell"
+                >
+                  <ng-container matColumnDef="ser">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header>
+                      Ser.
+                    </mat-header-cell>
+                    <mat-cell *matCellDef="let element; let i = index">
+                      {{ (paging.pageIndex - 1) * paging.pageSize + i + 1 }}
+                    </mat-cell>
+                  </ng-container>
+               
+                  <ng-container matColumnDef="airCraftName">
+                    <mat-header-cell class="att-airCraftName" *matHeaderCellDef mat-sort-header >
+                      Aircraft Name
+                    </mat-header-cell>
+                    <mat-cell class="att-airCraftName" *matCellDef="let element" >
+                      {{ element.airCraftName }}
+                    </mat-cell>
+                  </ng-container>
+                  <ng-container matColumnDef="categoryType">
+                    <mat-header-cell
+                      class="att-categoryType"
+                      *matHeaderCellDef
+                      mat-sort-header>
+                      Maintenance Type
+                    </mat-header-cell>
+                    <mat-cell
+                      class="att-categoryType"
+                      *matCellDef="let element"
+                    >
+                      {{ element.categoryType }}
+                    </mat-cell>
+                  </ng-container>
+                  <ng-container matColumnDef="category">
+                    <mat-header-cell
+                      class="att-category"
+                      *matHeaderCellDef
+                      mat-sort-header
+                    >
+                      Maintenance Category
+                    </mat-header-cell>
+                    <mat-cell class="att-category" *matCellDef="let element">
+                      {{ element.category }}
+                    </mat-cell>
+                  </ng-container>
+                  <ng-container matColumnDef="subCategory">
+                    <mat-header-cell
+                      class="att-subCategory"
+                      *matHeaderCellDef
+                      mat-sort-header
+                    >
+                      Sub Category
+                    </mat-header-cell>
+                    <mat-cell class="att-subCategory" *matCellDef="let element">
+                      {{ element.subCategory }}
+                    </mat-cell>
+                  </ng-container>
+
+                  <ng-container matColumnDef="jobListDocument">
+                    <mat-header-cell  *matHeaderCellDef mat-sort-header >
+                      Maint Job Card
+                    </mat-header-cell>
+                    <mat-cell  *matCellDef="let element">
+                      <a target="_blank" [href]="fileUrl+element.jobListDocument"> <i matTooltip="Maintenance Document" class="far fa-file-pdf tbl-pdf" ></i ></a>
+                    </mat-cell>
+                  </ng-container>
+                  <ng-container matColumnDef="approved">
+                    <mat-header-cell  *matHeaderCellDef mat-sort-header >
+                      Approved
+                    </mat-header-cell>
+                    <mat-cell  *matCellDef="let element">
+                      <button  mat-raised-button class="custom-btn courseplan-apr"  (click)="inActiveItem(element)"  (click)="$event.stopPropagation()">{{ element.verificationCompletStatus == 0 ? 'Not Approved' : 'Approved' }}</button>
+                    </mat-cell>
+                  </ng-container>
+
+                  
+
+                  <ng-container matColumnDef="actions">
+                    <mat-header-cell class="att-actions" *matHeaderCellDef
+                      >Actions</mat-header-cell
+                    >
+                    <mat-cell
+                      class="att-actions"
+                      *matCellDef="let row; let i = index"
+                    >
+                      <div fxLayout="row" fxLayoutGap="20px">
+                        
+                        
+                        <button
+                          mat-icon-button
+                          color="accent"
+                          class="btn-tbl-edit"
+                          [routerLink]="[
+                            '/maintenence-planning/view-maintenanceplanning',
+                            row.maintenancePlanningId
+                          ]"
+                        >
+                          <mat-icon aria-label="Edit" class="col-white"
+                            >visibility</mat-icon
+                          >
+                        </button>
+                        <button
+                          mat-icon-button
+                          color="accent"
+                          class="btn-tbl-edit"
+                          [routerLink]="[
+                            '/maintenence-planning/update-maintenanceplanning',
+                            row.maintenancePlanningId
+                          ]"
+                        >
+                          <mat-icon aria-label="Edit" class="col-white"
+                            >edit</mat-icon
+                          >
+                        </button>
+                        <button
+                          mat-icon-button
+                          color="accent"
+                          class="btn-tbl-delete"
+                          (click)="$event.stopPropagation()"
+                          (click)="deleteItem(row)"
+                        >
+                          <mat-icon aria-label="Delete" class="col-white"
+                            >delete</mat-icon
+                          >
+                        </button>
+                      </div>
+                      
+                    </mat-cell>
+                  </ng-container>
+                  <mat-header-row
+                    *matHeaderRowDef="displayedColumns"
+                  ></mat-header-row>
+                  <mat-row
+                    *matRowDef="let row; columns: displayedColumns"
+                  ></mat-row>
+                </mat-table> -->
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="overlay" *ngIf="popup">
+      <div class="popup flying-schedule">
+        <h2>Maintenance Schedule</h2>
+        <a class="close" (click)="popup = false">&times;</a>
+        <div class="content">
+          <div class="responsive_table">
+            <!-- <table class="table table-bordered">
+              <thead>
+                
+              </thead>
+              <tbody>
+                
+               
+              </tbody>
+            </table>           -->
+
+            <table class="table tbl-by-group db-li-s-in">
+              <thead>
+                <tr>
+                  <th class="thbm"><h5>Ser</h5></th>
+                  <th class="thbm"><h5>Last Inspaction</h5></th>
+                  <th class="thbm"><h5>Complete Date</h5></th>
+                </tr>
+              </thead>
+              <tbody>
+                <ng-container *ngFor="let data of maintenanceScheduleList;let i = index">
+                  <tr>
+                    <td>
+                      {{
+                        (paging.pageIndex - 1) * paging.pageSize + i + 1
+                      }}
+                    </td>
+                    
+                    <td>
+                      <span>{{ data.endInspDate | date: "dd/MMM/yyyy"}}</span>                       
+                    </td>
+                    <td>
+                      <span>{{ data.completedDate | date: "dd/MMM/yyyy" }}</span>                    
+                    </td>
+                    
+                  </tr>
+                </ng-container>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,331 @@
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<script src='https://kit.fontawesome.com/a076d05399.js' crossorigin='anonymous'></script>
+<section class="content">
+  <div class="container-fluid">
+    <div class="block-header">
+      <!-- <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+          <ul class="breadcrumb breadcrumb-style ">
+            <li class="breadcrumb-item">
+              <h4 class="page-title">Aircraft Flying Schedule</h4>
+            </li>
+            <li class="breadcrumb-item bcrumb-1">
+              <a routerLink="/admin/dashboard/main"><i class="fas fa-home"></i></a>
+            </li>
+            <li class="breadcrumb-item bcrumb-2">
+              <a href="#" onClick="return false;">Aircraft Flying Schedule</a>
+            </li>
+            <li class="breadcrumb-item active">All</li>
+          </ul>
+        </div>
+      </div> -->
+    </div>
+     <!-- dashboard component -->
+ <app-dashboard></app-dashboard>
+
+    <div class="row">
+      <!-- <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12"> -->
+          <!-- <ul class="breadcrumb breadcrumb-style ">
+            <li class="breadcrumb-item">
+              <h4 class="page-title">Aircraft Flying Schedule</h4>
+            </li>
+            <li class="breadcrumb-item bcrumb-1">
+              <a routerLink="/admin/dashboard/main"><i class="fas fa-home"></i></a>
+            </li>
+            <li class="breadcrumb-item bcrumb-2">
+              <a href="#" onClick="return false;">Aircraft Flying Schedule</a>
+            </li>
+            <li class="breadcrumb-item active">All</li>
+          </ul> -->
+        <!-- </div> -->
+      <!-- </div> -->
+      <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+        <div class="card flying-list">
+          <div class="body">
+            <div class="row">
+              <div class="col-lg-10 col-md-10 col-sm-10 col-xs-10-r">
+                <h3 class="page-title personal">Flying Schedule</h3>
+              </div>
+              <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2-a">
+                <button class="back" [routerLink]="['/admin/dashboard/main']" mat-raised-button> <mat-icon>keyboard_backspace</mat-icon> Back</button>
+              </div>
+            </div>
+            <form [formGroup]="AirCraftFlyingForm" (ngSubmit)="onSubmit()">
+              <div class="row">
+
+
+                <div *ngIf="role == userRole.HR || role == userRole.CO || role == userRole.SuperAdmin || role == userRole.FLGWG" class="col-xl-3 col-lg-3 col-md-3 col-sm-12 mb-2">
+
+                  <mat-form-field class="example-full-width mb-3" appearance="outline">
+                    <mat-label>Flight Line/Squadron </mat-label>
+                    <mat-select formControlName="departmentNameId" required >
+                      <mat-option value="0">All</mat-option>
+                      <mat-option (onSelectionChange)="onDepartmentNameSelectionChange($event)" *ngFor="let dropdown of selectedDepartmentName" [value]="dropdown.value">
+                        {{dropdown.text}}
+                      </mat-option>
+                    </mat-select>
+                    <mat-error *ngIf="AirCraftFlyingForm.get('departmentNameId').hasError('required')">
+                      Flight Line/Squadron is Required!
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+                
+
+                <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 mb-2">
+                  <mat-form-field class="example-full-width mb-3" appearance="outline">
+                    <mat-label> Date From</mat-label>
+                    <input matInput [matDatepicker]="frompicker" formControlName="dateFrom">
+                    <mat-datepicker-toggle matSuffix [for]="frompicker"></mat-datepicker-toggle>
+                    <mat-datepicker #frompicker></mat-datepicker>
+                  </mat-form-field>
+                </div>
+                <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 mb-2">
+                  <mat-form-field class="example-full-width mb-3" appearance="outline">
+                    <mat-label> Date To</mat-label>
+                    <input matInput [matDatepicker]="topicker" formControlName="dateTo">
+                    <mat-datepicker-toggle matSuffix [for]="topicker"></mat-datepicker-toggle>
+                    <mat-datepicker #topicker></mat-datepicker>
+                  </mat-form-field>
+                </div>
+                <div class="col-xl-2 col-lg-2 col-md-2 col-sm-12 mb-2">
+                  <button class="btn-space" [disabled]="!AirCraftFlyingForm.valid " mat-raised-button
+                    color="primary">{{btnText}}</button>
+
+                      <button
+                            class="btn-space"
+                            mat-raised-button
+                            color="primary"
+                            (click)="printSingle()">
+                            <mat-icon class="col-white">print</mat-icon>
+                          </button>
+                </div>
+                <div class="col-xl-2 col-lg-2 col-md-2 col-sm-12 mb-2"></div>
+                <!-- <div class="col-xl-2 col-lg-2 col-md-2 col-sm-12 mb-2 back-s">
+                  <button class="back" [routerLink]="['/admin/dashboard/main']" mat-raised-button> <mat-icon>keyboard_backspace</mat-icon> Back</button>
+                </div> -->
+              </div>
+              
+            </form>
+            <div class="responsive_table">
+              <div class="row">
+
+                <div id="print-routine">
+                  <table class="table tbl-by-group db-li-s-in">
+                    <thead *ngIf="isShown" class="bg">
+                      <tr>
+                        <th class="thbg"><h5>{{this.departmentNameValue}}</h5></th>
+
+                <!-- <table class="table table-striped tblbg">
+                  <thead *ngIf="isShown" class="bg">
+                    <tr>
+                      <th class="thbg"><h5>{{this.departmentNameValue}}</h5></th> -->
+                    <!-- </tr>
+                  </thead>
+                  <thead class="bg">
+                    <tr>
+                      <th class="thbg"><h5>Aircraft Name</h5></th>
+                      <th class="thbg"><h5>Status</h5></th>
+                      <th class="thbg"><h5>Crew</h5></th>
+                      <th class="thbg"><h5>Mission</h5></th>
+                      <th class="thbg"><h5>Start-up (Planned)</h5></th>
+                      <th class="thbg"><h5>Start-up (Actual)</h5></th>
+                      <th class="thbg"><h5>Landing (Actual) </h5></th>
+                      <th class="thbg"><h5>Duration</h5></th>
+                      <th class="thbg"><h5>Fuel</h5></th>
+                      <th class="thbg"><h5>Startup Status</h5></th>
+                      <th class="thbg"><h5>OPS Officer</h5></th>
+                      <th class="thbg"><h5>Remarks</h5></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <ng-container *ngFor="let data of AricraftFlyingScheduleList;let i= index;">
+                      <tr >
+                        <td>
+                          {{data.airCraftName}}
+                        </td>
+                        <td>
+                          <span *ngIf="this.time >= data.startUp && this.time <= data.endurance" [ngStyle]="{'color':'red'}">In Flight</span>
+                          <span *ngIf="!(this.time >= data.startUp) || !(this.time <= data.endurance)" [ngStyle]="{'color':'green'}">On Ground</span>
+                        </td>
+                        <td>
+                          {{data.crew}}
+                        </td>
+                        <td>
+                          {{data.mon}}
+                        </td>
+                        <td>
+                          {{data.startupPlanned}}
+                        </td>
+                        <td>
+                          {{data.startUp}}
+                        </td>
+                        <td >
+                          {{data.endurance}}
+                        </td>
+                        <td >
+                          {{data.duration}}
+                        </td>
+                        <td >
+                          {{data.fuel}}
+                        </td>
+                        <td>
+                        <span *ngIf="data.startupPlanned < data.startUp" [ngStyle]="{'color':'red'}">Delay</span>
+                        <span *ngIf="data.startupPlanned == data.startUp" [ngStyle]="{'color':'green'}">On Time</span>
+                        </td>
+                         <td *ngIf="data.startUpStatus==1">
+                          (On Time)[ngStyle]="{'color':'red'}"
+                         </td> -->
+                         <!-- <td >
+                          {{data.startUpDelay}}
+                        </td> 
+                        <td >
+                          {{data.opaOff}}
+                        </td>
+                        <td >
+                          {{data.remarks}}
+                        </td>
+                      </tr> -->
+                    </thead>
+                    <thead class="bg">
+                      <tr>
+                        <th class="thbg"><h5>Aircraft Name</h5></th>
+                        <th class="thbg"><h5>Date</h5></th>
+                        <th class="thbg"><h5>Crew</h5></th>
+                        <th class="thbg"><h5>Mission</h5></th>
+                        <th class="thbg"><h5>Start-up (Planned)</h5></th>
+                        <th class="thbg"><h5>Start-up (Actual)</h5></th>
+                        <th class="thbg"><h5>Landing (Actual) </h5></th>
+                        <th class="thbg"><h5>Duration</h5></th>
+                        <th class="thbg"><h5>Fuel</h5></th>
+                        <th class="thbg"><h5>Startup Status</h5></th>
+                        <!-- <th class="thbg"><h5>Startup (Delay)</h5></th> -->
+                        <th class="thbg"><h5>OPS Officer</h5></th>
+                        <th class="thbg"><h5>Remarks</h5></th>
+                        <th class="cl-action"><h5>Action</h5></th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <ng-container *ngFor="let data of AricraftFlyingScheduleList;let i= index;">
+                        <tr >
+                          <td>
+                            {{data.airCraftName}}
+                          </td>
+                          <!-- *ngIf="data.startUp <= this.time" -->
+                          <td>
+                            <!-- <span *ngIf="this.time >= data.startUp && this.time <= data.endurance" [ngStyle]="{'color':'red'}">In Flight</span>
+                            <span *ngIf="!(this.time >= data.startUp) || !(this.time <= data.endurance)" [ngStyle]="{'color':'green'}">On Ground</span> -->
+                            {{data.date | date:'dd/MMM/yyyy'}}
+                          </td>
+                          <td>
+                            {{data.crew}}
+                          </td>
+                          <td>
+                            {{data.mon}}
+                          </td>
+                          <td>
+                            {{data.startupPlanned}}
+                          </td>
+                          <td>
+                            {{data.startUp}}
+                          </td>
+                          <td >
+                            {{data.endurance}}
+                          </td>
+                          <td >
+                            {{data.duration}}
+                          </td>
+                          <td >
+                            {{data.fuel}}
+                          </td>
+                          <td>
+                          <span *ngIf="data.startupPlanned < data.startUp" [ngStyle]="{'color':'red'}">Delay</span>
+                          <span *ngIf="data.startupPlanned == data.startUp" [ngStyle]="{'color':'green'}">On Time</span>
+                          </td>
+                          <!-- <td *ngIf="data.startUpStatus==1">
+                            (On Time)[ngStyle]="{'color':'red'}"
+                           </td> -->
+                           <!-- <td >
+                            {{data.startUpDelay}}
+                          </td> -->
+                          <td >
+                            {{data.opaOff}}
+                          </td>
+                          <td >
+                            {{data.remarks}}
+                          </td>
+                          <td class="cl-action">
+                            <button mat-icon-button color="accent" class="btn-tbl-edit" (click)="getPopup(data)">
+                                <mat-icon aria-label="Edit"  class="col-white">visibility</mat-icon>
+                              </button>
+                          </td>
+                        </tr>
+                      </ng-container>
+                      
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="overlay" *ngIf="popup">
+      <div class="popup flying-schedule">
+        <h2>Flying Schedule</h2>
+        <a class="close" (click)="popup = false">&times;</a>
+        <div class="content">
+          <div class="responsive_table">
+            <table class="table table-bordered">
+              <thead>
+                
+              </thead>
+              <tbody>
+                <tr>
+                  <th scope="row">Aircraft Name</th>
+                  <td>{{this.airCraftName}}</td>
+                  <th scope="row">Date</th>
+                  <td>{{this.date | date:'dd/MMM/yyyy'}}</td>
+                </tr>
+                <tr>
+                  <th scope="row">Crew</th>
+                  <td>{{this.crew}}</td>
+                  <th scope="row">Mission</th>
+                  <td>{{this.mon}}</td>
+                </tr>
+                <tr>
+                  <th scope="row"> Start-up (Planned)</th>
+                  <td>{{this.startupPlanned}}</td>
+                  <th scope="row">Start-up (Actual)</th>
+                  <td>{{this.startUp}}</td>
+                </tr>
+                <tr>
+                  <th scope="row">Landing (Actual)</th>
+                  <td>{{this.endurance}}</td>
+                  <th scope="row">Duration</th>
+                  <td>{{this.duration }}</td>
+                </tr>
+                <tr>
+                  <th scope="row">Fuel</th>
+                  <td>{{this.fuel}}</td>
+                  <th scope="row">OPS Officer</th>
+                  <td>{{this.opaOff}}</td>
+                </tr>
+                <tr>
+                  <!-- <th scope="row">Startup Status</th>
+                  <td>{{this.startUpStatus}}</td> -->
+                  <th scope="row">Remarks</th>
+                  <td>{{this.remarks}}</td>
+                </tr>
+               
+              </tbody>
+            </table>          
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

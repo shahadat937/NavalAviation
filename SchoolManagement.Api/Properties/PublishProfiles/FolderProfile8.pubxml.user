@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!--
+https://go.microsoft.com/fwlink/?LinkID=208121.
+-->
+<Project>
+  <PropertyGroup>
+    <History>True|2022-12-18T10:58:43.7978040Z;False|2022-12-18T16:57:44.9924758+06:00;True|2022-12-17T17:17:07.2524801+06:00;False|2022-12-17T17:16:04.5750697+06:00;True|2022-12-17T17:04:51.0630206+06:00;False|2022-12-17T17:04:23.6143540+06:00;True|2022-12-14T18:02:17.9426966+06:00;False|2022-12-14T18:01:45.8624663+06:00;True|2022-12-13T17:48:26.1466052+06:00;False|2022-12-13T17:47:56.8697490+06:00;True|2022-12-12T18:26:00.2619537+06:00;True|2022-12-12T18:25:26.2779919+06:00;True|2022-12-12T14:58:35.1018580+06:00;False|2022-12-12T14:58:02.6366202+06:00;True|2022-12-11T19:13:39.6614509+06:00;False|2022-12-11T19:13:14.8395007+06:00;</History>
+    <LastFailureDetails />
+    <_PublishTargetUrl>F:\WorkPlace\working\NavalAviationPublish</_PublishTargetUrl>
+  </PropertyGroup>
+</Project>

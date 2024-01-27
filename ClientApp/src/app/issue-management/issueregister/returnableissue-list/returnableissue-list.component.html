@@ -1,0 +1,286 @@
+<section class="content">
+  <div class="container-fluid">
+    <div class="block-header">
+      <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+          <ul class="breadcrumb breadcrumb-style ">
+            <li class="breadcrumb-item">
+              <h4 class="page-title">{{pageTitle}}</h4>
+            </li>
+            <li class="breadcrumb-item bcrumb-1">
+              <a routerLink="/admin/dashboard/main"><i class="fas fa-home"></i></a>
+            </li>
+            <li class="breadcrumb-item bcrumb-2">
+              <a href="#" onClick="return false;">Issue Register</a>
+            </li>
+            <li class="breadcrumb-item active">{{destination}}</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="row clearfix">
+      <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+        <div class="card">
+          <div class="body">
+            <form class="m-4" [formGroup]="IssueRegisterForm">
+              <div class="row">
+
+                <div class="row">
+                  <div *ngIf="role == userRole.SuperAdmin" class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width mb-3" appearance="outline">
+                      <mat-label>Flight Line/Squadron </mat-label>
+                      <mat-select formControlName="departmentNameId" required>
+                        <mat-option value="0">--Select--</mat-option>
+                        <mat-option *ngFor="let dropdown of selectedDepartmentNames" [value]="dropdown.value">
+                          {{dropdown.text}}
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </div>
+
+                  <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width mb-3" appearance="outline">
+                      <mat-label>Spares Category</mat-label>
+                      <mat-select formControlName="sparesCategoryId" (selectionChange)="getSelectedIssueRegisterList()"
+                        required>
+                        <mat-option value="0">--Select--</mat-option>
+                        <mat-option *ngFor="let dropdown of selectedSparesCategory" [value]="dropdown.value">
+                          {{dropdown.text}}
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </div>
+
+                  <!-- <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width mb-3" appearance="outline">
+                          <mat-label>Part No</mat-label>
+                          <mat-select formControlName="itemDetailId" (selectionChange)="onPartNoSelectionChange($event.value)" required>
+                          <mat-option  value="0">--Select--</mat-option >                      
+                            <mat-option *ngFor="let dropdown of selectedItemDetails" [value]="dropdown.value">
+                                  {{dropdown.text}} 
+                                </mat-option>                          
+                          </mat-select>
+                      </mat-form-field>
+                    </div> -->
+                  <!-- <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 mb-2">
+                       <h5 class="clsh3">Item Name : {{itemName}}</h5>
+                    </div> -->
+                </div>
+                <div *ngIf="isShown" class="row clearfix">
+                  <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                    <!-- <mat-table #table [dataSource]="IssueRegisterList" matSort class="mat-cell">
+                      <ng-container matColumnDef="ser">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header> Ser. </mat-header-cell>
+                        <mat-cell *matCellDef="let element; let i = index;"> {{ ((paging.pageIndex-1) * paging.pageSize)
+                          + i+1}} </mat-cell>
+                      </ng-container>
+                      <ng-container matColumnDef="partNO">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header> Part No </mat-header-cell>
+                        <mat-cell *matCellDef="let element"> {{element.partNO}} </mat-cell>
+                      </ng-container>
+                      <ng-container matColumnDef="itemName">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header> Item Name </mat-header-cell>
+                        <mat-cell *matCellDef="let element"> {{element.itemName}} </mat-cell>
+                      </ng-container>
+                      <ng-container matColumnDef="issueStatusId">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header> Issue Status </mat-header-cell>
+                        <mat-cell *matCellDef="let element"> {{element.issueStatusId}} </mat-cell>
+                      </ng-container>
+                      <ng-container matColumnDef="issueQty">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header> Issue Qty</mat-header-cell>
+                        <mat-cell *matCellDef="let element"> {{element.issueQty}} </mat-cell>
+                      </ng-container>
+                      <ng-container matColumnDef="issueDate">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header> Issue Date</mat-header-cell>
+                        <mat-cell *matCellDef="let element"> {{element.issueDate | date:'dd/MMM/yyyy'}} </mat-cell>
+                      </ng-container>
+
+                      <ng-container matColumnDef="issuedTo">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header> Issued To </mat-header-cell>
+                        <mat-cell *matCellDef="let element"> {{element.issuedTo}} </mat-cell>
+                      </ng-container>
+
+                     
+
+                      <ng-container matColumnDef="actions">
+                        <mat-header-cell *matHeaderCellDef class="pr-0">Actions</mat-header-cell>
+                        <mat-cell *matCellDef="let row; let i=index;" class="pr-0">
+                         
+                          <button mat-icon-button color="accent" class="btn-tbl-edit"
+                            [routerLink]="['/tools-management/update-issueregister', row.issueRegisterId]">
+                            <mat-icon aria-label="Edit" class="col-white">edit</mat-icon>
+                          </button>
+
+                          <button mat-icon-button color="accent" class="btn-tbl-delete"
+                            (click)="$event.stopPropagation()" (click)="deleteItem(row)">
+                            <mat-icon aria-label="Delete" class="col-white">delete</mat-icon>
+                          </button>
+                        </mat-cell>
+                      </ng-container>
+
+
+                      <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                      <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+                    </mat-table> -->
+                    <div class="responsive_table">
+                      <table class="table tbl-by-group db-li-s-in mnt-scdle-lst">
+                        <thead>
+                          <tr>
+                            <th class="cl-srl">
+                              <h5>Ser</h5>
+                            </th>
+                            
+                            <th class="cl-mrk">
+                              <h5> Part No</h5>
+                            </th>
+                            <th class="cl-mrk">
+                              <h5>Item Name</h5>
+                            </th>
+        
+                            
+                            <!-- <th class="cl-mrk">
+                              <h5> Allow Extension </h5>
+                            </th> -->
+                            
+                            <th class="cl-nm-rnk">
+                              <h5> Issue Date</h5>
+                            </th>
+                            <th class="cl-nm-rnk">
+                              <h5>Issue Qty</h5>
+                            </th>
+
+                            <th class="cl-nm-rnk">
+                              <h5>Issued To</h5>
+                            </th> 
+                            <th class="cl-nm-rnk">
+                              <h5>Return Qty</h5>
+                            </th>
+                            <th class="cl-nm-rnk">
+                              <h5>Returning Qty</h5>
+                            </th>
+                            <!-- <th class="cl-nm-rnk">
+                              <h5>Planned Completion Date</h5>
+                            </th> -->
+                            <!-- <th *ngIf="role != userRole.CO" class="cl-nm-rnk">
+                              <h5>Extension</h5>
+                            </th> -->
+                            <!-- <th *ngIf="role != userRole.CO" class="cl-nm-rnk">
+                              <h5>Complete Date</h5>
+                            </th>
+                            <th  class="cl-nm-rnk">
+                              <h5>Progress bar</h5>
+                            </th>
+                            <th *ngIf="role != userRole.CO" class="cl-nm-rnk">
+                              <h5>Document</h5>
+                            </th>
+                            <th class="cl-nm-rnk">
+                              <h5>Job Card</h5>
+                            </th> -->
+                            <th  class="cl-nm-rnk">
+                              <h5>Status</h5>
+                            </th>
+                            
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr *ngFor="let unit of IssueRegisterForm.get('IssueRegisterList')['controls']; let i = index" [formGroup]="unit">
+                            <td class="cl-srl" scope="row">{{ i + 1 }}</td>                    
+                            <td class="cl-nm-rnk">
+                              {{ getControlLabel(i, "partNO") }}
+                            </td>
+                            
+                            <td class="cl-nm-rnk">
+                              {{ getControlLabel(i, "itemName") }}
+                            </td>
+                            
+                            
+                            <td class="cl-nm-rnk">
+                              {{ getControlLabel(i, "issueDate") | date: "dd/MMM/yyyy" }}
+                            </td>
+
+                            <td class="cl-nm-rnk">
+                              {{ getControlLabel(i, "issueQty") }}
+                            </td>
+                            <td class="cl-nm-rnk">
+                              {{ getControlLabel(i, "name") }}- <span>(P/O No {{ getControlLabel(i, "pno") }})</span> 
+                            </td>
+
+                            <td class="cl-nm-rnk">
+                              {{ getReturnableItems(i, "issueQty", "returnQty") }}
+                            </td>
+  
+                            
+                            <td class="cl-nm-rnk">
+                              <mat-form-field class="example-full-width mb-3" appearance="outline">
+                                <!-- <mat-label>Return Qty</mat-label> -->
+                                <input matInput formControlName="returningQty">                        
+                              </mat-form-field>
+                            </td>
+                            
+                            
+                            
+                            <!-- <td class="cl-nm-rnk">
+                              {{ getControlLabel(i, "extensionDays") }} Days
+                            </td> -->
+                            
+                            <!-- <td class="cl-nm-rnk">
+                              {{ getControlLabel(i, "issueDate") | date: "dd/MMM/yyyy" }} 
+                            </td>   
+                            
+                            <td class="cl-nm-rnk">
+                              {{ getControlLabel(i, "startInspDate") | date: "dd/MMM/yyyy" }}
+                            </td>
+                            
+                            <td class="cl-nm-rnk">
+                              {{ getControlLabel(i, "endInspDate") | date: "dd/MMM/yyyy" }} 
+                            </td>
+                            <td *ngIf="role != userRole.CO" class="cl-mrk custom-date">
+                              <mat-form-field class="example-full-width mb-3" appearance="outline">
+                                <input class="custom-date-picker" matInput [matDatepicker]="datepicker" formControlName="completedDate">
+                                <mat-datepicker-toggle matSuffix [for]="datepicker"></mat-datepicker-toggle>
+                                <mat-datepicker #datepicker></mat-datepicker>
+                              </mat-form-field>
+                            </td>   -->
+                            <!-- <td  class="cl-mrk">
+                              <mat-form-field *ngIf="role != userRole.CO" class="example-full-width mb-3" appearance="outline">
+                                <input matInput type="text" formControlName="progressBar"/>
+                              </mat-form-field>
+                              <span *ngIf="role == userRole.CO" >{{ getControlLabel(i, "progressBar") }}</span>
+                            </td>
+                            <td *ngIf="role != userRole.CO" class="cl-mrk">
+                              <mat-form-field class="example-full-width mb-3" appearance="outline">
+                                <ngx-mat-file-input (change)="onFileChanged($event,i)" accept=".txt,.pdf,.xls,.xlsx,.doc,.docx,.ppt,.pptx" ></ngx-mat-file-input>
+                                <mat-icon matSuffix>attachment</mat-icon>
+                              </mat-form-field>
+                            </td>
+                            <td>
+                              <a target="_blank" [href]='[this.fileUrl+getControlLabel(i, "jobCard")]'><i matTooltip="Maintenance Document" class="far fa-file-pdf tbl-pdf" ></i ></a>
+                            </td> -->
+                          
+                            <!-- <td class="cl-nm-rnk">
+        
+                            </td> -->
+                            <!-- <td *ngIf="role != userRole.CO"></td>
+                            <td *ngIf="role != userRole.CO"></td> -->
+                            <td *ngIf="role != userRole.CO">
+                              
+                              <button title="Progress Update"   class="btn-space custom" (click)="onReturnButtonClick($event,unit)">Return</button> 
+                              <!-- <button title="Work Completed"   class="btn-space custom" (click)="onCompletedButtonClick($event,unit,i,1)"><i class="fa fa-check"></i></button>  -->
+                            </td>                                    
+                            
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                    
+                  </div>
+                </div>
+              </div>
+             
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,878 @@
+<section class="content">
+  <div class="container-fluid">
+    <div class="block-header">
+      <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+          <ul class="breadcrumb breadcrumb-style">
+            <li class="breadcrumb-item">
+              <h4 class="page-title">{{ pageTitle }}</h4>
+            </li>
+            <li class="breadcrumb-item bcrumb-1">
+              <a routerLink="/admin/dashboard/main"
+                ><i class="fas fa-home"></i
+              ></a>
+            </li>
+            <li class="breadcrumb-item bcrumb-2">
+              <a href="#" onClick="return false;">Previous Item Store</a>
+            </li>
+            <li class="breadcrumb-item active">{{ destination }}</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="row clearfix">
+      <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+        <div class="card">
+          <div class="body">
+            <form
+              class="m-4"
+              [formGroup]="PreviousItemStoreForm"
+              (ngSubmit)="onSubmit()"
+            >
+              <div class="row">
+                <div
+                  *ngIf="role == userRole.SuperAdmin"
+                  class="col-xl-2 col-lg-2 col-md-2 col-sm-12 mb-2"
+                >
+                  <mat-form-field
+                    class="example-full-width mb-3"
+                    appearance="outline"
+                  >
+                    <mat-label>Flight Line/Squadron </mat-label>
+                    <mat-select
+                      formControlName="departmentNameId"
+                      required
+                      (selectionChange)="onDepartmentSelectionChange()"
+                    >
+                      <mat-option value="0">--Select--</mat-option>
+                      <mat-option
+                        *ngFor="let dropdown of selectedDepartmentNames"
+                        [value]="dropdown.value"
+                      >
+                        {{ dropdown.text }}
+                      </mat-option>
+                    </mat-select>
+                    <mat-error
+                      *ngIf="
+                        PreviousItemStoreForm.get('departmentNameId').hasError(
+                          'required'
+                        )
+                      "
+                    >
+                      department Name is Required!
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+
+                <!-- <div class="col-xl-2 col-lg-2 col-md-2 col-sm-12 mb-2">
+                  <mat-form-field
+                    class="example-full-width mb-3"
+                    appearance="outline">
+                    <mat-label>Patt No</mat-label>
+                    <mat-select formControlName="itemDetailId" required>
+                      <mat-option value="0">--Select--</mat-option>
+                      <mat-option
+                        *ngFor="let dropdown of selectedItemDetails"
+                        [value]="dropdown.value">
+                        {{ dropdown.text }}
+                      </mat-option>
+                    </mat-select>
+                    <mat-error
+                      *ngIf="
+                        PreviousItemStoreForm.get('itemDetailId').hasError('required')">
+                      Patt no is Required!
+                    </mat-error>
+                  </mat-form-field>
+                </div> -->
+
+                <div class="col-xl-3 col-lg-3 col-md-6 col-sm-12 mb-">
+                  <mat-form-field class="example-full-width mb-3" appearance="outline" >
+                    <mat-label>Patt No</mat-label>
+                    <input formControlName="part" matInput type="text" [matAutocomplete]="auto" required />
+                    <mat-autocomplete #auto="matAutocomplete">
+                      <mat-option *ngFor="let item of filteredOptions" [value]="item" (onSelectionChange)="onTraineeSelectionChanged(item)">
+                        {{ item.text }}
+                      </mat-option>
+                    </mat-autocomplete>
+                  </mat-form-field>
+                </div>
+                <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 mb-2">
+                  <h5 class="m-t-20,">
+                    Item Name : <span style="font-family: Arial, Helvetica, sans-serif; font-size: large; color: green;">
+                      {{ nameOfItem }}</span>
+                  </h5>
+                </div>
+               
+
+                <div class="col-xl-2 col-lg-2 col-md-2 col-sm-12 mb-2">
+                  <mat-form-field
+                    class="example-full-width mb-3"
+                    appearance="outline"
+                  >
+                    <mat-label> Ser No </mat-label>
+                    <input matInput formControlName="itemSerNo"/>
+                  </mat-form-field>
+                </div>
+
+                <div class="col-xl-2 col-lg-2 col-md-2 col-sm-12 mb-2">
+                  <mat-form-field
+                    class="example-full-width mb-3"
+                    appearance="outline"
+                  >
+                    <mat-label>Deno</mat-label>
+                    <mat-select formControlName="denoId" required>
+                      <mat-option value="0">--Select--</mat-option>
+                      <mat-option
+                        *ngFor="let dropdown of selectedDeno"
+                        [value]="dropdown.value"
+                      >
+                        {{ dropdown.text }}
+                      </mat-option>
+                    </mat-select>
+                    <mat-error
+                      *ngIf="
+                        PreviousItemStoreForm.get('denoId').hasError('required')
+                      "
+                    >
+                      deno is Required!
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+
+                <div class="col-xl-2 col-lg-2 col-md-2 col-sm-12 mb-2">
+                  <mat-form-field
+                    class="example-full-width mb-3"
+                    appearance="outline"
+                  >
+                    <mat-label>Total Received Qty </mat-label>
+                    <input
+                      matInput
+                      formControlName="totalReceivedQty"
+                      required
+                    />
+                    <mat-error
+                      *ngIf="
+                        PreviousItemStoreForm.get('totalReceivedQty').hasError(
+                          'required'
+                        )
+                      "
+                    >
+                      Total Received Qty is required
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+                <!-- <div class="col-xl-2 col-lg-2 col-md-2 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width mb-3" appearance="outline">
+                      <mat-label>Issued Qty </mat-label>
+                      <input matInput formControlName="issuedQty" required>
+                      <mat-error *ngIf="PreviousItemStoreForm.get('issuedQty').hasError('required')">
+                        Issued Qty  is required
+                      </mat-error>
+                    </mat-form-field>
+                  </div> -->
+                <div class="col-xl-2 col-lg-2 col-md-2 col-sm-12 mb-2">
+                  <mat-form-field class="example-full-width mb-3" appearance="outline">
+                    <mat-label>Available Qty </mat-label>
+                    <input matInput formControlName="availableQty" required />
+                    <mat-error *ngIf="PreviousItemStoreForm.get('availableQty').hasError('required')">
+                      Available Qty is required
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+
+                <!-- <div class="col-xl-2 col-lg-2 col-md-2 col-sm-12 mb-2">
+                  <mat-form-field
+                    class="example-full-width mb-3"
+                    appearance="outline"
+                  >
+                    <mat-label>Type of Item</mat-label>
+                    <mat-select formControlName="sparesCategoryId" required>
+                      <mat-option value="0">--Select--</mat-option>
+                      <mat-option
+                        *ngFor="let dropdown of selectedSparesCategory"
+                        [value]="dropdown.value"
+                      >
+                        {{ dropdown.text }}
+                      </mat-option>
+                    </mat-select>
+                    <mat-error
+                      *ngIf="
+                        PreviousItemStoreForm.get('sparesCategoryId').hasError(
+                          'required'
+                        )
+                      "
+                    >
+                      Spares Category is Required!
+                    </mat-error>
+                  </mat-form-field>
+                </div> -->
+
+                <div class="col-xl-2 col-lg-2 col-md-2 col-sm-12 mb-2">
+                  <mat-form-field
+                    class="example-full-width mb-3"
+                    appearance="outline"
+                  >
+                    <mat-label>Condition</mat-label>
+                    <mat-select formControlName="conditionOfItemId" required>
+                      <mat-option
+                        *ngFor="let dropdown of selectedConditionofItem"
+                        [value]="dropdown.value"
+                      >
+                        {{ dropdown.text }}
+                      </mat-option>
+                    </mat-select>
+                    <mat-error
+                      *ngIf="
+                        PreviousItemStoreForm.get('conditionOfItemId').hasError(
+                          'required'
+                        )
+                      "
+                    >
+                      Condition is Required!
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+
+                <!-- <div class="col-xl-2 col-lg-2 col-md-2 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width mb-3" appearance="outline">
+                        <mat-label>Tools Box Name</mat-label>                        
+                        <mat-select formControlName="toolsBoxNameId" required>
+                          <mat-option value="0">--Select--</mat-option>
+                            <mat-option *ngFor="let dropdown of selectedToolsBoxNames" [value]="dropdown.value">
+                                {{dropdown.text}} 
+                              </mat-option>                          
+                        </mat-select>
+                        <mat-error *ngIf="PreviousItemStoreForm.get('toolsBoxNameId').hasError('required')">
+                          Tools Box Name  is Required!
+                        </mat-error>
+                    </mat-form-field>
+                  </div> -->
+                <div class="col-xl-2 col-lg-2 col-md-2 col-sm-12 mb-2">
+                  <mat-form-field
+                    class="example-full-width mb-3"
+                    appearance="outline"
+                  >
+                    <mat-label>Location</mat-label>
+                    <mat-select formControlName="toolsLocationId" required>
+                      <mat-option value="0">--Select--</mat-option>
+                      <mat-option
+                        *ngFor="let dropdown of selectedToolsLocations"
+                        [value]="dropdown.value"
+                      >
+                        {{ dropdown.text }}
+                      </mat-option>
+                    </mat-select>
+                    <mat-error
+                      *ngIf="
+                        PreviousItemStoreForm.get('toolsLocationId').hasError(
+                          'required'
+                        )
+                      "
+                    >
+                      Location is Required!
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+
+                <div class="col-xl-2 col-lg-2 col-md-2 col-sm-12 mb-2">
+                  <mat-form-field
+                    class="example-full-width mb-3"
+                    appearance="outline"
+                  >
+                    <mat-label>Manufacturing Date</mat-label>
+                    <input
+                      matInput
+                      [matDatepicker]="ddpicker"
+                      formControlName="manufacturingDate"
+                    />
+                    <mat-datepicker-toggle
+                      matSuffix
+                      [for]="ddpicker"
+                    ></mat-datepicker-toggle>
+                    <mat-datepicker #ddpicker></mat-datepicker>
+                  </mat-form-field>
+                </div>
+
+                <div class="col-xl-2 col-lg-2 col-md-2 col-sm-12 mb-2">
+                  <mat-form-field
+                    class="example-full-width mb-3"
+                    appearance="outline">
+                    <mat-label>Life Limit</mat-label>
+                    <mat-select formControlName="lifeLimitItemId" required>
+                      <mat-option value="0">--Select--</mat-option>
+                      <mat-option (onSelectionChange)="onStatus($event)"
+                        *ngFor="let dropdown of selectedLifeLimitItem"
+                        [value]="dropdown.value">
+                        {{ dropdown.text }}
+                      </mat-option>
+                    </mat-select>
+                    <mat-error
+                      *ngIf="
+                        PreviousItemStoreForm.get('lifeLimitItemId').hasError(
+                          'required')">
+                      Life Limit is Required!
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+
+               
+
+                <!-- <div class="col-xl-2 col-lg-2 col-md-2 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width mb-3" appearance="outline">
+                        <mat-label>Tools Type</mat-label>                        
+                        <mat-select formControlName="toolsTypeId" required>
+                          <mat-option value="0">--Select--</mat-option>
+                            <mat-option *ngFor="let dropdown of selectedToolsType" [value]="dropdown.value">
+                                {{dropdown.text}} 
+                              </mat-option>                          
+                        </mat-select>
+                        <mat-error *ngIf="PreviousItemStoreForm.get('toolsTypeId').hasError('required')">
+                          Tools Type is Required!
+                        </mat-error>
+                    </mat-form-field>
+                  </div>
+
+                 <div class="col-xl-2 col-lg-2 col-md-2 col-sm-12 mb-2">
+                  <mat-form-field
+                    class="example-full-width mb-3"
+                    appearance="outline"
+                  >
+                    <mat-label>Item Category</mat-label>
+                    <mat-select formControlName="itemCategoryId" required>
+                      <mat-option value="0">--Select--</mat-option>
+                      <mat-option
+                        *ngFor="let dropdown of selectedItemCategory"
+                        [value]="dropdown.value"
+                      >
+                        {{ dropdown.text }}
+                      </mat-option>
+                    </mat-select>
+                    <mat-error
+                      *ngIf="
+                        PreviousItemStoreForm.get('itemCategoryId').hasError(
+                          'required'
+                        )
+                      "
+                    >
+                      item Category is Required!
+                    </mat-error>
+                  </mat-form-field>
+                </div> 
+
+                <div class="col-xl-2 col-lg-2 col-md-2 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width mb-3" appearance="outline">
+                        <mat-label>Service Life Type</mat-label>                        
+                        <mat-select formControlName="serviceLifeTypeId" required>
+                          <mat-option value="0">--Select--</mat-option>
+                            <mat-option *ngFor="let dropdown of selectedServiceLifeType" [value]="dropdown.value">
+                                {{dropdown.text}} 
+                              </mat-option>                          
+                        </mat-select>
+                        <mat-error *ngIf="PreviousItemStoreForm.get('serviceLifeTypeId').hasError('required')">
+                          service Life Type is Required!
+                        </mat-error>
+                    </mat-form-field>
+                  </div> 
+
+                 <div class="col-xl-2 col-lg-2 col-md-2 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width mb-3" appearance="outline">
+                        <mat-label>Expire Duration</mat-label>                        
+                        <mat-select formControlName="endLifeTypeId" required>
+                          <mat-option value="0">--Select--</mat-option>
+                            <mat-option *ngFor="let dropdown of selectedEndLifeType" [value]="dropdown.value">
+                                {{dropdown.text}} 
+                              </mat-option>                          
+                        </mat-select>
+                        <mat-error *ngIf="PreviousItemStoreForm.get('endLifeTypeId').hasError('required')">
+                          Expir Duration is Required!
+                        </mat-error>
+                    </mat-form-field>
+                  </div>
+                 <div class="col-xl-2 col-lg-2 col-md-2 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width mb-3" appearance="outline">
+                        <mat-label>Acct Store</mat-label>                        
+                        <mat-select formControlName="acctStoreId" required>
+                          <mat-option value="0">--Select--</mat-option>
+                            <mat-option *ngFor="let dropdown of selectedAcctStore" [value]="dropdown.value">
+                                {{dropdown.text}} 
+                              </mat-option>                          
+                        </mat-select>
+                        <mat-error *ngIf="PreviousItemStoreForm.get('acctStoreId').hasError('required')">
+                          Acct Store is Required!
+                        </mat-error>
+                    </mat-form-field>
+                  </div> 
+                 <div class="col-xl-2 col-lg-2 col-md-2 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width mb-3" appearance="outline">
+                        <mat-label>Overhauling Type</mat-label>                        
+                        <mat-select formControlName="overhaulingTypeId" required>
+                          <mat-option value="0">--Select--</mat-option>
+                            <mat-option *ngFor="let dropdown of selectedOverhaulingTypes" [value]="dropdown.value">
+                                {{dropdown.text}} 
+                              </mat-option>                          
+                        </mat-select>
+                        <mat-error *ngIf="PreviousItemStoreForm.get('overhaulingTypeId').hasError('required')">
+                          Overhauling Type is Required!
+                        </mat-error>
+                    </mat-form-field>
+                  </div> 
+                <div class="col-xl-2 col-lg-2 col-md-2 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width mb-3" appearance="outline">
+                        <mat-label>Retirement Type</mat-label>                        
+                        <mat-select formControlName="retirementTypeId" required>
+                          <mat-option value="0">--Select--</mat-option>
+                            <mat-option *ngFor="let dropdown of selectedRetirementTypes" [value]="dropdown.value">
+                                {{dropdown.text}} 
+                              </mat-option>                          
+                        </mat-select>
+                        <mat-error *ngIf="PreviousItemStoreForm.get('retirementTypeId').hasError('required')">
+                          Retirement Type is Required!
+                        </mat-error>
+                    </mat-form-field>
+                  </div> 
+
+                 <div class="col-xl-2 col-lg-2 col-md-2 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width mb-3" appearance="outline">
+                      <mat-label>IMC No </mat-label>
+                      <input matInput formControlName="icmNo" required>
+                      <mat-error *ngIf="PreviousItemStoreForm.get('icmNo').hasError('required')">
+                        ICM No  is required
+                      </mat-error>
+                    </mat-form-field>
+                  </div> 
+                <div class="col-xl-2 col-lg-2 col-md-2 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width mb-3" appearance="outline">
+                      <mat-label>Shelf Life </mat-label>
+                      <input matInput formControlName="shelfLife" required>
+                      <mat-error *ngIf="PreviousItemStoreForm.get('shelfLife').hasError('required')">
+                        shalf Life  is required
+                      </mat-error>
+                    </mat-form-field>
+                  </div> 
+                 <div class="col-xl-2 col-lg-2 col-md-2 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width mb-3" appearance="outline">
+                      <mat-label>End Shelf Life </mat-label>
+                      <input matInput formControlName="endShalfLife" required>
+                      <mat-error *ngIf="PreviousItemStoreForm.get('endShalfLife').hasError('required')">
+                        End Shalf Life  is required
+                      </mat-error>
+                    </mat-form-field>
+                  </div> 
+                <div class="col-xl-2 col-lg-2 col-md-2 col-sm-12 mb-2">
+                  <mat-form-field
+                    class="example-full-width mb-3"
+                    appearance="outline"
+                  >
+                    <mat-label>Warranty Start Date</mat-label>
+                    <input
+                      matInput
+                      [matDatepicker]="wsdpicker"
+                      formControlName="warrantyStartDate"
+                    />
+                    <mat-datepicker-toggle
+                      matSuffix
+                      [for]="wsdpicker"
+                    ></mat-datepicker-toggle>
+                    <mat-datepicker #wsdpicker></mat-datepicker>
+                  </mat-form-field>
+                </div> -->
+                <div *ngIf="lifeLimit!=2" class="col-xl-2 col-lg-2 col-md-2 col-sm-12 mb-2">
+                  <mat-form-field
+                    class="example-full-width mb-3"
+                    appearance="outline"
+                  >
+                    <mat-label>Life Limit Upto</mat-label>
+                    <input
+                      matInput
+                      [matDatepicker]="wedpicker"
+                      formControlName="warrantyEndDate"
+                    />
+                    <mat-datepicker-toggle
+                      matSuffix
+                      [for]="wedpicker"
+                    ></mat-datepicker-toggle>
+                    <mat-datepicker #wedpicker></mat-datepicker>
+                  </mat-form-field>
+                </div>
+
+                <div class="col-xl-2 col-lg-2 col-md-2 col-sm-12 mb-2">
+                  <mat-form-field class="example-full-width mb-3" appearance="outline">
+                    <mat-label>Model </mat-label>
+                    <input matInput formControlName="model"/>
+                  </mat-form-field>
+                </div>
+                <div class="col-xl-2 col-lg-2 col-md-2 col-sm-12 mb-2">
+                  <mat-form-field class="example-full-width mb-3" appearance="outline">
+                    <mat-label>Brand</mat-label>
+                    <input matInput formControlName="brand"/>
+                  </mat-form-field>
+                </div>
+                <div class="col-xl-2 col-lg-2 col-md-2 col-sm-12 mb-2">
+                  <mat-form-field class="example-full-width mb-3" appearance="outline">
+                    <mat-label>Price</mat-label>
+                    <input matInput formControlName="oldPrice"/>
+                  </mat-form-field>
+                </div>
+
+                <div class="col-xl-2 col-lg-2 col-md-2 col-sm-12 mb-2">
+                  <mat-form-field
+                    class="example-full-width mb-3"
+                    appearance="outline"
+                  >
+                    <mat-label>Doc</mat-label>
+                    <ngx-mat-file-input
+                      (change)="onFillDocChanged($event)"
+                      accept=".txt,.pdf,.xls,.xlsx,.doc,.docx,.ppt,.pptx"
+                    >
+                    </ngx-mat-file-input>
+                    <mat-icon matSuffix>attachment</mat-icon>
+                  </mat-form-field>
+                </div>
+                <!-- <div class="col-xl-2 col-lg-2 col-md-2 col-sm-12 mb-2">
+                  <mat-form-field
+                    class="example-full-width mb-3"
+                    appearance="outline"
+                  >
+                    <mat-label>Item Received Date</mat-label>
+                    <input
+                      matInput
+                      [matDatepicker]="itdpicker"
+                      formControlName="itemReceivedDate"
+                    />
+                    <mat-datepicker-toggle
+                      matSuffix
+                      [for]="itdpicker"
+                    ></mat-datepicker-toggle>
+                    <mat-datepicker #itdpicker></mat-datepicker>
+                  </mat-form-field>
+                </div> -->
+
+                <!-- <div class="col-xl-2 col-lg-2 col-md-2 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width mb-3" appearance="outline">
+                      <mat-label>Location </mat-label>
+                      <input matInput formControlName="location" required>
+                      <mat-error *ngIf="PreviousItemStoreForm.get('location').hasError('required')">
+                        Location  is required
+                      </mat-error>
+                    </mat-form-field>
+                  </div> -->
+                <!-- <div class="col-xl-2 col-lg-2 col-md-2 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width mb-3" appearance="outline">
+                      <mat-label>Service Life </mat-label>
+                      <input matInput formControlName="serviceLife" required>
+                      <mat-error *ngIf="PreviousItemStoreForm.get('serviceLife').hasError('required')">
+                        service Life  is required
+                      </mat-error>
+                    </mat-form-field>
+                  </div> -->
+                <!-- <div class="col-xl-2 col-lg-2 col-md-2 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width mb-3" appearance="outline">
+                      <mat-label>End Life Time </mat-label>
+                      <input matInput formControlName="endLifeTime" required>
+                      <mat-error *ngIf="PreviousItemStoreForm.get('endLifeTime').hasError('required')">
+                        end Life Time  is required
+                      </mat-error>
+                    </mat-form-field>
+                  </div> -->
+                <!-- <div class="col-xl-2 col-lg-2 col-md-2 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width mb-3" appearance="outline">
+                      <mat-label>Accessories </mat-label>
+                      <input matInput formControlName="accessories" required>
+                      <mat-error *ngIf="PreviousItemStoreForm.get('accessories').hasError('required')">
+                        accessories  is required
+                      </mat-error>
+                    </mat-form-field>
+                  </div> -->
+                <!-- <div class="col-xl-2 col-lg-2 col-md-2 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width mb-3" appearance="outline">
+                      <mat-label>Stock Register Page No </mat-label>
+                      <input matInput formControlName="stockRegisterPageNo" required>
+                      <mat-error *ngIf="PreviousItemStoreForm.get('stockRegisterPageNo').hasError('required')">
+                        Stock Register Page No  is required
+                      </mat-error>
+                    </mat-form-field>
+                  </div> -->
+                <!-- <div class="col-xl-2 col-lg-2 col-md-2 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width mb-3" appearance="outline">
+                      <mat-label>Retirement Life </mat-label>
+                      <input matInput formControlName="retirmentLife" required>
+                      <mat-error *ngIf="PreviousItemStoreForm.get('retirmentLife').hasError('required')">
+                        Retirement Life  is required
+                      </mat-error>
+                    </mat-form-field>
+                  </div>
+                  <div class="col-xl-2 col-lg-2 col-md-2 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width mb-3" appearance="outline">
+                      <mat-label>Demand Qty </mat-label>
+                      <input matInput formControlName="demandQty" required>
+                      <mat-error *ngIf="PreviousItemStoreForm.get('demandQty').hasError('required')">
+                        Demand Qty  is required
+                      </mat-error>
+                    </mat-form-field>
+                  </div> -->
+
+                <!-- <div class="col-xl-2 col-lg-2 col-md-2 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width mb-3" appearance="outline">
+                      <mat-label>Letter Outer No </mat-label>
+                      <input matInput formControlName="letterOuterNo" required>
+                      <mat-error *ngIf="PreviousItemStoreForm.get('letterOuterNo').hasError('required')">
+                        letterOuterNo  is required
+                      </mat-error>
+                    </mat-form-field>
+                  </div>
+                  <div class="col-xl-2 col-lg-2 col-md-2 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width mb-3" appearance="outline">
+                      <mat-label>Ref Purchase Order No </mat-label>
+                      <input matInput formControlName="refPoNo" required>
+                      <mat-error *ngIf="PreviousItemStoreForm.get('refPoNo').hasError('required')">
+                        Ref purchase order No  is required
+                      </mat-error>
+                    </mat-form-field>
+                  </div>
+                  <div class="col-xl-2 col-lg-2 col-md-2 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width mb-3" appearance="outline">
+                      <mat-label>Tender Number </mat-label>
+                      <input matInput formControlName="tenderNumber" required>
+                      <mat-error *ngIf="PreviousItemStoreForm.get('tenderNumber').hasError('required')">
+                        Tender Number  is required
+                      </mat-error>
+                    </mat-form-field>
+                  </div>
+                  <div class="col-xl-2 col-lg-2 col-md-2 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width mb-3" appearance="outline">
+                      <mat-label>Date Of Tender Float</mat-label>
+                        <input matInput [matDatepicker]="dtfpicker" formControlName="dateOfTenderFloat" >
+                        <mat-datepicker-toggle matSuffix [for]="dtfpicker"></mat-datepicker-toggle>
+                       <mat-datepicker #dtfpicker></mat-datepicker>                                            
+                    </mat-form-field>
+                  </div>
+                  <div class="col-xl-2 col-lg-2 col-md-2 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width mb-3" appearance="outline">
+                      <mat-label>Tender Opening Date</mat-label>
+                        <input matInput [matDatepicker]="toppicker" formControlName="tenderopeningDate" >
+                        <mat-datepicker-toggle matSuffix [for]="toppicker"></mat-datepicker-toggle>
+                       <mat-datepicker #toppicker></mat-datepicker>                                            
+                    </mat-form-field>
+                  </div>
+                  <div class="col-xl-2 col-lg-2 col-md-2 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width mb-3" appearance="outline">
+                      <mat-label>Tender Publish Date</mat-label>
+                        <input matInput [matDatepicker]="tpdpicker" formControlName="tenderPublishDate" >
+                        <mat-datepicker-toggle matSuffix [for]="tpdpicker"></mat-datepicker-toggle>
+                       <mat-datepicker #tpdpicker></mat-datepicker>                                            
+                    </mat-form-field>
+                  </div>
+                  <div class="col-xl-2 col-lg-2 col-md-2 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width mb-3" appearance="outline">
+                      <mat-label>Tender Notice </mat-label>
+                      <input matInput formControlName="tenderNotice" required>
+                      <mat-error *ngIf="PreviousItemStoreForm.get('tenderNotice').hasError('required')">
+                        Tender Notice  is required
+                      </mat-error>
+                    </mat-form-field>
+                  </div>
+                  <div class="col-xl-2 col-lg-2 col-md-2 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width mb-3" appearance="outline">
+                      <mat-label>Calibration Date</mat-label>
+                        <input matInput [matDatepicker]="cdpicker" formControlName="calibrationDate" >
+                        <mat-datepicker-toggle matSuffix [for]="cdpicker"></mat-datepicker-toggle>
+                       <mat-datepicker #cdpicker></mat-datepicker>                                            
+                    </mat-form-field>
+                  </div>
+                  <div class="col-xl-2 col-lg-2 col-md-2 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width mb-3" appearance="outline">
+                      <mat-label>Next Calibration Date</mat-label>
+                        <input matInput [matDatepicker]="ncdpicker" formControlName="nextCalibrationDate" >
+                        <mat-datepicker-toggle matSuffix [for]="ncdpicker"></mat-datepicker-toggle>
+                       <mat-datepicker #ncdpicker></mat-datepicker>                                            
+                    </mat-form-field>
+                  </div> -->
+                <!-- <div class="col-xl-2 col-lg-2 col-md-2 col-sm-12 mb-2">
+                  <mat-form-field
+                    class="example-full-width mb-3"
+                    appearance="outline"
+                  >
+                    <mat-label>Remarks </mat-label>
+                    <input matInput formControlName="remarks" />
+                  </mat-form-field>
+                </div> -->
+              </div>
+              <div class="row">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                  <button
+                    class="btn-space"
+                    [disabled]="!PreviousItemStoreForm.valid"
+                    mat-raised-button
+                    color="primary"
+                  >
+                    {{ btnText }}
+                  </button>
+                  <button
+                    type="button"
+                    mat-button
+                    routerLink="/spares-management/previousitemstore-list"
+                  >
+                    Cancel
+                  </button>
+                </div>
+              </div>
+            </form>
+            <div *ngIf="isShown" class="row create-table db-tbl cls-rtn">
+              <div class="materialTableHeader">
+                <div class="row">
+                  <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                    <ul class="header-buttons-left ml-0">
+                      <li class="dropdown">
+                        <input
+                          placeholder="Search"
+                          type="text"
+                          [(ngModel)]="searchText"
+                          #filter
+                          class="browser-default search-field"
+                          aria-label="Search box"
+                        />
+                      </li>
+                      <li>
+                        <div class="icon-button-demo m-l-10">
+                          <button
+                            mat-mini-fab
+                            (click)="applyFilter(searchText)"
+                            color="primary"
+                          >Go
+                            <!-- <mat-icon class="col-white">search</mat-icon> -->
+                          </button>
+                        </div>
+                      </li>
+                    </ul>
+                  </div>
+                  <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                    <ul class="header-buttons-left ml-0">
+                      <li>
+                        <h3 class="text-center table-title">Item Store List</h3>
+                      </li>
+                    </ul>
+                  </div>
+                  <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 mb-2 db-p">
+                    <button
+                      class="btn-space"
+                      mat-raised-button
+                      color="primary"
+                      (click)="printSingle()"
+                    >
+                      <mat-icon class="col-white">print</mat-icon>
+                    </button>
+                  </div>
+                </div>
+              </div>
+              <div class="container no-padding">
+                <div id="print-routine">
+                  <table class="table tbl-by-group db-li-s-in">
+                    <thead>
+                      <tr>
+                        <th class="thbm"><h5>Ser</h5></th>
+                        <th class="thbm"><h5>Patt No</h5></th>
+                        <th class="thbm"><h5>Item Name</h5></th>
+                        <th class="thbm"><h5>Deno</h5></th>
+                        <th class="thbm"><h5>Qty</h5></th>
+                        <th class="thbm"><h5>Location</h5></th>
+                        <th class="cl-action"><h5>Actions</h5></th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <ng-container
+                        *ngFor="let data of dataSource.data; let i = index"
+                      >
+                        <tr>
+                          <td>
+                            {{
+                              (paging.pageIndex - 1) * paging.pageSize + i + 1
+                            }}
+                          </td>
+                          <td>
+                            {{ data.partNo }}
+                          </td>
+                          <td>
+                            {{ data.nameOfItem }}
+                          </td>
+                          <td>
+                            {{ data.deno }}
+                          </td>
+                          <td>
+                            {{ data.totalReceivedQty }}
+                          </td>
+                          <td>
+                            {{ data.toolsLocation }}
+                          </td>
+                          <td class="cl-action">
+                            <div fxLayout="row" fxLayoutGap="20px">
+                              <a target="_blank" [href]="data.otherDoc">
+                                <i *ngIf="data.otherDoc != 'http://192.168.8.102:8030/Content/files/item-stores/'"
+                                  matTooltip="Document"
+                                  class="far fa-file-pdf tbl-pdf"
+                                ></i
+                              ></a>
+                              |
+                              <!-- <button
+                                mat-icon-button
+                                color="accent"
+                                class="btn-tbl-edit"
+                                [routerLink]="[
+                                  '/spares-management/view-itemstor',
+                                  data.itemStorId
+                                ]"
+                              >
+                                <mat-icon aria-label="Edit" class="col-white"
+                                  >visibility</mat-icon
+                                >
+                              </button> -->
+                              <!-- <button
+                                mat-icon-button
+                                color="accent"
+                                class="btn-tbl-edit"
+                                [routerLink]="[
+                                  '/spares-management/update-itemstor',
+                                  data.itemStorId
+                                ]"
+                              >
+                                <mat-icon aria-label="Edit" class="col-white"
+                                  >edit</mat-icon
+                                >
+                              </button> -->
+                              <button
+                                mat-icon-button
+                                color="accent"
+                                class="btn-tbl-delete"
+                                (click)="$event.stopPropagation()"
+                                (click)="deleteItem(data)"
+                              >
+                                <mat-icon aria-label="Delete" class="col-white"
+                                  >delete</mat-icon
+                                >
+                              </button>
+                            </div>
+                            {{ data.actions }}
+                          </td>
+                        </tr>
+                      </ng-container>
+                    </tbody>
+                  </table>
+                </div>
+
+                <mat-paginator
+                  [length]="paging.length"
+                  [showFirstLastButtons]="
+                    masterData.paging.showFirstLastButtons
+                  "
+                  [pageSize]="paging.pageSize"
+                  [pageSizeOptions]="masterData.paging.pageSizeOptions"
+                  (page)="pageChanged($event)"
+                >
+                </mat-paginator>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

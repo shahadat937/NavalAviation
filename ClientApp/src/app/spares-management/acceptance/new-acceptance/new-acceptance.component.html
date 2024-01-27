@@ -1,0 +1,885 @@
+<section class="content">
+  <div class="container-fluid">
+    <div class="block-header">
+      <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+          <ul class="breadcrumb breadcrumb-style">
+            <li class="breadcrumb-item">
+              <h4 class="page-title">{{ pageTitle }}</h4>
+            </li>
+            <li class="breadcrumb-item bcrumb-1">
+              <a routerLink="/admin/dashboard/main"
+                ><i class="fas fa-home"></i
+              ></a>
+            </li>
+            <li class="breadcrumb-item bcrumb-2">
+              <a href="#" onClick="return false;">Acceptance</a>
+            </li>
+            <li class="breadcrumb-item active">{{ destination }}</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="row clearfix">
+      <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+        <div class="card">
+          <div class="body">
+            <form
+              *ngIf="role != userRole.CO"
+              class="m-4"
+              [formGroup]="AcceptanceForm"
+              (ngSubmit)="onSubmit()"
+            >
+              <div class="row">
+                <div class="row exam-mark">
+                  <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-2">
+                    <div class="row left-row">
+                      <div
+                        *ngIf="role == userRole.SuperAdmin"
+                        class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2"
+                      >
+                        <mat-form-field
+                          class="example-full-width mb-3"
+                          appearance="outline"
+                        >
+                          <mat-label>Flight Line/Squadron </mat-label>
+                          <mat-select
+                            formControlName="departmentNameId"
+                            (selectionChange)="getselectedProcurements()"
+                            required
+                          >
+                            <mat-option value="0">--Select--</mat-option>
+                            <mat-option
+                              *ngFor="let dropdown of selectedDepartmentNames"
+                              [value]="dropdown.value"
+                            >
+                              {{ dropdown.text }}
+                            </mat-option>
+                          </mat-select>
+                          <mat-error
+                            *ngIf="
+                              AcceptanceForm.get('departmentNameId').hasError(
+                                'required'
+                              )
+                            "
+                          >
+                            Flight Line/Squadron is Required!
+                          </mat-error>
+                        </mat-form-field>
+                      </div>
+                      <!-- <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-2">
+                      </div> -->
+                      <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                        <mat-form-field
+                          class="example-full-width mb-3"
+                          appearance="outline"
+                        >
+                          <mat-label>Patt No</mat-label>
+                          <mat-select
+                            formControlName="procurementId"
+                            (selectionChange)="getProcurementData()"
+                            required
+                          >
+                            <mat-option value="0">--Select--</mat-option>
+                            <mat-option
+                              *ngFor="let dropdown of selectedPartNo"
+                              [value]="dropdown.value"
+                            >
+                              {{ dropdown.text }}
+                            </mat-option>
+                          </mat-select>
+                          <mat-error
+                            *ngIf="
+                              AcceptanceForm.get('procurementId').hasError(
+                                'required'
+                              )
+                            "
+                          >
+                            Patt No is Required!
+                          </mat-error>
+                        </mat-form-field>
+                      </div>
+                    </div>
+                  </div>
+                  <div
+                    *ngIf="isShown"
+                    class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-2 sft-entry"
+                  >
+                    <div class="row">
+                      <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                        <div class="row">
+                          <div
+                            class="container col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2 mt-2 sticky-table ex-mrk-li"
+                          >
+                            <h4 class="align-center">
+                              Procurement Information
+                            </h4>
+                            <mat-table
+                              #table
+                              [dataSource]="procurementData"
+                              matSort
+                              class="mat-cell ex-mrk-lft-tbl"
+                            >
+                              <ng-container matColumnDef="sl">
+                                <mat-header-cell
+                                  *matHeaderCellDef
+                                  mat-sort-header
+                                >
+                                  Ser.
+                                </mat-header-cell>
+                                <mat-cell
+                                  *matCellDef="let element; let i = index"
+                                >
+                                  {{
+                                    (paging.pageIndex - 1) * paging.pageSize +
+                                      i +
+                                      1
+                                  }}
+                                </mat-cell>
+                              </ng-container>
+                              <ng-container matColumnDef="itemDetail">
+                                <mat-header-cell
+                                  *matHeaderCellDef
+                                  mat-sort-header
+                                >
+                                  Patt No</mat-header-cell
+                                >
+                                <mat-cell *matCellDef="let element"
+                                  >{{ element.itemDetail }}
+                                </mat-cell>
+                              </ng-container>
+                              <ng-container matColumnDef="itemName">
+                                <mat-header-cell
+                                  *matHeaderCellDef
+                                  mat-sort-header
+                                >
+                                  Item Name</mat-header-cell
+                                >
+                                <mat-cell *matCellDef="let element"
+                                  >{{ element.itemName }}
+                                </mat-cell>
+                              </ng-container>
+
+                              <ng-container matColumnDef="remarks">
+                                <mat-header-cell
+                                  *matHeaderCellDef
+                                  mat-sort-header
+                                  >Remarks</mat-header-cell
+                                >
+                                <mat-cell *matCellDef="let element"
+                                  >{{ element.remarks }}
+                                </mat-cell>
+                              </ng-container>
+                              <ng-container matColumnDef="qty">
+                                <mat-header-cell
+                                  *matHeaderCellDef
+                                  mat-sort-header
+                                  >Qty</mat-header-cell
+                                >
+                                <mat-cell *matCellDef="let element"
+                                  >{{ element.qty }}
+                                </mat-cell>
+                              </ng-container>
+
+                              <mat-header-row
+                                *matHeaderRowDef="procurementColumns"
+                              ></mat-header-row>
+                              <mat-row
+                                *matRowDef="
+                                  let row;
+                                  columns: procurementColumns
+                                "
+                              ></mat-row>
+                            </mat-table>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <!-- <div *ngIf="isShown" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2 sft-entry">
+                  <div class="row">
+                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-2">
+                      <div class="row">
+                        <div class="container col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2 mt-2 sticky-table ex-mrk-li">
+
+                          <h4 class="align-center">Procurement Information</h4>
+                          <mat-table #table [dataSource]="procurementData" matSort class="mat-cell ex-mrk-lft-tbl">
+                            <ng-container matColumnDef="sl">
+                              <mat-header-cell *matHeaderCellDef mat-sort-header> Ser. </mat-header-cell>
+                              <mat-cell *matCellDef="let element; let i = index;"> {{ ((paging.pageIndex-1) *
+                                paging.pageSize) + i+1}} </mat-cell>
+                            </ng-container>
+
+                            <ng-container matColumnDef="tenderNumber">
+                              <mat-header-cell *matHeaderCellDef mat-sort-header> Tender No</mat-header-cell>
+                              <mat-cell *matCellDef="let element">{{element.tenderNumber}}
+                              </mat-cell>
+                            </ng-container>
+
+                            <ng-container matColumnDef="dateOfDelivery">
+                              <mat-header-cell *matHeaderCellDef mat-sort-header>Delivery</mat-header-cell>
+                              <mat-cell *matCellDef="let element">{{element.dateOfDelivery | date:'dd/MMM/yyyy'}}
+                              </mat-cell>
+                            </ng-container>
+
+                            <ng-container matColumnDef="dateOfTenderFloat">
+                              <mat-header-cell *matHeaderCellDef mat-sort-header>Float Date</mat-header-cell>
+                              <mat-cell *matCellDef="let element">{{element.dateOfTenderFloat | date:'dd/MMM/yyyy'}}
+                              </mat-cell>
+                            </ng-container>
+
+                            <ng-container matColumnDef="cstTec">
+                              <mat-header-cell *matHeaderCellDef mat-sort-header> CST / TEC</mat-header-cell>
+                              <mat-cell *matCellDef="let element">{{element.cstTec}}
+                              </mat-cell>
+                            </ng-container>
+
+                            <ng-container matColumnDef="qty">
+                              <mat-header-cell *matHeaderCellDef mat-sort-header>Qty</mat-header-cell>
+                              <mat-cell *matCellDef="let element">{{element.qty}}
+                              </mat-cell>
+                            </ng-container>
+                            <ng-container matColumnDef="sftQty">
+                              <mat-header-cell *matHeaderCellDef mat-sort-header>SFT Qty</mat-header-cell>
+                              <mat-cell *matCellDef="let element">{{element.sftQty}}
+                              </mat-cell>
+                            </ng-container>
+
+                            <mat-header-row *matHeaderRowDef="procurementColumns"></mat-header-row>
+                            <mat-row *matRowDef="let row; columns: procurementColumns;"></mat-row>
+                          </mat-table>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-2">
+                      <div class="row">
+                        <div class="container col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2 mt-2 sticky-table ex-mrk-li">
+                          <h4 class="align-center">Demand Information</h4>
+                          <mat-table #table [dataSource]="demandData" matSort class="mat-cell ex-mrk-lft-tbl">
+
+                            <ng-container matColumnDef="sl">
+                              <mat-header-cell *matHeaderCellDef mat-sort-header> Ser. </mat-header-cell>
+                              <mat-cell *matCellDef="let element; let i = index;"> {{ ((paging.pageIndex-1) *
+                                paging.pageSize) + i+1}} </mat-cell>
+                            </ng-container>
+
+                            <ng-container matColumnDef="demandAuthority">
+                              <mat-header-cell *matHeaderCellDef mat-sort-header> Authority</mat-header-cell>
+                              <mat-cell *matCellDef="let element">{{element.demandAuthority}}
+                              </mat-cell>
+                            </ng-container>
+
+                            <ng-container matColumnDef="deno">
+                              <mat-header-cell *matHeaderCellDef mat-sort-header>Deno</mat-header-cell>
+                              <mat-cell *matCellDef="let element">{{element.deno}}
+                              </mat-cell>
+                            </ng-container>
+
+                            <ng-container matColumnDef="fiscalYear">
+                              <mat-header-cell *matHeaderCellDef mat-sort-header>fiscal Year</mat-header-cell>
+                              <mat-cell *matCellDef="let element">{{element.fiscalYear}}
+                              </mat-cell>
+                            </ng-container>
+
+                            <ng-container matColumnDef="demandDate">
+                              <mat-header-cell *matHeaderCellDef mat-sort-header> Date</mat-header-cell>
+                              <mat-cell *matCellDef="let element">{{element.demandDate | date:'dd/MMM/yyyy'}}
+                              </mat-cell>
+                            </ng-container>
+
+                            <ng-container matColumnDef="demandQty">
+                              <mat-header-cell *matHeaderCellDef mat-sort-header>Qty</mat-header-cell>
+                              <mat-cell *matCellDef="let element">{{element.demandQty}}
+                              </mat-cell>
+                            </ng-container>
+
+                            <mat-header-row *matHeaderRowDef="demandColumns"></mat-header-row>
+                            <mat-row *matRowDef="let row; columns: demandColumns;"></mat-row>
+                          </mat-table>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div> -->
+              </div>
+              <div class="row sft-entry-form">
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-2">
+                  <mat-form-field
+                    class="example-full-width mb-3"
+                    appearance="outline"
+                  >
+                    <mat-label>Stock Category </mat-label>
+                    <mat-select formControlName="procurementStatusId" required>
+                      <mat-option value="0">--Select--</mat-option>
+                      <mat-option
+                        *ngFor="let dropdown of selectedProcurementStatuses"
+                        [value]="dropdown.value"
+                      >
+                        {{ dropdown.text }}
+                      </mat-option>
+                    </mat-select>
+                    <mat-error
+                      *ngIf="
+                        AcceptanceForm.get('procurementStatusId').hasError(
+                          'required'
+                        )
+                      "
+                    >
+                      Condition is Required!
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-2"></div>
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-2">
+                  <mat-form-field
+                    class="example-full-width mb-3"
+                    appearance="outline"
+                  >
+                    <mat-label> Ser No</mat-label>
+                    <input matInput formControlName="itemSerNo" />
+                  </mat-form-field>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-2"></div>
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-2">
+                  <mat-form-field
+                    class="example-full-width mb-3"
+                    appearance="outline"
+                  >
+                    <mat-label>Model</mat-label>
+                    <input matInput formControlName="model" />
+                  </mat-form-field>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-2"></div>
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-2">
+                  <mat-form-field
+                    class="example-full-width mb-3"
+                    appearance="outline"
+                  >
+                    <mat-label>Brand</mat-label>
+                    <input matInput formControlName="brand" />
+                  </mat-form-field>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-2">
+                </div>
+                <div  class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-2">
+                  <mat-form-field  class="example-full-width mb-3" appearance="outline">
+                    <mat-label>Work Order/Po No</mat-label>
+                    <input  matInput formControlName="workOrderNo" />
+                  </mat-form-field>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-2"></div>
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-2">
+                  <mat-form-field
+                    class="example-full-width mb-3"
+                    appearance="outline"
+                  >
+                    <mat-label>SFT Due Date</mat-label>
+                    <input
+                      matInput
+                      [matDatepicker]="dpicker"
+                      formControlName="deliveryDate"
+                    />
+                    <mat-datepicker-toggle
+                      matSuffix
+                      [for]="dpicker"
+                    ></mat-datepicker-toggle>
+                    <mat-datepicker #dpicker></mat-datepicker>
+                  </mat-form-field>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-2"></div>
+                <!-- <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-2">
+                  <mat-form-field class="example-full-width mb-3" appearance="outline">
+                    <mat-label> Supplied Qty</mat-label>
+                    <input matInput formControlName="ProcurementQty" >
+                  </mat-form-field>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-2">
+                </div> -->
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-2">
+                  <mat-form-field
+                    class="example-full-width mb-3"
+                    appearance="outline"
+                  >
+                    <mat-label>Accepted Qty</mat-label>
+                    <input matInput formControlName="sftQty" />
+                  </mat-form-field>
+                </div>
+
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-2"></div>
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-2">
+                  <mat-form-field
+                    class="example-full-width mb-3"
+                    appearance="outline"
+                  >
+                    <mat-label> Date of Acceptance</mat-label>
+                    <input
+                      matInput
+                      [matDatepicker]="sftpicker"
+                      formControlName="sftDate"
+                    />
+                    <mat-datepicker-toggle
+                      matSuffix
+                      [for]="sftpicker"
+                    ></mat-datepicker-toggle>
+                    <mat-datepicker #sftpicker></mat-datepicker>
+                  </mat-form-field>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-2"></div>
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-2">
+                  <mat-form-field
+                    class="example-full-width mb-3"
+                    appearance="outline"
+                  >
+                    <mat-label>Warranty From</mat-label>
+                    <input
+                      matInput
+                      [matDatepicker]="frompicker"
+                      formControlName="warrantyFrom"
+                    />
+                    <mat-datepicker-toggle
+                      matSuffix
+                      [for]="frompicker"
+                    ></mat-datepicker-toggle>
+                    <mat-datepicker #frompicker></mat-datepicker>
+                  </mat-form-field>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-2"></div>
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-2">
+                  <mat-form-field
+                    class="example-full-width mb-3"
+                    appearance="outline"
+                  >
+                    <mat-label>Warranty To</mat-label>
+                    <input
+                      matInput
+                      [matDatepicker]="topicker"
+                      formControlName="warrantyTo"
+                    />
+                    <mat-datepicker-toggle
+                      matSuffix
+                      [for]="topicker"
+                    ></mat-datepicker-toggle>
+                    <mat-datepicker #topicker></mat-datepicker>
+                  </mat-form-field>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-2"></div>
+                <!-- <div class="col-xl-2 col-lg-2 col-md-2 col-sm-12 mb-2">
+                  <mat-form-field class="example-full-width mb-3" appearance="outline">
+                    <mat-label>SFT Letter No</mat-label>
+                    <input matInput formControlName="sftLetterNo" required>
+                    <mat-error *ngIf="AcceptanceForm.get('sftLetterNo').hasError('required')">
+                      sft Letter No is required
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+                <div class="col-xl-3 col-lg-2 col-md-2 col-sm-12 mb-2">
+                  <mat-form-field class="example-full-width mb-3" appearance="outline">
+                    <mat-label>Work Order Date</mat-label>
+                    <input matInput [matDatepicker]="frompicker" formControlName="workOrderDate">
+                    <mat-datepicker-toggle matSuffix [for]="frompicker"></mat-datepicker-toggle>
+                    <mat-datepicker #frompicker></mat-datepicker>
+                  </mat-form-field>
+                </div>
+               
+                <div class="col-xl-3 col-lg-2 col-md-2 col-sm-12 mb-2">
+                  <mat-form-field class="example-full-width mb-3" appearance="outline">
+                    <mat-label>Source Of Supply</mat-label>
+                    <mat-select formControlName="sourceOfSupplyId" required>
+                      <mat-option *ngFor="let dropdown of selectedSourceOfSupplys" [value]="dropdown.value">
+                        {{dropdown.text}}
+                      </mat-option>
+                    </mat-select>
+                    <mat-error *ngIf="AcceptanceForm.get('sourceOfSupplyId').hasError('required')">
+                      Source Of Supply is Required!
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+                <div class="col-xl-2 col-lg-2 col-md-2 col-sm-12 mb-2">
+                  <mat-form-field class="example-full-width mb-3" appearance="outline">
+                    <mat-label>Manufacture</mat-label>
+                    <mat-select formControlName="manufactureId" required>
+                      <mat-option *ngFor="let dropdown of selectedManufactures" [value]="dropdown.value">
+                        {{dropdown.text}}
+                      </mat-option>
+                    </mat-select>
+                    <mat-error *ngIf="AcceptanceForm.get('manufactureId').hasError('required')">
+                      Manufacture is Required!
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+
+                <div class="col-xl-2 col-lg-2 col-md-2 col-sm-12 mb-2">
+                  <mat-form-field class="example-full-width mb-3" appearance="outline">
+                    <mat-label>Principal Name</mat-label>
+                    <mat-select formControlName="principalNameId" required>
+                      <mat-option *ngFor="let dropdown of selectedPrincipalNames" [value]="dropdown.value">
+                        {{dropdown.text}}
+                      </mat-option>
+                    </mat-select>
+                    <mat-error *ngIf="AcceptanceForm.get('principalNameId').hasError('required')">
+                      Principal Name is Required!
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+
+                <div class="col-xl-3 col-lg-2 col-md-2 col-sm-12 mb-2">
+                  <mat-form-field class="example-full-width mb-3" appearance="outline">
+                    <mat-label>Place Of Delivery</mat-label>
+                    <mat-select formControlName="placeOfDeliveryId" required>
+                      <mat-option *ngFor="let dropdown of selectedPlaceOfDeliverys" [value]="dropdown.value">
+                        {{dropdown.text}}
+                      </mat-option>
+                    </mat-select>
+                    <mat-error *ngIf="AcceptanceForm.get('placeOfDeliveryId').hasError('required')">
+                      Place Of Delivery is Required!
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+                <div class="col-xl-2 col-lg-2 col-md-2 col-sm-12 mb-2">
+                  <mat-form-field class="example-full-width mb-3" appearance="outline">
+                    <mat-label>Warranty (Month)</mat-label>
+                    <input matInput formControlName="warranty" required>
+                    <mat-error *ngIf="AcceptanceForm.get('warranty').hasError('required')">
+                      warranty is required
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+
+                <div class="col-xl-2 col-lg-2 col-md-2 col-sm-12 mb-2">
+                  <mat-form-field class="example-full-width mb-3" appearance="outline">
+                    <mat-label>Receive Date</mat-label>
+                    <input matInput [matDatepicker]="delpicker" formControlName="deliveryDate">
+                    <mat-datepicker-toggle matSuffix [for]="delpicker"></mat-datepicker-toggle>
+                    <mat-datepicker #delpicker></mat-datepicker>
+                  </mat-form-field>
+                </div>
+                <div class="col-xl-2 col-lg-2 col-md-2 col-sm-12 mb-2">
+                  <mat-form-field class="example-full-width mb-3" appearance="outline">
+                    <mat-label>Inspected By</mat-label>
+                    <mat-select formControlName="itemInspectionId" required>
+                      <mat-option *ngFor="let dropdown of selectedItemInspections" [value]="dropdown.value">
+                        {{dropdown.text}}
+                      </mat-option>
+                    </mat-select>
+                    <mat-error *ngIf="AcceptanceForm.get('itemInspectionId').hasError('required')">
+                      item Inspection is Required!
+                    </mat-error>
+                  </mat-form-field>
+                </div> -->
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-2">
+                  <mat-form-field
+                    class="example-full-width mb-3"
+                    appearance="outline"
+                  >
+                    <mat-label>Condition </mat-label>
+                    <mat-select formControlName="conditionOfItemId" required>
+                      <mat-option
+                        *ngFor="let dropdown of selectedConditionOfItem"
+                        [value]="dropdown.value"
+                      >
+                        {{ dropdown.text }}
+                      </mat-option>
+                    </mat-select>
+                    <mat-error
+                      *ngIf="
+                        AcceptanceForm.get('conditionOfItemId').hasError(
+                          'required'
+                        )
+                      "
+                    >
+                      Condition is Required!
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-2"></div>
+                <!-- <div class="col-xl-3 col-lg-2 col-md-2 col-sm-12 mb-2">
+                  <mat-form-field class="example-full-width mb-3" appearance="outline">
+                    <mat-label>Inspection Date</mat-label>
+                    <input matInput [matDatepicker]="inspicker" formControlName="inspectionDate">
+                    <mat-datepicker-toggle matSuffix [for]="inspicker"></mat-datepicker-toggle>
+                    <mat-datepicker #inspicker></mat-datepicker>
+                  </mat-form-field>
+                </div>
+                <div class="col-xl-3 col-lg-2 col-md-2 col-sm-12 mb-2">
+                  <mat-form-field class="example-full-width mb-3" appearance="outline">
+                    <mat-label>Date Of Manufacture</mat-label>
+                    <input matInput [matDatepicker]="manpicker" formControlName="dateOfManufacture">
+                    <mat-datepicker-toggle matSuffix [for]="manpicker"></mat-datepicker-toggle>
+                    <mat-datepicker #manpicker></mat-datepicker>
+                  </mat-form-field>
+                </div> -->
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-2">
+                  <mat-form-field
+                    class="example-full-width mb-3"
+                    appearance="outline"
+                  >
+                    <mat-label> Price</mat-label>
+                    <input matInput formControlName="purchasePrice" />
+                  </mat-form-field>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-2"></div>
+                <!-- <div class="col-xl-2 col-lg-2 col-md-2 col-sm-12 mb-2">
+                  <mat-form-field class="example-full-width mb-3" appearance="outline">
+                    <mat-label>SFT Reg: Page</mat-label>
+                    <input matInput formControlName="sftRegPage">
+                  </mat-form-field>
+                </div> -->
+
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-2">
+                  <mat-form-field
+                    class="example-full-width mb-3"
+                    appearance="outline"
+                  >
+                    <mat-label>Doc</mat-label>
+                    <ngx-mat-file-input
+                      (change)="onDocChanged($event)"
+                      accept=".txt,.pdf,.xls,.xlsx,.doc,.docx,.ppt,.pptx"
+                    >
+                    </ngx-mat-file-input>
+                    <mat-icon matSuffix>attachment</mat-icon>
+                  </mat-form-field>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-2"></div>
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-2">
+                  <mat-form-field
+                    class="example-full-width mb-3"
+                    appearance="outline"
+                  >
+                    <mat-label> Remarks</mat-label>
+                    <textarea matInput formControlName="remarks"></textarea>
+                  </mat-form-field>
+                </div>
+              </div>
+              <br />
+              <div class="row">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                  <button
+                    class="btn-space"
+                    [disabled]="!AcceptanceForm.valid"
+                    mat-raised-button
+                    color="primary"
+                  >
+                    {{ btnText }}
+                  </button>
+                  <!-- <button type="button" mat-button routerLink="/spares-management/acceptance-list">Cancel</button> -->
+                </div>
+              </div>
+            </form>
+            <div *ngIf="isShown" class="row create-table db-tbl cls-rtn">
+              <!-- <h3 class="text-center table-title">Spares SFT LIST</h3> -->
+              <div class="materialTableHeader auto">
+                <div class="row">
+                  <div class="table-title">
+                    <h3>Acceptance List</h3>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <h3 class="count-value">No of Items: {{ itemCount }}</h3>
+                  </div>
+                  <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <ul class="header-buttons-left right-align ml-0">
+                      <!-- <li><h5></h5></li> -->
+                      <li class="dropdown">
+                        <input
+                          placeholder="Search"
+                          type="text"
+                          [(ngModel)]="searchText"
+                          #filter
+                          class="browser-default search-field custom-search"
+                          aria-label="Search box"
+                        />
+                      </li>
+                      <li
+                        *ngIf="
+                          role == userRole.CO || role == userRole.SuperAdmin
+                        "
+                        class="dept-dropdown"
+                      >
+                        <mat-select
+                          placeholder="Flight Line"
+                          class="browser-default dept-field"
+                          [(ngModel)]="departmentNameId"
+                        >
+                          <mat-option selected value="0">--All--</mat-option>
+                          <mat-option
+                            *ngFor="let dropdown of selectedDepartmentNames"
+                            [value]="dropdown.value"
+                          >
+                            {{ dropdown.text }}
+                          </mat-option>
+                        </mat-select>
+                      </li>
+                      <!-- <li><h5>Type Of Demand</h5></li> -->
+                      <!-- <li class="dept-dropdown">
+                        <mat-select
+                          placeholder="Type Of Demand"
+                          [(ngModel)]="demandTypeId"
+                          class="browser-default dept-field"
+                          required
+                        >
+                          <mat-option selected value="0">--Select--</mat-option>
+                          <mat-option
+                            *ngFor="let dropdown of selectedTypeOfDemandValue"
+                            [value]="dropdown.value"
+                          >
+                            {{ dropdown.text }}
+                          </mat-option>
+                        </mat-select>
+                      </li> -->
+                      <li>
+                        <div class="icon-button-demo m-l-10">
+                          <button
+                            *ngIf="
+                              role == userRole.CO || role == userRole.SuperAdmin
+                            "
+                            mat-mini-fab
+                            (click)="
+                              applyDropdown(searchText, departmentNameId)
+                            "
+                            color="primary"
+                          >Go
+                            <!-- <mat-icon class="col-white">search</mat-icon> -->
+                          </button>
+                          <button
+                            *ngIf="
+                              role == userRole.User || role == userRole.admin
+                            "
+                            mat-mini-fab
+                            (click)="applyFilter(searchText)"
+                            color="Primary"
+                          >Go
+                            <!-- <mat-icon class="col-white">search</mat-icon> -->
+                          </button>
+                        </div>
+                      </li>
+                      <li>
+                        <div
+                          class="col-xl-4 col-lg-4 col-md-4 col-sm-12 mb-2 db-p"
+                        >
+                          <button
+                            class="btn-space"
+                            mat-raised-button
+                            color="primary"
+                            (click)="printSingle()"
+                          >
+                            <mat-icon class="col-white">print</mat-icon>
+                          </button>
+                        </div>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+              <div class="container no-padding">
+                <div id="print-routine">
+                  <table class="table tbl-by-group db-li-s-in">
+                    <thead>
+                      <tr>
+                        <th class="cl-nm-rnk"><h5>Flight Line</h5></th>
+                        <th class="cl-mrk"><h5>Patt No</h5></th>
+                        <th class="cl-mrk-rmrk"><h5>Item Name</h5></th>
+                        <th class="cl-mrk-rmrk"><h5>Item Ser No</h5></th>
+                        <th class="cl-mrk-rmrk"><h5>Acceptance Qty</h5></th>
+                        <th class="cl-mrk-rmrk"><h5>Warranty Upto</h5></th>
+                        <th *ngIf="role == userRole.SuperAdmin" class="thbm"><h5>Approved</h5></th>
+                        <th class="cl-action"><h5>Actions</h5></th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <ng-container
+                        *ngFor="let data of groupArrays; let i = index"
+                      >
+                        <tr>
+                          <td [attr.rowspan]="data.datas.length + 1">
+                            {{ data.departmentName }}
+                          </td>
+                        </tr>
+                        <tr *ngFor="let number of data.datas">
+                          <td>{{ number.itemDetail }}</td>
+
+                          <td>{{ number.itemName }}</td>
+                          <td>{{ number.itemSerNo }}</td>
+                          <td>{{ number.sftQty }}</td>
+                          <td>{{ number.warrantyTo | date: "dd/MMM/yyyy" }}</td>
+                          <td *ngIf="role == userRole.SuperAdmin">
+                            
+                            <button mat-raised-button class="custom-btn courseplan-apr"  (click)="inActiveItem(number)"  (click)="$event.stopPropagation()">{{ number.verificationCompletStatus == 0 ? 'Not Approved' : 'Approved' }}</button>
+                          </td>
+                          <td class="cl-action">
+                            <div fxLayout="row" fxLayoutGap="20px">
+                              <a
+                                target="_blank"
+                                [href]="number.acceptanceDocument"
+                              >
+                                <i *ngIf="number.acceptanceDocument != 'http://192.168.8.102:8030/Content/files/acceptances/'"
+                                  matTooltip="SFT Document"
+                                  class="far fa-file-pdf tbl-pdf"
+                                ></i
+                              ></a>
+                              |
+                              <button
+                                mat-icon-button
+                                color="accent"
+                                class="btn-tbl-edit"
+                                [routerLink]="[
+                                  '/spares-management/view-acceptance',
+                                  number.acceptanceId
+                                ]"
+                              >
+                                <mat-icon aria-label="Edit" class="col-white"
+                                  >visibility</mat-icon
+                                >
+                              </button>
+                              <button
+                              *ngIf="(role != userRole.CO && (role == userRole.User && number.verificationCompletStatus == 0))|| role == userRole.SuperAdmin"
+                                mat-icon-button
+                                color="accent"
+                                class="btn-tbl-edit"
+                                [routerLink]="[
+                                  '/spares-management/update-acceptance',
+                                  number.acceptanceId
+                                ]"
+                              >
+                                <mat-icon aria-label="Edit" class="col-white"
+                                  >edit</mat-icon
+                                >
+                              </button>
+                              <button
+                              *ngIf="(role != userRole.CO && (role == userRole.User && number.verificationCompletStatus == 0))|| role == userRole.SuperAdmin"
+                                mat-icon-button
+                                color="accent"
+                                class="btn-tbl-delete"
+                                (click)="$event.stopPropagation()"
+                                (click)="deleteItem(number)"
+                              >
+                                <mat-icon aria-label="Delete" class="col-white"
+                                  >delete</mat-icon
+                                >
+                              </button>
+                            </div>
+                          </td>
+                        </tr>
+                      </ng-container>
+                    </tbody>
+                  </table>
+                </div>
+                <!-- <mat-paginator
+                  [length]="paging.length"
+                  [showFirstLastButtons]="
+                    masterData.paging.showFirstLastButtons
+                  "
+                  [pageSize]="paging.pageSize"
+                  [pageSizeOptions]="masterData.paging.pageSizeOptions"
+                  (page)="pageChanged($event)"
+                >
+                </mat-paginator> -->
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,96 @@
+<section class="content">
+  <div class="container-fluid">
+    <div class="block-header">
+      <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+          <ul class="breadcrumb breadcrumb-style ">
+            <li class="breadcrumb-item">
+              <h4 class="page-title">Pending Demands List</h4>
+            </li>
+            <li class="breadcrumb-item bcrumb-1">
+              <a routerLink="/admin/dashboard/main"><i class="fas fa-home"></i></a>
+            </li>
+            <li class="breadcrumb-item bcrumb-2">
+              <a href="#" onClick="return false;">Pending Demands List</a>
+            </li>
+            <li class="breadcrumb-item active">All</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+        <div class="card">
+          <div class="body">
+            <div class="responsive_table">
+              <div class="row dash-cd-m-0">
+                <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 div-class div-left">
+                  
+                  <h3>Aircraft Flying Hours Details </h3> 
+                </div>
+                <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 div-class div-right">
+                  <div  class="dialog m-b-10">
+                    <button class="back" [routerLink]="['/admin/dashboard/main']" mat-raised-button> <mat-icon>keyboard_backspace</mat-icon> Back</button> 
+                    <!-- <button  class="all" (click)="inActiveItem(masterData.department.all, 'All')" mat-raised-button>All</button> | 
+                    <button  color="accent" (click)="inActiveItem(masterData.department.mpa, 'MPA')" mat-raised-button>MPA</button> | 
+                    <button   color="primary" (click)="inActiveItem(masterData.department.hel, 'HEL')" mat-raised-button>HEL</button>  |
+                    <button   color="warn" (click)="inActiveItem(masterData.department.uav, 'UAV')" mat-raised-button>UAV</button> -->
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <mat-table #table [dataSource]="flyingdetailsList" matSort class="mat-cell">
+                  <ng-container matColumnDef="ser">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header> Ser. </mat-header-cell>
+                    <mat-cell *matCellDef="let element; let i = index;"> {{ ((paging.pageIndex-1) * paging.pageSize) +
+                      i+1}} </mat-cell>
+                  </ng-container>
+                  <ng-container matColumnDef="airCraftName">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header> Air Craft Name </mat-header-cell>
+                    <mat-cell *matCellDef="let element"> {{element.airCraftName}} </mat-cell>
+                  </ng-container> 
+                  <ng-container matColumnDef="flightDate">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header> Flight Date</mat-header-cell>
+                    <mat-cell *matCellDef="let element"> {{element.flightDate | date:'dd/MMM/yyyy'}} </mat-cell>
+                  </ng-container>       
+                  
+                  <ng-container matColumnDef="flightTimeHr">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header> Flight Time (Hour) </mat-header-cell>
+                    <mat-cell *matCellDef="let element"> {{element.flightTimeHr}} </mat-cell>
+                  </ng-container>        
+                  <ng-container matColumnDef="flightTimeMin">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header> Flight Time (Minute) </mat-header-cell>
+                    <mat-cell *matCellDef="let element"> {{element.flightTimeMin}} </mat-cell>
+                  </ng-container>
+
+                  <ng-container matColumnDef="actions">
+                    <mat-header-cell *matHeaderCellDef class="pr-0">Actions</mat-header-cell>
+                    <mat-cell *matCellDef="let row; let i=index;" class="pr-0">
+                      <button mat-icon-button color="accent" class="btn-tbl-edit" update-runninghour
+                        [routerLink]="['/basic-setup/update-runninghour', row.runningHourId]">
+                        <mat-icon aria-label="Edit" class="col-white">edit</mat-icon>
+                      </button>
+                      <button mat-icon-button color="accent" class="btn-tbl-delete" (click)="$event.stopPropagation()"
+                        (click)="deleteItem(row)">
+                        <mat-icon aria-label="Delete" class="col-white">delete</mat-icon>
+                      </button>
+                    </mat-cell>
+                  </ng-container>
+                  <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                  <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+                </mat-table>
+              </div>
+              
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
+
+
+ 

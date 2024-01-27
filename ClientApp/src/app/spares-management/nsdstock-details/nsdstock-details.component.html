@@ -1,0 +1,89 @@
+<section class="content">
+  <div class="container-fluid">
+    <div class="block-header">
+      <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+          <ul class="breadcrumb breadcrumb-style">
+            <li class="breadcrumb-item">
+              <h4 class="page-title">  Stock Details</h4>
+            </li>
+            <li class="breadcrumb-item bcrumb-1">
+              <a routerLink="/admin/dashboard/main"
+                ><i class="fas fa-home"></i
+              ></a>
+            </li>
+            <li class="breadcrumb-item bcrumb-2">
+              <a href="#" onClick="return false;">  Stock Details</a>
+            </li>
+            <li class="breadcrumb-item active">All</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+        <div class="card">
+          <div class="body">
+            <div class="responsive_table">
+              <div class="materialTableHeader auto">
+                
+                <div class="row">
+                  <div class="table-title">
+                    <h3 *ngIf="toolsLocationId == masterData.toolsLocation.fltLine"> FLT Line Stock Details</h3>
+                    <h3 *ngIf="toolsLocationId == masterData.toolsLocation.nsd"> NSD Stock Details</h3>
+                  </div>
+                </div>
+              </div>
+
+              <div id="print-routine">
+                <table class="table tbl-by-group db-li-s-in">
+                  <thead>
+                    <tr>
+                      <!-- <th rowspan="2" class="cl-nm-rnk">
+                        <h5>Flight Line</h5>
+                      </th> -->
+                      <!-- <th class="cl-mrk"><h5>Patt No</h5></th>
+                      <th class="cl-mrk-rmrk"> <h5>Item Name</h5> </th> -->
+                      <th class="cl-mrk-rmrk"> <h5>Item Ser. No</h5> </th>
+                      <th class="cl-mrk-rmrk"> <h5>Item Name</h5> </th>  
+                      <th class="cl-mrk-rmrk"> <h5>Model</h5> </th>
+                      <th class="cl-mrk-rmrk"> <h5>Brand</h5> </th>
+                      <th class="cl-mrk-rmrk"> <h5>Warranty End Date</h5> </th>                    
+                      <th *ngIf="toolsLocationId == masterData.toolsLocation.fltLine" class="cl-mrk-rmrk"> <h5>FLT Line Qty</h5> </th>                      
+                      <th *ngIf="toolsLocationId == masterData.toolsLocation.nsd" class="cl-mrk-rmrk"> <h5>NSD Qty</h5> </th>                      
+                  </thead>
+                  <tbody>
+                    <ng-container>
+                      <!-- <tr>
+                        <td
+                          class="no-border"
+                          [attr.rowspan]="data.datas.length + 1"
+                        >
+                          {{ data.departmentName }}
+                        </td>
+                      </tr> -->
+                      <tr *ngFor="let number of availableIssueQtyDetailList">
+                        <!-- <td>{{ number.partNo }}</td> -->
+                        <td>{{ number.itemSerNo }}</td>
+                        <td>{{ number.nameOfItem }}</td>
+                        <td>{{ number.model }}</td>
+                        <td>{{ number.brand }}</td>
+                        <td>{{ number.warrantyEndDate | date: "dd/MMM/yyyy" }}</td>
+                        <td *ngIf="toolsLocationId == masterData.toolsLocation.fltLine">{{ number.availableQty }}</td>
+                        <td *ngIf="toolsLocationId == masterData.toolsLocation.nsd">{{ number.nsdQty }}</td>
+                      </tr>
+                    </ng-container>
+                  </tbody>
+                </table>
+              </div>
+              <!-- <mat-paginator [length]="paging.length" [showFirstLastButtons]="masterData.paging.showFirstLastButtons"
+                [pageSize]="paging.pageSize" [pageSizeOptions]="masterData.paging.pageSizeOptions"
+                (page)="pageChanged($event)">
+              </mat-paginator> -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

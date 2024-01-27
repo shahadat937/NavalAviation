@@ -1,0 +1,199 @@
+<section class="content">
+  <div class="container-fluid">
+    <div class="block-header">
+      <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+          <ul class="breadcrumb breadcrumb-style ">
+            <li class="breadcrumb-item">
+              <h4 class="page-title">{{pageTitle}}</h4>
+            </li>
+            <li class="breadcrumb-item bcrumb-1">
+              <a routerLink="/admin/dashboard/main"><i class="fas fa-home"></i></a>
+            </li>
+            <li class="breadcrumb-item bcrumb-2">
+              <a href="#" onClick="return false;">Archiving for Publication</a>
+            </li>
+            <li class="breadcrumb-item active">{{destination}}</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="row clearfix">
+      <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+        <div class="card">
+          <div class="body">
+            <form *ngIf="isCoHide" class="m-4" [formGroup]="ArchivingforPublicationForm" (ngSubmit)="onSubmit()">
+              <div class="row">
+
+                <div *ngIf="role == userRole.SuperAdmin || role == userRole.EXO || role == userRole.User" class="col-xl-4 col-lg-4 col-md-4 col-sm-12 mb-2">
+                  <mat-form-field class="example-full-width mb-3" appearance="outline">
+                    <mat-label>Flight Line/Squadron </mat-label>
+                    <mat-select formControlName="departmentNameId" required (selectionChange)="onArchivingforPublicationListByDepartmentNameSelectionChange()">
+                      <mat-option  *ngFor="let dropdown of departmentName" [value]="dropdown.value">
+                        {{dropdown.text}}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+                <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 mb-2">
+                  <mat-form-field class="example-full-width mb-3" appearance="outline">
+                    <mat-label>Aircraft Name </mat-label>
+                    <mat-select formControlName="airCraftNameId" required>
+                      <mat-option  *ngFor="let dropdown of aircraftName" [value]="dropdown.value">
+                        {{dropdown.text}}
+                      </mat-option>
+                    </mat-select>
+                    <mat-error *ngIf="ArchivingforPublicationForm.get('airCraftNameId').hasError('required')">
+                      Aircraft Name is required
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+                <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 mb-2">
+                  <mat-form-field class="example-full-width mb-3" appearance="outline">
+                    <mat-label> Name of Publication </mat-label>
+                    <mat-select formControlName="nameofPublicationId" required>
+                      <mat-option  *ngFor="let dropdown of NameofPublication" [value]="dropdown.value">
+                        {{dropdown.text}}
+                      </mat-option>
+                    </mat-select>
+                    <mat-error *ngIf="ArchivingforPublicationForm.get('nameofPublicationId').hasError('required')">
+                      Name of Publication is required!
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+              
+                <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 mb-2">
+                  <mat-form-field class="example-full-width mb-3" appearance="outline">
+                    <mat-label>Name</mat-label>
+                    <input matInput formControlName="documentName" required>
+                    <mat-error *ngIf="ArchivingforPublicationForm.get('documentName').hasError('required')">
+                      Name is required
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+                <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 mb-2">
+                  <mat-form-field
+                    class="example-full-width mb-3"
+                    appearance="outline"
+                  >
+                    <mat-label>Date</mat-label>
+                    <input
+                      matInput
+                      [matDatepicker]="dateOfTenderFloatpicker"
+                      formControlName="date"
+                      required
+                    />
+                    <mat-datepicker-toggle
+                      matSuffix
+                      [for]="dateOfTenderFloatpicker"
+                    ></mat-datepicker-toggle>
+                    <mat-datepicker
+                      #dateOfTenderFloatpicker
+                    ></mat-datepicker>
+                    <mat-error *ngIf="ArchivingforPublicationForm.get('date').hasError('required')">
+                      Date is required
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+                <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 mb-2">
+                  <mat-form-field
+                    class="example-full-width mb-3"
+                    appearance="outline"
+                  >
+                    <mat-label>DocUpload</mat-label>
+                    <ngx-mat-file-input
+                      (change)="onFileChanged($event)"
+                      accept=".txt,.pdf,.xls,.xlsx,.doc,.docx,.ppt,.pptx"
+                    >
+                    </ngx-mat-file-input>
+                    <mat-icon matSuffix>attachment</mat-icon>
+                  </mat-form-field>
+                </div>
+                <!-- <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 mb-2">
+                  <mat-form-field class="example-full-width mb-3" appearance="outline">
+                    <mat-label>Doc Upload</mat-label>
+                    <input matInput formControlName="docUpload">
+                  </mat-form-field>
+                </div> -->
+
+                <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 mb-2">
+                  <mat-form-field class="example-full-width mb-3" appearance="outline">
+                    <mat-label>Remarks</mat-label>
+                    <textarea matInput formControlName="remarks"></textarea>
+                  </mat-form-field>
+                </div>
+               
+
+              </div>
+              <div class="row">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                  <button class="btn-space" [disabled]="!ArchivingforPublicationForm.valid " mat-raised-button
+                    color="primary">{{btnText}}</button>
+                  <!-- <button type="button" mat-button routerLink="/basic-setup/aircraftname-list">Cancel</button> -->
+                </div>
+              </div>
+            </form>
+            <div *ngIf="isShown" class="row create-table db-tbl cls-rtn">
+              <h3 class="text-center table-title">Archiving for Publication  </h3>
+              <div class="container">
+                
+
+                <table class="table tbl-by-group db-li-s-in">
+                  <thead>
+                    <tr>
+                      <th class="cl-nm-rnk"><h5>Flight Line</h5></th>
+                      <th class="cl-mrk-rmrk"><h5>Aircraft Name</h5></th>
+                      <th class="cl-mrk"><h5>Name of Publication</h5></th>
+                      <th class="cl-mrk"><h5>Name</h5></th>
+                      <th class="cl-mrk-rmrk"><h5>Date</h5></th>
+                      <th class="cl-mrk-rmrk"><h5>Actions</h5></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <ng-container
+                      *ngFor="let data of groupArrays; let i = index"
+                    >
+                      <tr>
+                        <td [attr.rowspan]="data.datas.length + 1">
+                          {{ data.departmentName }}
+                        </td>
+                      </tr>
+                      <tr *ngFor="let number of data.datas">
+                        <td>{{ number.aircraftName }}</td>
+                        <td>{{ number.nameofPublication }}</td>
+                        <td>{{ number.documentName }}</td>
+                        <td>
+                          {{ number.date | date: "dd/MMM/yyyy" }}
+                        </td>
+                        
+                        <td>
+                          <div fxLayout="row" fxLayoutGap="20px">
+                           
+                            <a target="_blank" [href]="number.docUpload"> 
+                              <i *ngIf="number.docUpload != '/Content/files/archiving-for-publication/'" matTooltip="Document" class="far fa-file-pdf tbl-pdf">
+
+                              </i></a>
+                            |
+                            <button *ngIf="isCoHide" mat-icon-button color="accent" class="btn-tbl-edit"
+                              [routerLink]="['/record-room/update-archivingforpublication', number.archivingforPublicationId]">
+                              <mat-icon aria-label="Edit" class="col-white">edit</mat-icon>
+                            </button>
+                            <button *ngIf="isCoHide" mat-icon-button color="accent" class="btn-tbl-delete" (click)="$event.stopPropagation()"
+                              (click)="deleteItem(number)">
+                              <mat-icon aria-label="Delete" class="col-white">delete</mat-icon>
+                            </button>
+                          </div>
+                        </td>
+                        
+                      </tr>
+                    </ng-container>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

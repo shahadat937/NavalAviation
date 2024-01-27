@@ -1,0 +1,211 @@
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<script src='https://kit.fontawesome.com/a076d05399.js' crossorigin='anonymous'></script>
+<section class="content">
+  <div class="container-fluid">
+    <div class="block-header">
+      <!-- <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+          <ul class="breadcrumb breadcrumb-style ">
+            <li class="breadcrumb-item">
+              <h4 class="page-title">Aircraft Under Maintenance</h4>
+            </li>
+            <li class="breadcrumb-item bcrumb-1">
+              <a routerLink="/admin/dashboard/main"><i class="fas fa-home"></i></a>
+            </li>
+            <li class="breadcrumb-item bcrumb-2">
+              <a href="#" onClick="return false;">Aircraft Under Maintenance</a>
+            </li>
+            <li class="breadcrumb-item active">All</li>
+          </ul>
+        </div>
+      </div> -->
+    </div>
+     <!-- dashboard component -->
+ <app-dashboard></app-dashboard>
+    <div class="row">
+      <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+        <div class="card undermaintenence">
+          <div class="body">
+            <div class="row">
+              <div class="col-lg-10 col-md-10 col-sm-10 col-xs-10-u-m">
+                <h3 class="page-title aircraft-undermaintenence">Aircraft Under Maintenence</h3>
+              </div>
+              <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2-u-m">
+                <button class="back" [routerLink]="['/admin/dashboard/main']" mat-raised-button> <mat-icon>keyboard_backspace</mat-icon> Back</button>
+              </div>
+            </div>
+            <div class="row">
+              <form  [formGroup]="AircraftUnderMaintenanceForm" (ngSubmit)="onSubmit()">
+                <div class="row">
+                  <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2 aircraftCount text-design">
+                    Aircraft Total : {{this.totalAircraftCount}}
+                    </div>
+                    <div  class="col-lg-2 col-md-2 col-sm-2 col-xs-2 aircraftCount text-design">
+                      <!-- Under Maint  : {{this.CountAricraftUnderMaintenance}} -->
+                      </div>
+                  <div class="col-xl-2 col-lg-2 col-md-2 col-sm-12 mb-2 f-l">
+                    <mat-form-field class="example-full-width mb-3" appearance="outline">
+                      <mat-label>Flight Line/Squadron </mat-label>
+                      <mat-select formControlName="departmentNameId" (selectionChange)="onDepartmentNameSelectionChange()" >
+                        <mat-option value="0">All</mat-option>
+                        <mat-option   *ngFor="let dropdown of selectedDepartmentName" [value]="dropdown.value">
+                          {{dropdown.text}}
+                        </mat-option>
+                      </mat-select>
+                      <mat-error *ngIf="AircraftUnderMaintenanceForm.get('departmentNameId').hasError('required')">
+                        Flight Line/Squadron is Required!
+                      </mat-error>
+                    </mat-form-field>
+                  </div>
+                  
+  
+                  <div class="col-xl-2 col-lg-2 col-md-2 col-sm-12 mb-2 f-l">
+                    <mat-form-field class="example-full-width mb-3" appearance="outline">
+                      <mat-label>Date From</mat-label>
+                      <input matInput [matDatepicker]="frompicker" formControlName="commencingDateFrom">
+                      <mat-datepicker-toggle matSuffix [for]="frompicker"></mat-datepicker-toggle>
+                      <mat-datepicker #frompicker></mat-datepicker>
+                    </mat-form-field>
+                  </div>
+
+                  <div class="col-xl-2 col-lg-2 col-md-2 col-sm-12 mb-2 f-l">
+                    <mat-form-field class="example-full-width mb-3" appearance="outline">
+                      <mat-label> Date To</mat-label>
+                      <input matInput [matDatepicker]="topicker" formControlName="commencingDateTo">
+                      <mat-datepicker-toggle matSuffix [for]="topicker"></mat-datepicker-toggle>
+                      <mat-datepicker #topicker></mat-datepicker>
+                    </mat-form-field>
+                  </div>
+                  
+                  <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2 aircraftCount">
+                    <button class="btn-space" [disabled]="!AircraftUnderMaintenanceForm.valid " mat-raised-button
+                      color="success">{{btnText}}</button>
+                    
+                    <button class="btn-space"  mat-raised-button color="primary" (click)="printSingle()"> 
+                      <mat-icon class="col-white">print</mat-icon>
+                    </button>
+                  </div>
+                 <!-- <div class="col-xl-2 col-lg-2 col-md-2 col-sm-12 mb-2"></div> -->
+                
+                </div>
+  
+                
+              </form>
+            </div>
+          
+            <div class="row">
+              <div class="container">
+                <!-- <div class="row">
+                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4 aircraftCount">
+                  Aircraft Total : {{this.totalAircraftCount}}
+                  </div>
+                  <div  class="col-lg-4 col-md-4 col-sm-4 col-xs-5 aircraftCount">
+                  Under Maint  : {{this.CountAricraftUnderMaintenance}}
+                  </div>
+                  <div class="col-xl-2 col-lg-2 col-md-2 col-sm-12 mb-2"></div>
+                  <div class="col-xl-2 col-lg-2 col-md-2 col-sm-12 mb-2 print-m">
+                    <button class="btn-space"  mat-raised-button color="primary" (click)="printSingle()"> Print
+                      <mat-icon class="col-white">print</mat-icon>
+                    </button>
+                  </div>
+              </div> -->
+              <div class="responsive_table">
+                <div class="row">
+                  <div id="print-routine"> 
+                    <table class="table tbl-by-group db-li-s-in">
+                      <thead>
+                        <tr>
+                          <th class="cl-nm-rnk"><h5>Flight Line</h5></th>
+                          <th class="cl-mrk-rmrk"><h5>Aircraft Name</h5></th>
+                          <th class="cl-mrk"><h5>Type of Maintenance</h5></th>
+                          <th class="cl-mrk"><h5>Last Insp. Date</h5></th>
+                          <th class="cl-mrk-rmrk"><h5>Commencing Date</h5></th>
+                          <th class="cl-mrk-rmrk"><h5>Planned Completion Date</h5></th>
+                          <th class="cl-mrk-rmrk"><h5>Progress</h5></th>
+                          <th class="cl-mrk-rmrk"><h5>Job Card</h5></th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <ng-container
+                          *ngFor="let data of groupArrays; let i = index"
+                        >
+                          <tr>
+                            <td [attr.rowspan]="data.datas.length + 1">
+                              {{ data.departmentName }}
+                            </td>
+                          </tr>
+                          <tr *ngFor="let number of data.datas">
+                            <td>{{ number.airCraftName }}</td>
+                            <td>{{ number.subCategory }}</td>
+                            <td>
+                              {{ number.maintenancePlanning | date: "dd/MMM/yyyy" }}
+                            </td>
+                            <td>
+                              {{ number.startInspDate | date: "dd/MMM/yyyy" }}
+                            </td>
+                            <td>
+                              {{ number.endInspDate | date: "dd/MMM/yyyy" }}
+                            </td>
+                            <td>
+                              {{ number.progressBar }}
+                            </td>
+                            <td>
+                              <a target="_blank" [href]='this.fileUrl+number.jobCard'><i matTooltip="Maintenance Document" class="far fa-file-pdf tbl-pdf" ></i ></a>
+                            </td>
+                            
+                          </tr>
+                        </ng-container>
+                      </tbody>
+                    </table>
+                  </div>
+                  
+                </div>
+              </div>
+                
+             
+              </div>
+            </div>
+            <!-- <div class="responsive_table">
+              
+              <div class="row">
+                <table mat-table #table [dataSource]="AricraftUnderMaintenanceList" matSort
+                  class="mat-cell  db-tbl db-avl-qty-tbl content-center-align">
+                 
+                  <ng-container matColumnDef="airCraftName">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Aircraft Name </th>
+                    <td *matCellDef="let element"> {{element.airCraftName}} </td>
+                  </ng-container>
+                  <ng-container matColumnDef="typeofMaintenance">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Type of Maintenance</th>
+                    <td *matCellDef="let element"> {{element.typeofMaintenance}} </td>
+                  </ng-container>
+                  <ng-container matColumnDef="descriptionofMaint">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Description of Maint</th>
+                    <td mat-cell *matCellDef="let element"> {{element.descriptionofMaint}} </td>
+                  </ng-container>
+                
+                  <ng-container matColumnDef="commencingDate">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header> commencingDate</th>
+                    <td mat-cell *matCellDef="let element"> {{element.commencingDate}} </td>
+                  </ng-container>
+                  <ng-container matColumnDef="plannedCompletionDate">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Planned Completion Date</th>
+                    <td mat-cell *matCellDef="let element"> {{element.plannedCompletionDate}} </td>
+                  </ng-container>
+                  <ng-container matColumnDef="remarks">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Remarks</th>
+                    <td mat-cell *matCellDef="let element"> {{element.remarks}} </td>
+                  </ng-container>
+                  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                  <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                </table>
+              </div>
+
+            </div> -->
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>

@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!--
+https://go.microsoft.com/fwlink/?LinkID=208121.
+-->
+<Project>
+  <PropertyGroup>
+<<<<<<< HEAD
+    <History>True|2022-12-05T12:00:35.9598169Z;True|2022-12-05T17:56:40.6021923+06:00;False|2022-12-05T17:56:16.0666727+06:00;</History>
+=======
+    <History>False|2022-12-06T05:01:25.5230169Z;</History>
+>>>>>>> 2cf8f392ac4ecf5d8348aab4c0af94f739cdbf47
+    <LastFailureDetails />
+  </PropertyGroup>
+</Project>

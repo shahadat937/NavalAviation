@@ -1,0 +1,375 @@
+<section class="content">
+  <div class="container-fluid">
+    <div class="block-header">
+      <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+          <ul class="breadcrumb breadcrumb-style ">
+            <li class="breadcrumb-item">
+              <h4 class="page-title">{{pageTitle}}</h4>
+            </li>
+            <li class="breadcrumb-item bcrumb-1">
+              <a routerLink="/admin/dashboard/main"><i class="fas fa-home"></i></a>
+            </li>
+            <li class="breadcrumb-item bcrumb-2">
+              <a href="#" onClick="return false;">Sailor Biodata</a>
+            </li>
+            <li class="breadcrumb-item active">{{destination}}</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="row clearfix">
+      <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+        <div class="card">
+          <div class="body">
+            <form class="m-4" [formGroup]="TrainingCrewForm" (ngSubmit)="onSubmit()">
+              <div class="row">
+
+                <div *ngIf="role == userRole.SuperAdmin || role == userRole.CO || role == userRole.HR" class="col-xl-3 col-lg-3 col-md-3 col-sm-12 mb-2">
+                  <mat-form-field class="example-full-width mb-3" appearance="outline">
+                    <mat-label>Flight Line/Squadron </mat-label>
+                    <mat-select formControlName="departmentNameId" required (selectionChange)="onDepartmentNameSelectionChange()">
+                      <mat-option value="0">All</mat-option>
+                      <mat-option  *ngFor="let code of departmentName" [value]="code.value">
+                        {{code.text}}
+                      </mat-option>
+                    </mat-select>
+                    <mat-error *ngIf="TrainingCrewForm.get('departmentNameId').hasError('required')">
+                      Select Any Flight Line/Squadron 
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+                
+                <div *ngIf="role != userRole.CO" class="col-xl-3 col-lg-3 col-md-3 col-sm-12 mb-2">
+                  <mat-form-field class="example-full-width mb-3" appearance="outline">
+                    <mat-label>O No</mat-label>
+                    <input matInput formControlName="pno" required>
+                    <mat-error *ngIf="TrainingCrewForm.get('pno').hasError('required')">
+                      O No is required
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+                <div *ngIf="role != userRole.CO" class="col-xl-3 col-lg-3 col-md-3 col-sm-12 mb-2">
+                  <mat-form-field class="example-full-width mb-3" appearance="outline">
+                      <mat-label>Rank</mat-label>
+                      <mat-select formControlName="sailorRankId" required>
+                        <mat-option value="0">--Select--</mat-option>
+                        <mat-option *ngFor="let code of selectSailorRank" [value]="code.value">
+                              {{code.text}}
+                            </mat-option>                          
+                      </mat-select>
+                      <mat-error *ngIf="TrainingCrewForm.get('sailorRankId').hasError('required')">
+                          Select Any Rank 
+                      </mat-error>
+                  </mat-form-field>
+                </div>
+
+                
+                <div *ngIf="role != userRole.CO" class="col-xl-3 col-lg-3 col-md-3 col-sm-12 mb-2">
+                  <mat-form-field class="example-full-width mb-3" appearance="outline">
+                    <mat-label>Name</mat-label>
+                    <input matInput formControlName="name" required>
+                    <mat-error *ngIf="TrainingCrewForm.get('name').hasError('required')">
+                      name is required
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+                <div *ngIf="role != userRole.CO" class="col-xl-3 col-lg-3 col-md-3 col-sm-12 mb-2">
+                  <mat-form-field class="example-full-width mb-3" appearance="outline">
+                    <mat-label>Date Of Join</mat-label>
+                    <input matInput [matDatepicker]="frompicker" formControlName="dateOfJoin">
+                    <mat-datepicker-toggle matSuffix [for]="frompicker"></mat-datepicker-toggle>
+                    <mat-datepicker #frompicker></mat-datepicker>
+                  </mat-form-field>
+                </div>
+                <!-- <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 mb-2">
+                  <mat-form-field class="example-full-width mb-3" appearance="outline">
+                    <mat-label>Course</mat-label>
+                    <mat-select formControlName="courseId" required>
+                      <mat-option *ngFor="let code of selectCourse" [value]="code.value">
+                        {{code.text}}
+                      </mat-option>
+                    </mat-select>
+                    <mat-error *ngIf="TrainingCrewForm.get('courseId').hasError('required')">
+                      Select Any Course
+                    </mat-error>
+                  </mat-form-field>
+                </div> -->
+                <div *ngIf="role != userRole.CO" class="col-xl-3 col-lg-3 col-md-3 col-sm-12 mb-2">
+                  <mat-form-field class="example-full-width mb-3" appearance="outline">
+                    <mat-label>Duties</mat-label>
+                    <input matInput formControlName="duties" required>
+                    <mat-error *ngIf="TrainingCrewForm.get('duties').hasError('required')">
+                      duties is required
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+                <div *ngIf="role != userRole.CO" class="col-xl-3 col-lg-3 col-md-3 col-sm-12 mb-2">
+                  <mat-form-field class="example-full-width mb-3" appearance="outline">
+                    <mat-label>Aviation Category</mat-label>
+                    <input matInput formControlName="aviationCategory" required>
+                    <mat-error *ngIf="TrainingCrewForm.get('aviationCategory').hasError('required')">
+                      aviation Category is required
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+                
+                <div *ngIf="role != userRole.CO" class="col-xl-3 col-lg-3 col-md-3 col-sm-12 mb-2">
+                  <mat-form-field class="example-full-width mb-3" appearance="outline">
+                    <mat-label>Mobile</mat-label>
+                    <input matInput formControlName="mobile" required>
+                    <mat-error *ngIf="TrainingCrewForm.get('mobile').hasError('required')">
+                      mobile is required
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+                <div *ngIf="role != userRole.CO" class="col-xl-3 col-lg-3 col-md-3 col-sm-12 mb-2">
+                  <mat-form-field class="example-full-width mb-3" appearance="outline">
+                    <mat-label>Email</mat-label>
+                    <input matInput formControlName="email" required>
+                    <mat-error *ngIf="TrainingCrewForm.get('email').hasError('required')">
+                      email is required
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+              
+                <div *ngIf="role != userRole.CO" class="col-xl-3 col-lg-3 col-md-3 col-sm-12 mb-2">
+                  <mat-form-field class="example-full-width mb-3" appearance="outline">
+                    <mat-label>Employee Status</mat-label>
+                    <mat-select formControlName="officersStatusId" required>
+                      <mat-option value="0">--Select--</mat-option>
+                      <mat-option *ngFor="let code of selectOfficersStatuses" [value]="code.value">
+                        {{code.text}}
+                      </mat-option>
+                    </mat-select>
+                    <mat-error *ngIf="TrainingCrewForm.get('officersStatusId').hasError('required')">
+                      Select Any Employee Status
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+
+                <div *ngIf="role != userRole.CO" class="col-xl-3 col-lg-3 col-md-3 col-sm-12 mb-2">
+                  <mat-form-field class="example-full-width mb-3" appearance="outline">
+                    <mat-label>Present Billet</mat-label>
+                    <mat-select formControlName="presentBilletId" required>
+                      <mat-option value="0">--Select--</mat-option>
+                      <mat-option *ngFor="let code of selectedPresentBillet" [value]="code.value">
+                        {{code.text}}
+                      </mat-option>
+                    </mat-select>
+                    <mat-error *ngIf="TrainingCrewForm.get('presentBilletId').hasError('required')">
+                      Select Any Employee Status
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+
+                <div *ngIf="role != userRole.CO" class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-2">
+                  <mat-form-field class="example-full-width mb-3" appearance="outline">
+                    <mat-label>Remark</mat-label>
+                    <textarea matInput formControlName="remarks"></textarea>
+                  </mat-form-field>
+                </div>
+              </div>
+              <div *ngIf="role != userRole.CO" class="row">
+                <div *ngIf="role != userRole.CO" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                  <button class="btn-space" [disabled]="!TrainingCrewForm.valid " mat-raised-button
+                    color="primary">{{btnText}}</button>
+                  <!-- <button type="button" mat-button routerLink="/maintenence-planning/trainingcrew-list">Cancel</button> -->
+                </div>
+              </div>
+            </form>
+            <div *ngIf="isShown" class="row create-table db-tbl cls-rtn">
+              <!-- <h3 class="text-center table-title">Sailor Biodata List</h3> -->
+              <div class="row">
+                <!-- <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                  <ul class="header-buttons-left ml-0">
+                    <li class="dropdown">
+                      <input placeholder="Search" type="text" [(ngModel)]="searchText"  #filter class="browser-default search-field"
+                        aria-label="Search box">
+                    </li>
+                    <li>
+                      <div class="icon-button-demo m-l-10">                          
+                        <button mat-mini-fab (click)="applyFilter(searchText)" color="primary">Go
+                        </button>
+                      </div>
+                    </li>
+                  </ul>
+                </div> -->
+                <div class="col-xl-3 col-lg-3 col-md-12 col-sm-12 mb-2">
+                  <input placeholder="Search" type="text" [(ngModel)]="searchText" #filter
+                        class="browser-default search-field custom-search sailor-search"
+                        aria-label="Search box"/>
+                </div>
+                <div class="col-xl-1 col-lg-1 col-md-12 col-sm-12 mb-2">
+                  <button mat-mini-fab (click)="applyFilter(searchText)" color="primary" >Go </button>
+                </div>
+                <div class="col-xl-7 col-lg-7 col-md-12 col-sm-12 mb-2">
+                  <h3 class="text-center table-title">Sailor Biodata List (Not as per Seniority)</h3>
+                </div>
+                <div class="col-xl-1 col-lg-1 col-md-12 col-sm-12 mb-2">
+                  <button class="btn-space" mat-raised-button color="primary" (click)="printSingle()">
+                    <mat-icon class="col-white">print</mat-icon>
+                  </button>
+                </div>
+              </div>
+              <div class="container">
+                <div id="print-routine">
+                <table class="table tbl-by-group db-li-s-in">
+                  <thead>
+                    <tr>
+                      <th class="cl-mrk"><h5>Ser</h5></th>
+                      <th class="cl-mrk"><h5>O.No</h5></th>
+                      <th class="cl-mrk-name"><h5>Name</h5></th>
+                      <th class="cl-mrk-r"><h5>Rank</h5></th>
+                      <th class="cl-mrk"><h5>Appointment</h5></th>
+                      <th class="cl-mrk"><h5>Mobile</h5></th>
+                      <th class="cl-mrk"><h5>Status</h5></th>                        
+                      <!-- <th *ngIf="role == userRole.SuperAdmin" class="thbm"><h5>Approved</h5></th> -->
+                      <th *ngIf="role != userRole.CO" class="cl-action-si"><h5>Actions</h5></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <ng-container
+                      *ngFor="
+                        let data of trainingCrewList;
+                        let i = index">
+                      <tr>
+                        <td class="cl-mrk">
+                          {{
+                            (paging.pageIndex - 1) * paging.pageSize + i + 1
+                          }}
+                        </td>
+                        <td class="cl-mrk">
+                          {{ data.pno }}
+                        </td>
+                        <td class="left-align">
+                          {{data.name}}
+                        </td>
+                        <td class="cl-mrk rank">
+                          {{data.rank}}  {{data.sailorRank}}
+                        </td>
+                        <td class="cl-mrk left-align">
+                          {{ data.duties }}
+                        </td>
+                        <td class="cl-mrk">
+                          {{ data.mobile }}
+                        </td>
+                        <td class="cl-mrk">
+                          <span *ngIf="data.officersStatus == 'Present'" style="color:green;background-color: transparent;">{{data.officersStatus}}</span>
+                              <span *ngIf="data.officersStatus != 'Present'" style="color:red;background-color: transparent;">{{data.officersStatus}}</span>
+                         
+                        </td>
+                        
+                       
+                       
+                        <td *ngIf="role != userRole.CO" class="cl-action-si">
+                          <div>
+                            <button mat-icon-button color="accent" class="btn-tbl-edit"
+                            [routerLink]="['/biodata/view-sailorbiodata',  data.trainingCrewId]">
+                            <mat-icon aria-label="Edit" class="col-white">visibility</mat-icon>
+                          </button>
+                            <button *ngIf="data.officersStatusId != masterData.officerStatus.Present" mat-icon-button color="primary" title="Present" class="btn-tbl-basic present" (click)="$event.stopPropagation()"
+                              (click)="ChangeOfficerStatus(data, masterData.officerStatus.Present)">
+                              <mat-icon aria-label="Delete" class="col-white">touch_app</mat-icon>
+                            </button>
+                            <button *ngIf="data.officersStatusId != masterData.officerStatus.Away" mat-icon-button color="accent" title="Away" class="btn-tbl-basic away" (click)="$event.stopPropagation()"
+                              (click)="ChangeOfficerStatus(data, masterData.officerStatus.Away)">
+                              <mat-icon aria-label="Delete"  class="col-white">airplanemode_active</mat-icon>
+                            </button>
+                            <button *ngIf="data.officersStatusId != masterData.officerStatus.Leave" mat-icon-button color="accent" title="Leave" class="btn-tbl-basic leave" (click)="$event.stopPropagation()"
+                              (click)="ChangeOfficerStatus(data, masterData.officerStatus.Leave)">
+                              <mat-icon aria-label="Delete" class="col-white">rowing</mat-icon>
+                            </button>
+                            <button *ngIf="data.officersStatusId != masterData.officerStatus.Transfer" mat-icon-button color="accent" title="Transfer" class="btn-tbl-basic transfer" (click)="$event.stopPropagation()"
+                              (click)="ChangeOfficerStatus(data, masterData.officerStatus.Transfer)">
+                              <mat-icon aria-label="Delete" class="col-white">swap_horiz</mat-icon>
+                            </button>
+                            <button mat-icon-button color="accent" title="Edit" class="btn-tbl-edit" update-trainingcrew
+                              [routerLink]="['/biodata/update-sailorbiodata', data.trainingCrewId]">
+                              <mat-icon aria-label="Edit" class="col-white">edit</mat-icon>
+                            </button>
+                            <button mat-icon-button color="accent" title="Delete" class="btn-tbl-delete" (click)="$event.stopPropagation()"
+                              (click)="deleteItem(data)">
+                              <mat-icon aria-label="Delete" class="col-white">delete</mat-icon>
+                            </button>
+                            
+                          </div>
+                          {{ data.actions }}
+                        </td>
+                      </tr>
+                    </ng-container>
+                  </tbody>
+                </table>
+                </div>
+                <!-- <mat-table #table [dataSource]="trainingCrewList" matSort class="mat-cell">
+                  <ng-container matColumnDef="ser">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header> Ser. </mat-header-cell>
+                    <mat-cell *matCellDef="let element; let i = index;"> {{ ((paging.pageIndex-1) * paging.pageSize) +
+                      i+1}} </mat-cell>
+                  </ng-container>
+                  <ng-container matColumnDef="pno">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header> Rank & Name</mat-header-cell>
+                    <mat-cell *matCellDef="let element"> {{element.sailorRank}}  {{element.name}} ({{element.pno}})  </mat-cell>
+                  </ng-container>  
+                 
+                  <ng-container matColumnDef="duties">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header> Appoinment</mat-header-cell>
+                    <mat-cell *matCellDef="let element"> {{element.duties }} </mat-cell>
+                  </ng-container> 
+               
+                  <ng-container matColumnDef="officersStatus">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header> Status</mat-header-cell>
+                    <mat-cell *matCellDef="let element"> {{element.officersStatus }} </mat-cell>
+                  </ng-container> 
+                  <ng-container matColumnDef="mobile">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header> Mobile</mat-header-cell>
+                    <mat-cell *matCellDef="let element"> {{element.mobile }} </mat-cell>
+                  </ng-container> 
+                 
+
+                  <ng-container matColumnDef="actions">
+                    <mat-header-cell *matHeaderCellDef class="pr-0">Actions</mat-header-cell>
+                    <mat-cell *matCellDef="let row; let i=index;" class="pr-0">
+                    
+                      <button mat-icon-button color="accent" class="btn-tbl-edit"
+                      [routerLink]="['/biodata/view-sailorbiodata',  row.trainingCrewId]">
+                      <mat-icon aria-label="Edit" class="col-white">visibility</mat-icon>
+                    </button>
+                      <button *ngIf="row.officersStatusId != masterData.officerStatus.Present" mat-icon-button color="primary" title="Present" class="btn-tbl-basic present" (click)="$event.stopPropagation()"
+                        (click)="ChangeOfficerStatus(row, masterData.officerStatus.Present)">
+                        <mat-icon aria-label="Delete" class="col-white">touch_app</mat-icon>
+                      </button>
+                      <button *ngIf="row.officersStatusId != masterData.officerStatus.Away" mat-icon-button color="accent" title="Away" class="btn-tbl-basic away" (click)="$event.stopPropagation()"
+                        (click)="ChangeOfficerStatus(row, masterData.officerStatus.Away)">
+                        <mat-icon aria-label="Delete"  class="col-white">airplanemode_active</mat-icon>
+                      </button>
+                      <button *ngIf="row.officersStatusId != masterData.officerStatus.Leave" mat-icon-button color="accent" title="Leave" class="btn-tbl-basic leave" (click)="$event.stopPropagation()"
+                        (click)="ChangeOfficerStatus(row, masterData.officerStatus.Leave)">
+                        <mat-icon aria-label="Delete" class="col-white">rowing</mat-icon>
+                      </button>
+                      <button *ngIf="row.officersStatusId != masterData.officerStatus.Transfer" mat-icon-button color="accent" title="Transfer" class="btn-tbl-basic transfer" (click)="$event.stopPropagation()"
+                        (click)="ChangeOfficerStatus(row, masterData.officerStatus.Transfer)">
+                        <mat-icon aria-label="Delete" class="col-white">swap_horiz</mat-icon>
+                      </button>
+                      <button mat-icon-button color="accent" class="btn-tbl-edit" update-trainingcrew
+                        [routerLink]="['/biodata/update-sailorbiodata', row.trainingCrewId]">
+                        <mat-icon aria-label="Edit" class="col-white">edit</mat-icon>
+                      </button>
+                      <button mat-icon-button color="accent" class="btn-tbl-delete" (click)="$event.stopPropagation()"
+                        (click)="deleteItem(row)">
+                        <mat-icon aria-label="Delete" class="col-white">delete</mat-icon>
+                      </button>
+                    </mat-cell>
+                  </ng-container>
+                  <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                  <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+                </mat-table> -->
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+

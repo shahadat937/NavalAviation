@@ -1,0 +1,142 @@
+<section class="content">
+  <div class="container-fluid">
+    <div class="block-header">
+      <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+          <ul class="breadcrumb breadcrumb-style ">
+            <li class="breadcrumb-item">
+              <h4 class="page-title">All Documets</h4>
+            </li>
+            <li class="breadcrumb-item bcrumb-1">
+              <a routerLink="/admin/dashboard/main"><i class="fas fa-home"></i></a>
+            </li>
+            <li class="breadcrumb-item bcrumb-2">
+              <a href="#" onClick="return false;">All Documets</a>
+            </li>
+            <li class="breadcrumb-item active">All</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+        <div class="card">
+          <div class="body">
+            <div class="responsive_table">
+              <div class="materialTableHeader">
+                <div class="row">
+                  <!-- <div class="col-8">
+                    <ul class="header-buttons-left ml-0">
+                      
+                      <li class="dropdown">
+                        <input placeholder="Search" type="text" [(ngModel)]="searchText"  #filter class="browser-default search-field"
+                          aria-label="Search box">
+                      </li>
+                      <li>
+                        <div class="icon-button-demo m-l-10">
+                          <button mat-mini-fab (click)="applyFilter(searchText)" color="primary">Go
+                          
+                          </button>
+                        </div>
+                      </li>
+                    </ul>
+                  </div>
+                  <div class="col-4">
+                    <ul class="header-buttons">
+                      <li>
+                        <div class="icon-button-demo">
+                          <button class="btn-space"  mat-raised-button
+                          color="primary" [routerLink]="['/spares-management/add-itemdetail',this.masterData.sparescategory.spares]"> Add
+                            <mat-icon class="col-white">add</mat-icon>
+                          </button>
+                        </div>
+                      </li>
+                    </ul>
+                  </div> -->
+                </div>
+              </div>
+              <table class="table tbl-by-group db-li-s-in">
+                <thead>
+                  <tr>
+                    <th class="cl-nm-rnk"><h5>Demand Documents</h5></th>
+                    <th class="cl-mrk"><h5>Technical Spec</h5></th>
+                    <th class="cl-mrk-rmrk"><h5>Attach Doc</h5></th>
+                    <th class="cl-mrk-rmrk"><h5>Attach CST</h5></th>
+                    <th class="cl-mrk-rmrk"><h5>Attach Purchase Order Doc</h5></th>
+                    <th class="cl-mrk-rmrk"><h5>SFT Document</h5></th>
+                    <th class="cl-mrk-rmrk"><h5>Other Doc</h5></th>
+                    
+                  </tr>
+                </thead>
+                <tbody>
+                  <ng-container
+                    *ngFor="let data of this.dataSource.data;let i = index">
+                    <tr>
+                      <td>
+                        <div fxLayout="row" fxLayoutGap="20px">
+                          <a target="_blank" [href]="data.demandLetterNo">
+                            <i matTooltip="Documents" class="far fa-file-pdf tbl-pdf"></i>
+                          </a>
+                        </div>
+                      </td>
+                      <td>
+                        <div fxLayout="row" fxLayoutGap="20px">
+                          <a target="_blank" [href]="data.specDoc">
+                            <i  matTooltip="Technical Spec" class="far fa-file-pdf tbl-pdf" ></i>
+                          </a>
+                        </div>
+                      </td>
+                      <td>
+                        <div fxLayout="row" fxLayoutGap="20px">
+                          <a target="_blank" [href]="data.tenderSpecification">
+                            <i  matTooltip="Attach Doc" class="far fa-file-pdf tbl-pdf"></i>
+                          </a>
+                        </div>
+                      </td>
+                      <td>
+                        <div fxLayout="row" fxLayoutGap="20px">
+                          <a target="_blank" [href]="data.tenderNotice">
+                            <i  matTooltip="Attach CST" class="far fa-file-pdf tbl-pdf" ></i>
+                          </a>
+                        </div>
+                      </td>
+                      <td>
+                        <div fxLayout="row" fxLayoutGap="20px">
+                          <a target="_blank" [href]="data.procurementDocument">
+                            <i  matTooltip="Attach Purchase Order Doc" class="far fa-file-pdf tbl-pdf" ></i>
+                          </a>
+                        </div>
+                      </td>
+                      
+                      <td>
+                        <div fxLayout="row" fxLayoutGap="20px">
+                          <a target="_blank" [href]="data.acceptanceDocument">
+                            <i  matTooltip="SFT Document" class="far fa-file-pdf tbl-pdf" ></i>
+                          </a>
+                        </div>
+                      </td>
+                      <td>
+                        <div fxLayout="row" fxLayoutGap="20px">
+                          <a target="_blank" [href]="data.otherDoc">
+                            <i  matTooltip="Other Doc" class="far fa-file-pdf tbl-pdf" ></i>
+                          </a>
+                        </div>
+                      </td>
+                     
+                    </tr>
+                  </ng-container>
+                </tbody>        
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
+
+
+ 

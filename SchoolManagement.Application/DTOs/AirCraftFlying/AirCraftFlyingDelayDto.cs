@@ -1,0 +1,41 @@
+using System;
+using System.Collections.Generic;
+using System.Text;
+
+namespace SchoolManagement.Application.DTOs.AirCraftFlying
+{
+    public class AirCraftFlyingDelayDto 
+    {
+        public int AirCraftFlyingId { get; set; }
+    //public int? AirCraftNameId { get; set; }
+    //public int? DepartmentNameId { get; set; }
+    //public DateTime? Date { get; set; }
+    //public string? TypeOfAC { get; set; }
+    //public string? AcNo { get; set; }
+    //public string? Crew { get; set; }
+    //public string? CallSign { get; set; }
+    //public string? Mon { get; set; }
+  //  public string? StartUp { get; set; }
+        public int? StartUpStatus { get; set; }
+        public string? StartUpDelay { get; set; }
+        //public string? StartUp { get; set; }
+
+    //public string? Dup { get; set; }
+    //public string? Endurance { get; set; }
+    //public string? Fuel { get; set; }
+    //public string? OpaOff { get; set; }
+    //public string? Pdf { get; set; }
+    //public string? Remarks { get; set; }
+    //public bool IsActive { get; set; }
+    //public int? MaintenenceState { get; set; }
+    //public string? DepartmentName { get; set; }
+    //public string? AirCraftName { get; set; }
+    //public TimeSpan? RunningHour { get; set; }
+    //public TimeSpan? RestHour { get; set; }
+    //public double? RunningPercentage { get; set; }
+    //public double? RestPercentage { get; set; }
+    //public int? StartUpStatus { get; set; }
+    //public string? StartUpDelay { get; set; }
+
+  }
+}

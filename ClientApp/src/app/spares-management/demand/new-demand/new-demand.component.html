@@ -1,0 +1,726 @@
+<section class="content">
+  <div class="container-fluid">
+    <div class="block-header">
+      <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+          <ul class="breadcrumb breadcrumb-style">
+            <li class="breadcrumb-item">
+              <h4 class="page-title">{{ pageTitle }}</h4>
+            </li>
+            <li class="breadcrumb-item bcrumb-1">
+              <a routerLink="/admin/dashboard/main">
+                <i class="fas fa-home"></i>
+              </a>
+            </li>
+            <li class="breadcrumb-item bcrumb-2">
+              <a href="#" onClick="return false;">Demand</a>
+            </li>
+            <li class="breadcrumb-item active">{{ destination }}</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="row clearfix">
+      <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+        <div class="card">
+          <div class="body">
+            <form
+              *ngIf="role != userRole.CO"
+              class="m-4"
+              [formGroup]="DemandForm"
+              (ngSubmit)="onSubmit()"
+            >
+              <div class="row">
+                <div
+                  *ngIf="role == userRole.SuperAdmin"
+                  class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-2"
+                >
+                  <mat-form-field
+                    class="example-full-width mb-3"
+                    appearance="outline"
+                  >
+                    <mat-label>Flight Line/Squadron </mat-label>
+                    <mat-select
+                      formControlName="departmentNameId"
+                      (selectionChange)="onDepartmentSelectionChange()"
+                    >
+                      <mat-option value="0">--Select--</mat-option>
+                      <mat-option
+                        *ngFor="let dropdown of selectedDepartmentName"
+                        [value]="dropdown.value"
+                      >
+                        {{ dropdown.text }}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+                <div
+                  *ngIf="role == userRole.SuperAdmin"
+                  class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-2"
+                ></div>
+
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-">
+                  <mat-form-field class="example-full-width mb-3" appearance="outline" >
+                    <mat-label>Patt No</mat-label>
+                    <input formControlName="part" matInput type="text" [matAutocomplete]="auto" required />
+                    <mat-autocomplete #auto="matAutocomplete">
+                      <mat-option *ngFor="let item of filteredOptions" [value]="item" (onSelectionChange)="onTraineeSelectionChanged(item)">
+                        {{ item.text }}
+                      </mat-option>
+                    </mat-autocomplete>
+                  </mat-form-field>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-2">
+                  <h5 class="m-t-20">
+                    Item Name : <span class="c-color">{{ itemValue }}</span>
+                  </h5>
+                </div>
+
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-2">
+                  <mat-form-field
+                    class="example-full-width mb-3"
+                    appearance="outline"
+                  >
+                    <mat-label>Type of Demand </mat-label>
+                    <mat-select
+                      formControlName="demandTypeId"
+                      (selectionChange)="onDemandTypeSelect()"
+                      required
+                    >
+                      <mat-option value="0">--Select--</mat-option>
+                      <mat-option
+                        *ngFor="let dropdown of selectedTypeOfDemandValue"
+                        [value]="dropdown.value"
+                      >
+                        {{ dropdown.text }}
+                      </mat-option>
+                    </mat-select>
+                    <mat-error
+                      *ngIf="
+                        DemandForm.get('demandTypeId').hasError('required')
+                      "
+                    >
+                      Type of Demand is required
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+
+                <!-- <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width mb-3" appearance="outline">
+                        <mat-label>Part No</mat-label>                        
+                        <mat-select formControlName="itemDetailId" >
+                          <mat-option  value="0">--Select--</mat-option >
+                            <mat-option *ngFor="let dropdown of selectedPartNo" [value]="dropdown.value" (onSelectionChange)="onPartNoSelectionChange($event)">
+                                {{dropdown.text}} 
+                              </mat-option>                          
+                        </mat-select>
+                    </mat-form-field>
+                  </div> -->
+
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-2"></div>
+                <!-- <hr> -->
+                <div
+                  *ngIf="isConditionShown"
+                  class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-2"
+                >
+                  <mat-form-field
+                    class="example-full-width mb-3"
+                    appearance="outline"
+                  >
+                    <mat-label>Condition</mat-label>
+                    <mat-select formControlName="conditionOfItemId">
+                      <mat-option value="0">--Select--</mat-option>
+                      <mat-option
+                        *ngFor="let dropdown of selectedConditionOfItem"
+                        [value]="dropdown.value"
+                      >
+                        {{ dropdown.text }}
+                      </mat-option>
+                    </mat-select>
+                    <mat-error
+                      *ngIf="
+                        DemandForm.get('conditionOfItemId').hasError('required')
+                      "
+                    >
+                      Condition is required
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+                <div
+                  *ngIf="isConditionShown"
+                  class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-2"
+                ></div>
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-2">
+                  <mat-form-field
+                    class="example-full-width mb-3"
+                    appearance="outline"
+                  >
+                    <mat-label>Deno </mat-label>
+                    <mat-select formControlName="denoId" required>
+                      <mat-option value="0">--Select--</mat-option>
+                      <mat-option
+                        *ngFor="let dropdown of selectedDeno"
+                        [value]="dropdown.value"
+                      >
+                        {{ dropdown.text }}
+                      </mat-option>
+                    </mat-select>
+                    <mat-error
+                      *ngIf="DemandForm.get('denoId').hasError('required')"
+                    >
+                      Deno is required
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-2"></div>
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-2">
+                  <mat-form-field
+                    class="example-full-width mb-3"
+                    appearance="outline"
+                  >
+                    <mat-label>Qty</mat-label>
+                    <input matInput formControlName="demandQty" required />
+                  </mat-form-field>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-2"></div>
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-2">
+                  <mat-form-field
+                    class="example-full-width mb-3"
+                    appearance="outline"
+                  >
+                    <mat-label>Occasion Of Demand</mat-label>
+                    <mat-select formControlName="occasionOfDemandId" required>
+                      <mat-option value="0">--Select--</mat-option>
+                      <mat-option
+                        *ngFor="let dropdown of selectedOccasionOfDemand"
+                        [value]="dropdown.value"
+                      >
+                        {{ dropdown.text }}
+                      </mat-option>
+                    </mat-select>
+                    <mat-error
+                      *ngIf="
+                        DemandForm.get('occasionOfDemandId').hasError(
+                          'required'
+                        )
+                      "
+                    >
+                      Occasion Of Demand is required
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-2"></div>
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-2">
+                  <mat-form-field
+                    class="example-full-width mb-3"
+                    appearance="outline"
+                  >
+                    <mat-label>Financial Year</mat-label>
+                    <mat-select formControlName="fiscalYearId" required>
+                      <mat-option value="0">--Select--</mat-option>
+                      <mat-option
+                        *ngFor="let dropdown of selectedFiscalYear"
+                        [value]="dropdown.value"
+                      >
+                        {{ dropdown.text }}
+                      </mat-option>
+                    </mat-select>
+                    <mat-error
+                      *ngIf="
+                        DemandForm.get('fiscalYearId').hasError('required')
+                      "
+                    >
+                      Financial Year is required
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-2"></div>
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-2">
+                  <mat-form-field
+                    class="example-full-width mb-3"
+                    appearance="outline"
+                  >
+                    <mat-label>Demand Placed to</mat-label>
+                    <mat-select formControlName="authorityId" required>
+                      <mat-option value="0">--Select--</mat-option>
+                      <mat-option
+                        *ngFor="let dropdown of selectedAuthority"
+                        [value]="dropdown.value"
+                      >
+                        {{ dropdown.text }}
+                      </mat-option>
+                    </mat-select>
+                    <mat-error
+                      *ngIf="DemandForm.get('authorityId').hasError('required')"
+                    >
+                      Demand Placed to is required
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-2"></div>
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-2">
+                  <mat-form-field
+                    class="example-full-width mb-3"
+                    appearance="outline"
+                  >
+                    <mat-label>Trade</mat-label>
+                    <mat-select disabled formControlName="tradeId" >
+                      <mat-option value="0">--Select--</mat-option>
+                      <mat-option
+                        *ngFor="let dropdown of selectedTrade"
+                        [value]="dropdown.value"
+                      >
+                        {{ dropdown.text }}
+                      </mat-option>
+                    </mat-select>
+                    <mat-error
+                      *ngIf="DemandForm.get('tradeId').hasError('required')"
+                    >
+                      Trade is required
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-2"></div>
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-2">
+                  <mat-form-field
+                    class="example-full-width mb-3"
+                    appearance="outline"
+                  >
+                    <mat-label>Item Category</mat-label>
+                    <mat-select disabled formControlName="itemCategoryId">
+                      <mat-option value="0">--Select--</mat-option>
+                      <mat-option
+                        *ngFor="let dropdown of selectedItemCategory"
+                        [value]="dropdown.value"
+                      >
+                        {{ dropdown.text }}
+                      </mat-option>
+                    </mat-select>
+                    <mat-error
+                      *ngIf="
+                        DemandForm.get('itemCategoryId').hasError('required')
+                      "
+                    >
+                      Item Category required
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-2"></div>
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-2">
+                  <mat-form-field
+                    class="example-full-width mb-3"
+                    appearance="outline"
+                  >
+                    <mat-label>Demand Date</mat-label>
+                    <input
+                      matInput
+                      [matDatepicker]="datepicker"
+                      formControlName="demandDate"
+                    />
+                    <mat-datepicker-toggle
+                      matSuffix
+                      [for]="datepicker"
+                    ></mat-datepicker-toggle>
+                    <mat-datepicker #datepicker></mat-datepicker>
+                  </mat-form-field>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-2"></div>
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-2">
+                  <mat-form-field
+                    class="example-full-width mb-3"
+                    appearance="outline"
+                  >
+                    <mat-label>Demand Status</mat-label>
+                    <mat-select formControlName="demandStatusId" required>
+                      <mat-option value="0">--Select--</mat-option>
+                      <mat-option
+                        (onSelectionChange)="onStatus($event)"
+                        *ngFor="let dropdown of selectedDemandStaus"
+                        [value]="dropdown.value"
+                      >
+                        {{ dropdown.text }}
+                      </mat-option>
+                    </mat-select>
+                    <mat-error
+                      *ngIf="
+                        DemandForm.get('demandStatusId').hasError('required')
+                      "
+                    >
+                      Demand Status is required
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-2"
+                ></div>
+                <div 
+                  class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-2"
+                >
+                  <mat-form-field
+                    class="example-full-width mb-3"
+                    appearance="outline"
+                  >
+                    <mat-label>Demand No</mat-label>
+                    <input matInput formControlName="demandNo" required/>
+                    <mat-error *ngIf="DemandForm.get('demandNo').hasError('required')" >
+                      Demand No is required
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-2"></div>
+
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-2">
+                  <mat-form-field
+                    class="example-full-width mb-3"
+                    appearance="outline"
+                  >
+                    <mat-label>Manufacturer Address</mat-label>
+                    <mat-select formControlName="manufactureId" required>
+                      <mat-option value="0">--Select--</mat-option>
+                      <mat-option
+                        *ngFor="let dropdown of selectedManufacture"
+                        [value]="dropdown.value"
+                      >
+                        {{ dropdown.text }}
+                      </mat-option>
+                    </mat-select>
+                    <mat-error
+                      *ngIf="
+                        DemandForm.get('manufactureId').hasError('required')
+                      "
+                    >
+                    Manufacturer Address required
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-2 reload">
+                  <span (click)="reloadManufacturerers()"
+                    ><mat-icon>autorenew</mat-icon></span
+                  >
+                </div>
+
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-2">
+                  <mat-form-field
+                    class="example-full-width mb-3"
+                    appearance="outline"
+                  >
+                    <mat-label>Ref Price</mat-label>
+                    <input matInput formControlName="refPrice" />
+                  </mat-form-field>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-2"></div>
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-2">
+                  <mat-form-field
+                    class="example-full-width mb-3"
+                    appearance="outline"
+                  >
+                    <mat-label>Documents</mat-label>
+                    <ngx-mat-file-input
+                      (change)="onFileChanged($event)"
+                      accept=".txt,.pdf,.xls,.xlsx,.doc,.docx,.ppt,.pptx"
+                    >
+                    </ngx-mat-file-input>
+                    <mat-icon matSuffix>attachment</mat-icon>
+                  </mat-form-field>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-2"></div>
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-2">
+                  <mat-form-field
+                    class="example-full-width mb-3"
+                    appearance="outline"
+                  >
+                    <mat-label>Technical Spec</mat-label>
+                    <ngx-mat-file-input
+                      (change)="onTenderSpecChanged($event)"
+                      accept=".txt,.pdf,.xls,.xlsx,.doc,.docx,.ppt,.pptx"
+                    >
+                    </ngx-mat-file-input>
+                    <mat-icon matSuffix>attachment</mat-icon>
+                  </mat-form-field>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-2"></div>
+              </div>
+
+              <div class="row">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                  <button
+                    class="btn-space"
+                    [disabled]="!DemandForm.valid"
+                    mat-raised-button
+                    color="primary"
+                  >
+                    {{ btnText }}
+                  </button>
+                  <!-- <button type="button" mat-button routerLink="/spares-management/demand-list">Cancel</button> -->
+                </div>
+              </div>
+            </form>
+            <div *ngIf="isShown" class="row create-table db-tbl cls-rtn">
+              <!-- <h3 class="text-center table-title">Spares Demand LIST</h3> -->
+              <div class="materialTableHeader auto">
+                <div class="row">
+                  <div class="table-title">
+                    <h3>Demand List</h3>
+                  </div>
+                </div>
+                <div class="row">
+                  <!-- <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                    <ul class="header-buttons-left ml-0">
+                      <li class="dropdown">
+                        <input
+                          placeholder="Search"
+                          type="text"
+                          [(ngModel)]="searchText"
+                          #filter
+                          class="browser-default search-field custom-search"
+                          aria-label="Search box"
+                        />
+                      </li>
+                      <li>
+                        <div class="icon-button-demo m-l-10">
+                          <button
+                            mat-mini-fab
+                            (click)="applyFilter(searchText)"
+                            color="accent"
+                          >
+                            <mat-icon class="col-white">search</mat-icon>
+                          </button>
+                        </div>
+                      </li>
+                    </ul>
+                  </div> -->
+                  <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <h3 class="count-value">No of Items:  {{ itemCount }}</h3>
+                  </div>
+                  <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <ul class="header-buttons-left right-align ml-0">
+                      <!-- <li><h5></h5></li> -->
+                      <li class="dropdown">
+                        <input
+                          placeholder="Search"
+                          type="text"
+                          [(ngModel)]="searchText"
+                          #filter
+                          class="browser-default search-field custom-search"
+                          aria-label="Search box"
+                        />
+                      </li>
+                      <li
+                        *ngIf="
+                          role == userRole.CO || role == userRole.SuperAdmin
+                        "
+                        class="dept-dropdown"
+                      >
+                        <mat-select
+                          placeholder="Type Of Demand"
+                          [(ngModel)]="demandTypeId"
+                          class="browser-default dept-field"
+                          required
+                        >
+                          <mat-option selected value="0">--Select--</mat-option>
+                          <mat-option
+                            *ngFor="let dropdown of selectedTypeOfDemandValue"
+                            [value]="dropdown.value"
+                          >
+                            {{ dropdown.text }}
+                          </mat-option>
+                        </mat-select>
+                      </li>
+                      <li
+                        *ngIf="
+                          role == userRole.CO || role == userRole.SuperAdmin
+                        "
+                        class="dept-dropdown"
+                      >
+                        <mat-select
+                          placeholder="Flight Line"
+                          class="browser-default dept-field"
+                          [(ngModel)]="departmentNameId"
+                        >
+                          <mat-option selected value="0">--All--</mat-option>
+                          <mat-option
+                            *ngFor="let dropdown of selectedDepartmentName"
+                            [value]="dropdown.value"
+                          >
+                            {{ dropdown.text }}
+                          </mat-option>
+                        </mat-select>
+                      </li>
+                      <!-- <li><h5>Type Of Demand</h5></li> -->
+                      <!-- <li class="dept-dropdown">
+                        <mat-select
+                          placeholder="Type Of Demand"
+                          [(ngModel)]="demandTypeId"
+                          class="browser-default dept-field"
+                          required
+                        >
+                          <mat-option selected value="0">--Select--</mat-option>
+                          <mat-option
+                            *ngFor="let dropdown of selectedTypeOfDemandValue"
+                            [value]="dropdown.value"
+                          >
+                            {{ dropdown.text }}
+                          </mat-option>
+                        </mat-select>
+                      </li> -->
+                      <li>
+                        <div class="icon-button-demo m-l-10">
+                          <button
+                            *ngIf="
+                              role == userRole.CO || role == userRole.SuperAdmin
+                            "
+                            mat-mini-fab
+                            (click)="
+                              applyDropdown(
+                                searchText,
+                                departmentNameId,
+                                demandTypeId
+                              )
+                            "
+                            color="primary"
+                          >Go
+                            <!-- <mat-icon class="col-white">search</mat-icon> -->
+                          </button>
+                          <button
+                            *ngIf="
+                              role == userRole.User || role == userRole.admin
+                            "
+                            mat-mini-fab
+                            (click)="applyFilter(searchText)"
+                            color="Primary"
+                          >Go
+                            <!-- <mat-icon class="col-white">search</mat-icon> -->
+                          </button>
+                        </div>
+                      </li>
+                      <li>
+                        <div
+                          class="col-xl-4 col-lg-4 col-md-4 col-sm-12 mb-2 db-p"
+                        >
+                          <button
+                            class="btn-space"
+                            mat-raised-button
+                            color="primary"
+                            (click)="printSingle()"
+                          >
+                            <mat-icon class="col-white">print</mat-icon>
+                          </button>
+                        </div>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+              <div class="container no-padding">
+                <div id="print-routine">
+                  <table class="table tbl-by-group db-li-s-in">
+                    <thead>
+                      <tr>
+                        <th class="cl-nm-rnk"><h5>Flight Line</h5></th>
+                        <th class="cl-mrk"><h5>Patt No</h5></th>
+                        <th class="cl-mrk-rmrk"><h5>Item Name</h5></th>
+                        <th class="cl-mrk-rmrk"><h5>Condition</h5></th>
+                        <th class="cl-mrk-rmrk"><h5>Deno</h5></th>
+                        <th class="cl-mrk-rmrk"><h5>Qty</h5></th>
+                        <th class="cl-mrk-rmrk-dn"><h5>Demand No</h5></th>
+                        <th class="cl-mrk-rmrk"><h5>Demand Date</h5></th>
+                        <th class="cl-mrk-rmrk"><h5>Type of Demand</h5></th>
+                        <th *ngIf="role == userRole.SuperAdmin" class="thbm"><h5>Approved</h5></th>
+                        <th class="cl-action-d"><h5>Actions</h5></th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <ng-container
+                        *ngFor="let data of groupArrays; let i = index"
+                      >
+                        <tr>
+                          <td [attr.rowspan]="data.datas.length + 1">
+                            {{ data.departmentName }}
+                          </td>
+                        </tr>
+                        <tr *ngFor="let number of data.datas">
+                          <td>{{ number.itemDetail }}</td>
+
+                          <td>{{ number.itemName }}</td>
+                          <td>{{ number.conditionOfItem }}</td>
+                          <td>{{ number.deno }}</td>
+                          <td>{{ number.demandQty }}</td>
+                          <td class="cl-mrk-rmrk-dn">{{ number.demandNo }}</td>
+                          <td>{{ number.demandDate | date: "dd/MMM/yyyy" }}</td>
+                          <td>{{ number.demandType }}</td>
+                          <td *ngIf="role == userRole.SuperAdmin">
+                            <button mat-raised-button class="custom-btn courseplan-apr"  (click)="inActiveItem(number)"  (click)="$event.stopPropagation()">{{ number.verificationCompletStatus == 0 ? 'Not Approved' : 'Approved' }}</button>
+                          </td>
+                          <td class="cl-action-d">
+                           
+                            <div fxLayout="row" fxLayoutGap="20px">
+                              <a target="_blank" [href]="number.demandLetterNo">
+                                <i *ngIf="number.demandLetterNo != 'http://192.168.8.102:8030/Content/files/demand/'"
+                                  matTooltip="Documents"
+                                  class="far fa-file-pdf tbl-pdf"
+                                ></i
+                              ></a>
+                             
+                              |
+                              <a target="_blank" [href]="number.specDoc">
+                                <i *ngIf="number.specDoc != 'http://192.168.8.102:8030/Content/files/demand/'"
+                                  matTooltip="Technical Spec"
+                                  class="far fa-file-pdf tbl-pdf"
+                                >
+                              </i>
+                              </a>
+                              <!-- <mat-lebel *ngIf="number.specDoc"><a target="_blank" [href]="number.specDoc"><mat-icon>{{number.documentIcon}}</mat-icon></a></mat-lebel> -->
+                              |
+                              <button
+                                mat-icon-button
+                                color="accent"
+                                class="btn-tbl-edit"
+                                [routerLink]="[
+                                  '/spares-management/view-demand',
+                                  number.demandId
+                                ]"
+                              >
+                                <mat-icon aria-label="Edit" class="col-white"
+                                  >visibility</mat-icon
+                                >
+                              </button>
+                              <button
+                                *ngIf="(role != userRole.CO && (role == userRole.User && number.verificationCompletStatus == 0)) || role == userRole.SuperAdmin "
+                                mat-icon-button
+                                color="accent"
+                                class="btn-tbl-edit"
+                                [routerLink]="[
+                                  '/spares-management/update-demand',
+                                  number.demandId
+                                ]"
+                              >
+                                <mat-icon aria-label="Edit" class="col-white"
+                                  >edit</mat-icon
+                                >
+                              </button>
+                              <button 
+                                *ngIf="(role != userRole.CO && (role == userRole.User && number.verificationCompletStatus == 0))|| role == userRole.SuperAdmin"
+                                mat-icon-button
+                                color="accent"
+                                class="btn-tbl-delete"
+                                (click)="$event.stopPropagation()"
+                                (click)="deleteItem(number)"
+                              >
+                                <mat-icon aria-label="Delete" class="col-white"
+                                  >delete</mat-icon
+                                >
+                              </button>
+                            </div>
+                          </td>
+                        </tr>
+                      </ng-container>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

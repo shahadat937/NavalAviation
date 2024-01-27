@@ -1,0 +1,118 @@
+<section class="content">
+  <div class="container-fluid">
+    <div class="block-header">
+      <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+          <ul class="breadcrumb breadcrumb-style">
+            <li class="breadcrumb-item">
+              <h4 class="page-title"> Barcode Scan</h4>
+            </li>
+            <li class="breadcrumb-item bcrumb-1">
+              <a routerLink="/admin/dashboard/main"
+                ><i class="fas fa-home"></i
+              ></a>
+            </li>
+            <li class="breadcrumb-item bcrumb-2">
+              <a href="#" onClick="return false;"> Barcode Scan</a>
+            </li>
+            <li class="breadcrumb-item active">All</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+        <div class="card">
+          <div class="body">
+            <div class="responsive_table">
+              <div class="materialTableHeader auto">
+                
+                <div class="row">
+                  <div class="table-title">
+                    <h3> Barcode Scan</h3>
+                  </div>
+                </div>
+                <div class="row">
+                  <form [formGroup]="BarcodeValueForm" (ngSubmit)="onSubmit()">
+                    <div class="row">
+                      <div class="col-xl-11 col-lg-11 col-md-11 col-sm-11">
+                        <mat-form-field class="example-full-width mb-3" appearance="outline">
+                          <!-- <mat-label>Accout Type</mat-label> -->
+                          <input matInput  formControlName="codeValue" autofocus required>                          
+                        </mat-form-field>
+                      </div>
+                      <div class="col-xl-1 col-lg-1 col-md-1 col-sm-1">
+                        <button class="my-2 btn-space" [disabled]="!BarcodeValueForm.valid " mat-raised-button
+                          color="primary">Find</button>
+                        <!-- <button type="button" mat-button routerLink="/basic-setup/accounttype-list">Cancel</button> -->
+                      </div>
+                    </div>
+                
+                  </form>
+                </div>
+              </div>
+
+              <div *ngIf="!barcodeResult && isDataNull" class="result-null">
+                <h3>No Data Found</h3>
+              </div>
+
+              <div  id="print-routine">
+                
+                <table *ngIf="barcodeResult && isDataNull" class="table detail-table">
+                  <tr>
+                    <th>Patt No</th>
+                    <td>{{barcodeResult.partNo}}</td>
+                  </tr>
+                  <tr>
+                    <th>Item Name</th>
+                    <td>{{barcodeResult.nameOfItem}}</td>
+                  </tr>
+                  <tr>
+                    <th>IMC No</th>
+                    <td>{{barcodeResult.imcNumber}}</td>
+                  </tr>
+                  <tr>
+                    <th>Item Category</th>
+                    <td>{{barcodeResult.itemCategory}}</td>
+                  </tr>
+                  <tr>
+                    <th>Department</th>
+                    <td>{{barcodeResult.deptName}}</td>
+                  </tr>
+                  <tr>
+                    <th>Demand Date</th>
+                    <td>{{barcodeResult.demandDate | date: "dd/MMM/yyyy"}}</td>
+                  </tr>
+                  <tr>
+                    <th>Demand Qty</th>
+                    <td>{{barcodeResult.demandQty}}</td>
+                  </tr>
+                  <tr>
+                    <th>ICM No</th>
+                    <td>{{barcodeResult.icmNo}}</td>
+                  </tr>
+                  <tr>
+                    <th>Item Ser No</th>
+                    <td>{{barcodeResult.itemSerNo}}</td>
+                  </tr>
+                  <tr>
+                    <th>Total Received Qty</th>
+                    <td>{{barcodeResult.totalReceivedQty}}</td>
+                  </tr>
+                  <tr>
+                    <th>Available Qty</th>
+                    <td>{{barcodeResult.availableQty}}</td>
+                  </tr>
+                </table>
+              </div>
+              <!-- <mat-paginator [length]="paging.length" [showFirstLastButtons]="masterData.paging.showFirstLastButtons"
+                [pageSize]="paging.pageSize" [pageSizeOptions]="masterData.paging.pageSizeOptions"
+                (page)="pageChanged($event)">
+              </mat-paginator> -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

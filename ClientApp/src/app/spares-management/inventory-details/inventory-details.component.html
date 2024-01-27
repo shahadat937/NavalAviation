@@ -1,0 +1,81 @@
+<section class="content">
+  <div class="container-fluid">
+    <div class="block-header">
+      <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+          <ul class="breadcrumb breadcrumb-style">
+            <li class="breadcrumb-item">
+              <h4 class="page-title"> Inventory Details</h4>
+            </li>
+            <li class="breadcrumb-item bcrumb-1">
+              <a routerLink="/admin/dashboard/main"
+                ><i class="fas fa-home"></i
+              ></a>
+            </li>
+            <li class="breadcrumb-item bcrumb-2">
+              <a href="#" onClick="return false;"> Inventory Details</a>
+            </li>
+            <li class="breadcrumb-item active">All</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+        <div class="card">
+          <div class="body">
+            <div class="responsive_table">
+              <div class="materialTableHeader auto">
+                
+                <div class="row">
+                  <div class="table-title">
+                    <h3> Inventory Details</h3>
+                  </div>
+                </div>
+              </div>
+
+              <div id="print-routine">
+                <table class="table tbl-by-group db-li-s-in">
+                  <thead>
+                    <tr>
+                      <!-- <th rowspan="2" class="cl-nm-rnk">
+                        <h5>Flight Line</h5>
+                      </th> -->
+                      <!-- <th class="cl-mrk"><h5>Patt No</h5></th>
+                      <th class="cl-mrk-rmrk"> <h5>Item Name</h5> </th> -->
+                      <th class="cl-mrk-rmrk"> <h5>Issue Status</h5> </th>
+                      <th class="cl-mrk-rmrk"> <h5>Issued Qty</h5> </th>                      
+                      <th class="cl-mrk-rmrk"> <h5>Aircraft Name</h5> </th>                      
+                  </thead>
+                  <tbody>
+                    <ng-container>
+                      <!-- <tr>
+                        <td
+                          class="no-border"
+                          [attr.rowspan]="data.datas.length + 1"
+                        >
+                          {{ data.departmentName }}
+                        </td>
+                      </tr> -->
+                      <tr *ngFor="let number of availableIssueQtyDetailList">
+                        <!-- <td>{{ number.partNo }}</td>
+                        <td>{{ number.nameOfItem }}</td> -->
+                        <td>{{ number.statusName }}</td>
+                        <td>{{ number.issueQty }}</td>
+                        <td></td>
+                      </tr>
+                    </ng-container>
+                  </tbody>
+                </table>
+              </div>
+              <!-- <mat-paginator [length]="paging.length" [showFirstLastButtons]="masterData.paging.showFirstLastButtons"
+                [pageSize]="paging.pageSize" [pageSizeOptions]="masterData.paging.pageSizeOptions"
+                (page)="pageChanged($event)">
+              </mat-paginator> -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

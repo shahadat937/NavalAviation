@@ -1,0 +1,291 @@
+<section class="content">
+  <div class="container-fluid">
+    <div class="block-header">
+      <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+          <ul class="breadcrumb breadcrumb-style ">
+            <li class="breadcrumb-item">
+              <h4 class="page-title">{{pageTitle}}</h4>
+            </li>
+            <li class="breadcrumb-item bcrumb-1">
+              <a routerLink="/admin/dashboard/main"><i class="fas fa-home"></i></a>
+            </li>
+            <li class="breadcrumb-item bcrumb-2">
+              <a href="#" onClick="return false;">Stock Transfer from NSD</a>
+            </li>
+            <li class="breadcrumb-item active">{{destination}}</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="row clearfix">
+      <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+        <div class="card">
+          <div class="body">
+            <form *ngIf="isFormShown" class="m-4" [formGroup]="StockTransferNsdForm" (ngSubmit)="onSubmit()">
+              <div class="row">
+
+                <div *ngIf="role == userRole.SuperAdmin" class="col-xl-4 col-lg-4 col-md-4 col-sm-12 mb-2">
+                  <mat-form-field class="example-full-width mb-3" appearance="outline">
+                    <mat-label>Flight Line/Squadron </mat-label>
+                    <mat-select formControlName="departmentNameId" required (selectionChange)="onStockTransferNsdListByDepartmentNameSelectionChange()">
+                      <mat-option  *ngFor="let dropdown of departmentName" [value]="dropdown.value">
+                        {{dropdown.text}}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+                <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 mb-2">
+                  <mat-form-field class="example-full-width mb-3" appearance="outline">
+                    <mat-label>Item Name </mat-label>
+                    <mat-select formControlName="itemStorId" required (selectionChange)="onItemNameSelectionChange()">
+                      <mat-option (onSelectionChange)="onPartNoSelectionChange($event)"  *ngFor="let dropdown of itemName" [value]="dropdown.value">
+                        {{dropdown.text}}
+                      </mat-option>
+                    </mat-select>
+                    <mat-error *ngIf="StockTransferNsdForm.get('itemStorId').hasError('required')">
+                      Item Name is required
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+                <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 mb-2">
+                  <h5 class="m-t-25">
+                    NSD Qty : <span class="c-color">{{ itemValue }}</span>
+                  </h5>
+                </div>
+                <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 mb-2">
+                  <mat-form-field class="example-full-width mb-3" appearance="outline">
+                    <mat-label>Transfer Qty</mat-label>
+                    <input matInput formControlName="transferQty" required>
+                    <mat-error *ngIf="StockTransferNsdForm.get('transferQty').hasError('required')">
+                      Transfer Qty is required
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+                <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 mb-2">
+                  <mat-form-field class="example-full-width mb-3" appearance="outline">
+                    <mat-label>Demand Authority </mat-label>
+                    <mat-select formControlName="demandAuthorityId" required>
+                      <mat-option  *ngFor="let dropdown of demandAuthorityValue" [value]="dropdown.value">
+                        {{dropdown.text}}
+                      </mat-option>
+                    </mat-select>
+                    <mat-error *ngIf="StockTransferNsdForm.get('demandAuthorityId').hasError('required')">
+                      Demand Authority is required
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+                <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 mb-2">
+                  <mat-form-field
+                    class="example-full-width mb-3"
+                    appearance="outline"
+                  >
+                    <mat-label>Stock Adjustment Date</mat-label>
+                    <input matInput [matDatepicker]="dateOfTenderFloatpicker" formControlName="stockAdjustmentDate" />
+                    <mat-datepicker-toggle
+                      matSuffix
+                      [for]="dateOfTenderFloatpicker"
+                    ></mat-datepicker-toggle>
+                    <mat-datepicker
+                      #dateOfTenderFloatpicker
+                    ></mat-datepicker>
+                    <mat-error *ngIf="StockTransferNsdForm.get('stockAdjustmentDate').hasError('required')">
+                      Date is required
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+                <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 mb-2">
+                  <mat-form-field
+                    class="example-full-width mb-3"
+                    appearance="outline"
+                  >
+                    <mat-label>Doc</mat-label>
+                    <ngx-mat-file-input
+                      (change)="onFileChanged($event)"
+                      accept=".txt,.pdf,.xls,.xlsx,.doc,.docx,.ppt,.pptx"
+                    >
+                    </ngx-mat-file-input>
+                    <mat-icon matSuffix>attachment</mat-icon>
+                  </mat-form-field>
+                </div>
+                <!-- <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 mb-2">
+                  <mat-form-field class="example-full-width mb-3" appearance="outline">
+                    <mat-label>Remarks</mat-label>
+                    <input matInput formControlName="remarks">
+                  </mat-form-field>
+                </div> -->
+               
+
+              </div>
+              <div class="row">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                  <button class="btn-space" [disabled]="!StockTransferNsdForm.valid " mat-raised-button
+                    color="primary">{{btnText}}</button>
+                  <!-- <button type="button" mat-button routerLink="/basic-setup/aircraftname-list">Cancel</button> -->
+                </div>
+              </div>
+            </form>
+            <div *ngIf="isShown" class="row create-table db-tbl cls-rtn">
+              <h3 class="text-center table-title">Stock Transfer NSD List </h3>
+              <div class="container">
+                <mat-table *ngIf="isFormShown" #table [dataSource]="stockTransferNsdList" matSort class="mat-cell">
+                  <ng-container matColumnDef="ser">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header> Ser. </mat-header-cell>
+                    <mat-cell *matCellDef="let element; let i = index;"> {{ ((paging.pageIndex-1) * paging.pageSize) +
+                      i+1}} </mat-cell>
+                  </ng-container>
+
+                  <ng-container matColumnDef="departmentName">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header> Flight Line/Squadron </mat-header-cell>
+                    <mat-cell *matCellDef="let element"> {{element.departmentName}} </mat-cell>
+                  </ng-container>
+                  <ng-container matColumnDef="itemName">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header>  Item Name </mat-header-cell>
+                    <mat-cell *matCellDef="let element"> {{element.itemName}} </mat-cell>
+                  </ng-container>
+                  <ng-container matColumnDef="demandAuthority">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header>  Demand Authority </mat-header-cell>
+                    <mat-cell *matCellDef="let element"> {{element.demandAuthority}} </mat-cell>
+                  </ng-container>
+                  
+                  <ng-container matColumnDef="nsdQty">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header>NSD Qty </mat-header-cell>
+                    <mat-cell *matCellDef="let element"> {{element.nsdQty}} </mat-cell>
+                  </ng-container>
+                  <ng-container matColumnDef="transferQty">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header>Transfer Qty </mat-header-cell>
+                    <mat-cell *matCellDef="let element"> {{element.transferQty}} </mat-cell>
+                  </ng-container>
+                  <!-- <ng-container matColumnDef="availableQty">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header>Available Qty</mat-header-cell>
+                    <mat-cell *matCellDef="let element"> {{element.availableQty}} </mat-cell>
+                  </ng-container> -->
+                  <ng-container matColumnDef="stockAdjustmentDate">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header>Stock Adjustment Date </mat-header-cell>
+                    <mat-cell *matCellDef="let element"> {{element.stockAdjustmentDate | date:'dd/MMM/yyyy'}} </mat-cell>
+                  </ng-container>
+                  <ng-container matColumnDef="status">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header>Status</mat-header-cell>
+                    <mat-cell *matCellDef="let element"> 
+                      Pending
+                     </mat-cell>
+                  </ng-container>
+                  <ng-container *ngIf="isColumnHide" matColumnDef="doc">
+                    <mat-header-cell *matHeaderCellDef class="pr-0">Doc</mat-header-cell>
+                    <mat-cell *matCellDef="let row; let i=index;" class="pr-0">
+                      <div fxLayout="row" fxLayoutGap="20px">                        
+                        <a target="_blank" [href]="row.doc"> <i matTooltip="Document" class="far fa-file-pdf tbl-pdf"></i></a>
+                        
+                      </div>
+                    </mat-cell>
+                  </ng-container>
+                  <ng-container  matColumnDef="actions">
+                    <mat-header-cell *matHeaderCellDef class="pr-0 a">Actions</mat-header-cell>
+                    <mat-cell *matCellDef="let row; let i=index;" class="pr-0 a">
+                      <div fxLayout="row" fxLayoutGap="20px">
+                        <!-- <button mat-icon-button color="accent" class="btn-tbl-edit"
+                          [routerLink]="['/basic-setup/view-aircraftname',  row.equipmentNameId]">
+                          <mat-icon aria-label="Edit" class="col-white">visibility</mat-icon>
+                        </button> -->
+                        <button *ngIf="role == userRole.SuperAdmin" mat-raised-button class="custom-btn courseplan-apr"  (click)="inActiveItem(row)"  (click)="$event.stopPropagation()">{{ row.verificationCompletStatus == 0 ? 'Not Approved' : 'Approved' }}</button>|
+                        <a target="_blank" [href]="row.doc"> 
+                          <i *ngIf="row.doc != 'http://192.168.8.102:8030/Content/files/stock-transfer-nsd/'" matTooltip="Document" class="far fa-file-pdf tbl-pdf"></i>
+                        </a>
+                        |
+                        <button *ngIf="(role == userRole.admin || (role == userRole.User && row.verificationCompletStatus == 0))|| role == userRole.SuperAdmin"
+                        mat-icon-button color="accent" class="btn-tbl-edit"
+                          [routerLink]="['/spares-management/update-stocktransfernsd', row.stockTransferNsdId]">
+                          <mat-icon aria-label="Edit" class="col-white">edit</mat-icon>
+                        </button>
+                        <button *ngIf="(role == userRole.admin || (role == userRole.User && row.verificationCompletStatus == 0))|| role == userRole.SuperAdmin"
+                        mat-icon-button color="accent" class="btn-tbl-delete" (click)="$event.stopPropagation()"
+                          (click)="deleteItem(row)">
+                          <mat-icon aria-label="Delete" class="col-white">delete</mat-icon>
+                        </button>
+                        <button title="Work Completed"   class="btn-space custom" (click)="ChangeNsdTransfarStatus(row,1)"><i class="fa fa-check"></i></button> 
+                      </div>
+                    </mat-cell>
+                  </ng-container>
+
+                  <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                  <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+                </mat-table>
+
+                <mat-table *ngIf="coView" #table [dataSource]="stockTransferNsdList" matSort class="mat-cell">
+                  <ng-container matColumnDef="ser">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header> Ser. </mat-header-cell>
+                    <mat-cell *matCellDef="let element; let i = index;"> {{ ((paging.pageIndex-1) * paging.pageSize) +
+                      i+1}} </mat-cell>
+                  </ng-container>
+
+                  <ng-container matColumnDef="departmentName">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header> Flight Line/Squadron </mat-header-cell>
+                    <mat-cell *matCellDef="let element"> {{element.departmentName}} </mat-cell>
+                  </ng-container>
+                  <ng-container matColumnDef="itemName">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header>  Item Name </mat-header-cell>
+                    <mat-cell *matCellDef="let element"> {{element.itemName}} </mat-cell>
+                  </ng-container>
+                  
+                  <ng-container matColumnDef="demandAuthority">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header>  Demand Authority </mat-header-cell>
+                    <mat-cell *matCellDef="let element"> {{element.demandAuthority}} </mat-cell>
+                  </ng-container>
+                  <ng-container matColumnDef="nsdQty">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header>NSD Qty </mat-header-cell>
+                    <mat-cell *matCellDef="let element"> {{element.nsdQty}} </mat-cell>
+                  </ng-container>
+                  <ng-container matColumnDef="transferQty">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header>Transfer Qty </mat-header-cell>
+                    <mat-cell *matCellDef="let element"> {{element.transferQty}} </mat-cell>
+                  </ng-container>
+                  <!-- <ng-container matColumnDef="availableQty">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header>Available Qty</mat-header-cell>
+                    <mat-cell *matCellDef="let element"> {{element.availableQty}} </mat-cell>
+                  </ng-container> -->
+                  <ng-container matColumnDef="stockAdjustmentDate">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header>Stock Adjustment Date </mat-header-cell>
+                    <mat-cell *matCellDef="let element"> {{element.stockAdjustmentDate | date:'dd/MMM/yyyy'}} </mat-cell>
+                  </ng-container>
+                  <ng-container matColumnDef="status">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header>Status</mat-header-cell>
+                    <mat-cell *matCellDef="let element"> 
+                      Pending - 
+                      <a target="_blank" [href]="element.doc"> 
+                        <i matTooltip="Document" class="far fa-file-pdf tbl-pdf"></i>
+                      </a>
+                     </mat-cell>
+                  </ng-container>
+                  <ng-container *ngIf="isColumnHide" matColumnDef="doc">
+                    <mat-header-cell *matHeaderCellDef class="pr-0">Doc</mat-header-cell>
+                    <mat-cell *matCellDef="let row; let i=index;" class="pr-0">
+                      <div fxLayout="row" fxLayoutGap="20px">
+                        <!-- <button mat-icon-button color="accent" class="btn-tbl-edit"
+                          [routerLink]="['/basic-setup/view-aircraftname',  row.equipmentNameId]">
+                          <mat-icon aria-label="Edit" class="col-white">visibility</mat-icon>
+                        </button> -->
+                        <!-- |
+                        <button mat-icon-button color="accent" class="btn-tbl-edit"
+                          [routerLink]="['/spares-management/update-stocktransfernsd', row.stockTransferNsdId]">
+                          <mat-icon aria-label="Edit" class="col-white">edit</mat-icon>
+                        </button>
+                        <button mat-icon-button color="accent" class="btn-tbl-delete" (click)="$event.stopPropagation()"
+                          (click)="deleteItem(row)">
+                          <mat-icon aria-label="Delete" class="col-white">delete</mat-icon>
+                        </button>
+                        <button title="Work Completed"   class="btn-space custom" (click)="ChangeNsdTransfarStatus(row,1)"><i class="fa fa-check"></i></button>  -->
+                      </div>
+                    </mat-cell>
+                  </ng-container>
+
+                  <mat-header-row *matHeaderRowDef="displayedColumnsForCo"></mat-header-row>
+                  <mat-row *matRowDef="let row; columns: displayedColumnsForCo;"></mat-row>
+                </mat-table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

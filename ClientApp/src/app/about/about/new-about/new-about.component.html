@@ -1,0 +1,116 @@
+<section class="content">
+  <div class="container-fluid">
+    <!-- <div class="block-header">
+      <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+          <ul class="breadcrumb breadcrumb-style ">
+            <li class="breadcrumb-item">
+              <h4 class="page-title">{{pageTitle}}</h4>
+            </li>
+            <li class="breadcrumb-item bcrumb-1">
+              <a routerLink="/admin/dashboard/main"><i class="fas fa-home"></i></a>
+            </li>
+            <li class="breadcrumb-item bcrumb-2">
+              <a href="#" onClick="return false;">About</a>
+            </li>
+            <li class="breadcrumb-item active">{{destination}}</li>
+          </ul>
+        </div>
+      </div>
+    </div> -->
+    <div class="row clearfix">
+      <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+        <div class="card">
+          <div class="body">
+            <form *ngIf="isCoHide" class="m-4" [formGroup]="DegitalArchieveForm" (ngSubmit)="onSubmit()">
+              <div class="row">
+                <div class="row about">
+                  <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2 about">
+                    <div class="row left-row">
+                      <div class="col-xl-1 col-lg-1 col-md-1 col-sm-12 mb-2-hed">
+                      </div>
+                      <div class="col-xl-10 col-lg-10 col-md-10 col-sm-12 mb-2-hed">
+                        <h2 class="align-center">INTEGRATED SPARES AND MAINTENANCE MANAGEMENT SOFTWARE  <br>  NAVAL AVIATION</h2>
+                      </div>
+                      <div class="col-xl-1 col-lg-1 col-md-1 col-sm-12 mb-2-hed">
+                      </div>
+                      <div class="col-xl-1 col-lg-1 col-md-1 col-sm-12 mb-2-hed">
+                      </div>
+                      <div class="col-xl-10 col-lg-10 col-md-10 col-sm-12 mb-2-hed">
+                        <h2 class="align-center">DEVELOPED & FURNISHED BY:</h2>
+                      </div>
+                      <div class="col-xl-1 col-lg-1 col-md-1 col-sm-12 mb-2-hed">
+                      </div>
+                         
+                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-2-infinity">
+                          <div class="row left-row-infin">
+                            <h3 class="align-center" style="color:blue; background-color: antiquewhite; border-radius: 10px;padding-top: 15px; height: 70px;"> <b>INFINITY TECHNOLOGY INTERNATIONAL LTD.</b> <br><span style="font-size: 12px;">Address: 7th floor, Samsuddin Mansion, House: 41 Road: 52, Dhaka 1212</span></h3>
+                            <p class="align-center" style="font-size: 18px; font-family: Arial, Helvetica, sans-serif; line-height:20px; text-align: justify;">1. Md. Aminul Islam <span style="font-size: 12px;">  (Project Manager) </span><br><span style="font-size: 12px;"> Phone:01714783332 </span><br>
+                              2. Paritosh Sarker <span style="font-size: 12px;">  (Senior Business Analyst)</span><br><span style="font-size: 12px;"> Phone:01687130086</span><br>
+                              3. Md. Musaddiqur Rahman<span style="font-size: 12px;"> (Software Engineer)</span> <br><span style="font-size: 12px;"> Phone:01954947465</span><br>
+                              4. Subrato Ghosh <span style="font-size: 12px;">  (Software Engineer)</span><br><span style="font-size: 12px;"> Phone:01706681577</span><br>
+                              5. Al Mamun <span style="font-size: 12px;">  (Software Engineer) Phone:01925222534</span>
+                            </p>
+                            
+                          </div>
+                        </div>
+                        <!-- <div class="col-xl-2 col-lg-2 col-md-2 col-sm-12 mb-2-hed">
+                        </div> -->
+                        <div  class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-2-infinity">
+                          <div class="row left-row-infin">
+                            <h2 class="align-center navy" style="color:blue; background-color: antiquewhite; border-radius: 10px;padding-top: 15px; height: 60px;">BANGLADESH NAVY</h2>
+                            <p class="align-center" style="font-size: 18px; font-family: Arial, Helvetica, sans-serif; line-height:25px; text-align: justify;">1. Capt M Iqbal, (L), BSP, psc, BN (P/N0: 1154) <br>
+                              2. Cdr M Zahidul Islam, (L), psc, BN (P/N0: 1430) <br> 3. Lt Cdr M Arifuzzaman, (L), BN (P/N0: 2283) <br>
+                              4. Lt Cdr Ariful Islam, (L), BN (P/N0: 2320) <br> 5. Lt Cdr Abdur Rahim, (L), BN (P/N0: 2393) <br> 
+                              6. Lt Cdr Farzana Nasir, (L), BN (P/N0: 2436) <br> 7. M Muhayminur Rahman, LEN (O.No: 20080088) <br> 
+                              8. M Jakir Parvez, LEN (O.No: 20090582) 
+                            </p>
+                           
+                          </div>
+                        </div>
+                    </div>
+                  </div>
+                  <!-- <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-2">
+                    <div class="row left-row">
+                     
+                      <h3>Samsuddin Mansion 41 Gulshan North, Road No-53, 
+                        7th Floor Commercial Area, Gulshan-2, Dhaka-1212</h3>
+                     
+                      
+                    </div>
+                  </div> -->
+                  <!-- <div  class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-2 sft-entry">
+                    <div class="row">
+                      <h3 class="align-center" style="color:blue;">Honerable Naval Aviation Officer's</h3>
+                      <h3 class="align-center">Capt M Iqbal, (L), BSP, psc, BN</h3>
+                      <h3 class="align-center">Cdr M Zahidul Islam, (L), psc, BN</h3>
+                      <h3 class="align-center">Lt Cdr M Arifuzzaman, (L), BN</h3>
+                      <h3 class="align-center">Lt Cdr Ariful Islam, (L), BN</h3>
+                      <h3 class="align-center">Lt Cdr Farzana, (L), BN</h3>
+                      <h3 class="align-center">M Muhayminul Rahman, LEN</h3>
+                      <h3 class="align-center">M Jakir Parvez, LEN</h3>
+                    </div>
+                  </div> -->
+                </div>
+              </div>
+              <!-- <div class="row">
+
+
+                <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 mb-2">
+                  <mat-form-field class="example-full-width mb-3" appearance="outline">
+                    <mat-label>Remarks</mat-label>
+                    <textarea matInput formControlName="remarks"></textarea>
+                  </mat-form-field>
+                </div>
+               
+
+              </div> -->
+             
+            </form>
+           
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

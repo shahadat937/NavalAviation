@@ -1,0 +1,123 @@
+<section class="content">
+    <div class="container-fluid">
+      <div class="block-header">
+        <div class="row">
+          <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+            <ul class="breadcrumb breadcrumb-style ">
+              <li class="breadcrumb-item">
+                <h4 class="page-title">{{pageTitle}}</h4>
+              </li>
+              <li class="breadcrumb-item bcrumb-1">
+                <a routerLink="/admin/dashboard/main"><i class="fas fa-home"></i></a>
+              </li>
+              <li class="breadcrumb-item bcrumb-2">
+                <a href="#" onClick="return false;">MEA Squadron State</a>
+              </li>
+              <li class="breadcrumb-item active">{{destination}}</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="row clearfix">
+        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+          <div class="card">
+            <div class="body">
+              <form class="m-4" [formGroup]="MeaSquadronStateForm" (ngSubmit)="onSubmit()">
+                <div class="row">
+                  <div *ngIf="role == userRole.SuperAdmin" class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width mb-3" appearance="outline">
+                        <mat-label>Flight Line/Squadron </mat-label>                        
+                        <mat-select formControlName="departmentNameId" required>
+                            <mat-option *ngFor="let dropdown of selectedDepartmentNames" [value]="dropdown.value">
+                                {{dropdown.text}} 
+                              </mat-option>                          
+                        </mat-select>
+                        <mat-error *ngIf="MeaSquadronStateForm.get('departmentNameId').hasError('required')">
+                          Flight Line/Squadron  is Required!
+                        </mat-error>
+                    </mat-form-field>
+                  </div>
+                  <div *ngIf="role == userRole.SuperAdmin" class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-2">
+                  </div>
+                  <!-- <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width mb-3" appearance="outline">
+                      <mat-label>Ser No</mat-label>
+                      <input matInput formControlName="serNo" required>
+                      <mat-error *ngIf="MeaSquadronStateForm.get('serNo').hasError('required')">
+                        Ser No is required
+                      </mat-error>
+                    </mat-form-field>
+                  </div>
+                  <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-2">
+                  </div> -->
+                  <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width mb-3" appearance="outline">
+                      <mat-label>Work Order Received</mat-label>
+                      <input matInput formControlName="workOrderReceived" required>
+                      <mat-error *ngIf="MeaSquadronStateForm.get('workOrderReceived').hasError('required')">
+                        Work Order Received is required
+                      </mat-error>
+                    </mat-form-field>
+                  </div>
+                  <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-2">
+                  </div>
+                  <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width mb-3" appearance="outline">
+                      <mat-label>Work Order Date</mat-label>
+                      <input matInput [matDatepicker]="frompicker" formControlName="workOrderDate">
+                      <mat-datepicker-toggle matSuffix [for]="frompicker"></mat-datepicker-toggle>
+                      <mat-datepicker #frompicker></mat-datepicker>
+                    </mat-form-field>
+                  </div>
+                  <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-2">
+                  </div>
+                  <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width mb-3" appearance="outline">
+                      <mat-label>Workshop Name</mat-label>
+                      <input matInput formControlName="workshopName" required>
+                      <mat-error *ngIf="MeaSquadronStateForm.get('workshopName').hasError('required')">
+                        Workshop Name is required
+                      </mat-error>
+                    </mat-form-field>
+                  </div>
+                  <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-2">
+                  </div>
+                  <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width mb-3" appearance="outline">
+                        <mat-label>Present State </mat-label>                        
+                        <mat-select formControlName="presentStateId" required>
+                            <mat-option *ngFor="let dropdown of selectedPresentStates" [value]="dropdown.value">
+                                {{dropdown.text}} 
+                              </mat-option>                          
+                        </mat-select>
+                        <mat-error *ngIf="MeaSquadronStateForm.get('presentStateId').hasError('required')">
+                          Present State is Required!
+                        </mat-error>
+                    </mat-form-field>
+                  </div>
+                  <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-2">
+                  </div>
+                  <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width mb-3" appearance="outline">
+                      <mat-label>Remarks</mat-label>
+                      <textarea matInput formControlName="remarks" ></textarea>
+                    </mat-form-field>
+                  </div>
+                  
+
+                </div>
+                <div class="row">
+                  <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                    <button class="btn-space" [disabled]="!MeaSquadronStateForm.valid " mat-raised-button
+                      color="primary">{{btnText}}</button>
+                    <button type="button" mat-button routerLink="/maintenence-planning/measquadronstate-list">Cancel</button>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  

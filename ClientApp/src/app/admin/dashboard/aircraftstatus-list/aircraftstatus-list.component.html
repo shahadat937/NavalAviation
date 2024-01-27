@@ -1,0 +1,164 @@
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<script src='https://kit.fontawesome.com/a076d05399.js' crossorigin='anonymous'></script>
+<section class="content">
+  <div class="container-fluid">
+    <div class="block-header">
+      <!-- <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+          <ul class="breadcrumb breadcrumb-style ">
+            <li class="breadcrumb-item">
+              <h4 class="page-title">Aircraft Under Maintenance</h4>
+            </li>
+            <li class="breadcrumb-item bcrumb-1">
+              <a routerLink="/admin/dashboard/main"><i class="fas fa-home"></i></a>
+            </li>
+            <li class="breadcrumb-item bcrumb-2">
+              <a href="#" onClick="return false;">Aircraft Under Maintenance</a>
+            </li>
+            <li class="breadcrumb-item active">All</li>
+          </ul>
+        </div>
+      </div> -->
+    </div>
+     <!-- dashboard component -->
+ <app-dashboard></app-dashboard>
+    <div class="row">
+      <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+        <div class="card undermaintenence">
+          <div class="body">
+            <div class="row">
+              <div class="col-lg-10 col-md-10 col-sm-10 col-xs-10-as">
+                <h3 class="page-title aircraft-undermaintenence">Aircraft Status</h3>
+              </div>
+              <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2-as">
+                <button class="back" [routerLink]="['/admin/dashboard/main']" mat-raised-button> <mat-icon>keyboard_backspace</mat-icon> Back</button>
+              </div>
+            </div>
+            <div class="row">
+              <form  [formGroup]="AircraftStatusForm" (ngSubmit)="onSubmit()">
+                <div class="row">
+                  <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3 aircraftCount aircraftstatus">
+                    Aircraft Total : {{this.totalAircraftCount}}
+                    </div>
+                    <!-- <div  class="col-lg-2 col-md-2 col-sm-2 col-xs-2 aircraftCount">
+                      Total  : {{this.totalCount}}
+                      </div> -->
+                      <div  class="col-lg-2 col-md-2 col-sm-2 col-xs-2 aircraftCount aircraftstatus">
+                        Serviceable  : {{this.operationalcount}}
+                        </div>
+                        <div  class="col-lg-3 col-md-3 col-sm-3 col-xs-3 aircraftCount aircraftstatus">
+                          Under Maint  : {{this.underMaincount}}
+                          </div>
+                 
+                  
+  
+                  <div class="col-xl-2 col-lg-2 col-md-2 col-sm-12 mb-2 f-l">
+                    <mat-form-field class="example-full-width mb-3" appearance="outline">
+                      <mat-label> Date</mat-label>
+                      <input matInput [matDatepicker]="frompicker" formControlName="plannedDate">
+                      <mat-datepicker-toggle matSuffix [for]="frompicker"></mat-datepicker-toggle>
+                      <mat-datepicker #frompicker></mat-datepicker>
+                    </mat-form-field>
+                  </div>
+                  
+                  <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1 aircraftCount aircraftstatus btn">
+                    <button class="btn-space" [disabled]="!AircraftStatusForm.valid " mat-raised-button
+                      color="success">{{btnText}}</button>
+                      
+                  </div>
+                  <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1 aircraftCount aircraftstatus btn">
+                    <button class="btn-space"  mat-raised-button color="primary" (click)="printSingle()"> 
+                      <mat-icon class="col-white">print</mat-icon>
+                    </button>
+                  </div>
+                
+                </div>
+  
+                
+              </form>
+            </div>
+          
+            <div class="row">
+              <div class="container">
+                <!-- <div class="row">
+                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4 aircraftCount">
+                  Aircraft Total : {{this.totalAircraftCount}}
+                  </div>
+                  <div  class="col-lg-4 col-md-4 col-sm-4 col-xs-5 aircraftCount">
+                  Under Maint  : {{this.CountAricraftUnderMaintenance}}
+                  </div>
+                  <div class="col-xl-2 col-lg-2 col-md-2 col-sm-12 mb-2"></div>
+                  <div class="col-xl-2 col-lg-2 col-md-2 col-sm-12 mb-2 print-m">
+                    <button class="btn-space"  mat-raised-button color="primary" (click)="printSingle()"> Print
+                      <mat-icon class="col-white">print</mat-icon>
+                    </button>
+                  </div>
+              </div> -->
+              
+                <div class="row">
+                  <div id="print-routine"> 
+                    <table class="table table-striped tblbg">
+                      <thead *ngIf="isShown" class="bg">
+                        <tr>
+                          <!-- <th class="thbg"><h5>{{this.departmentNameValue}}</h5></th> -->
+                          <th class="thbg"><h5>Total : {{this.totalCount}}</h5></th>
+                          <th class="thbg" colspan="2"><h5>Serviceable : {{this.operationalCount}}</h5></th>
+                          <th class="thbg" colspan="2"><h5>Under Maint : {{this.underMainCount}}</h5></th>
+                        </tr>
+                      </thead>
+                      <thead>
+                        <tr>
+                          <th class="thbm"><h5>Aircraft Name</h5></th>
+                          <th class="thbm"><h5>Status</h5></th>
+                          <th class="thbm"><h5>Excep Release</h5></th>
+                          <th class="thbm"><h5>Upcoming Maint</h5></th>
+                          <th class="thbm"><h5>Planned Date</h5></th>
+                          <th class="thbm"><h5>Required Days/Hrs</h5></th>
+                          <th class="thbm"><h5>Remarks</h5></th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <ng-container *ngFor="let data of aircraftStatusList;let i= index;">
+                         
+                          
+                          <tr >
+                            <td>
+                              {{data.acName}}
+                            </td>
+                            <td>
+                              {{data.status}}
+                            </td>
+                            <td>
+                              {{data.excepRelease}}
+                            </td>
+                            <td >
+                              {{data.upcomingMaint}}
+                            </td>
+                            <td >
+                              {{data.plannedDate | date:'dd/MMM/yyyy'}}
+                            </td>
+                            <td >
+                              {{data.requiredDays}}
+                            </td>
+                            <td >
+                              {{data.remarks}}
+                            </td>
+                            
+                          </tr>
+                        </ng-container>
+                        
+                      </tbody>
+                    </table>
+                  </div>
+                  
+                </div>
+             
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>

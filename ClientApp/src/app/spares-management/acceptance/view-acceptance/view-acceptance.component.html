@@ -1,0 +1,120 @@
+<section class="content">
+  <div class="container-fluid">
+    <div class="block-header">
+      <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+          <ul class="breadcrumb breadcrumb-style ">
+            <li class="breadcrumb-item">
+            </li>
+            <li class="breadcrumb-item bcrumb-1">
+              <a routerLink="/admin/dashboard/main"><i class="fas fa-home"></i></a>
+            </li>
+            <li class="breadcrumb-item bcrumb-2">
+              <a href="#" onClick="return false;">Acceptance Details</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="row clearfix">
+      <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+        <div class="card">
+          <div class="body">
+
+            <div class="responsive_table">
+              <div class="materialTableHeader">
+                <div class="row"> 
+                  <div class="col-8">
+                    <ul class="header-buttons-left ml-0">
+                      <li class="dropdown">
+                        <h4>Acceptance Details</h4>
+                      </li>
+                    </ul> 
+                  </div>
+                  <div class="col-4">
+                    <ul class="header-buttons">
+                      <li>
+                        <div class="icon-button-demo">
+                          <button class="btn-space"  mat-raised-button
+                          color="warn" [routerLink]="['/spares-management/add-acceptance']"> 
+                          <mat-icon class="col-white">keyboard_backspace</mat-icon> Back
+                          </button>
+                          <button class="btn-space"  mat-raised-button
+                          [routerLink]="['/spares-management/update-acceptance',this.acceptanceId]"> Update
+                            <mat-icon class="col-white">Update</mat-icon>
+                          </button>
+                        </div>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+              <table class="table table-bordered">
+                <thead>
+                  
+                </thead>
+                <tbody>
+                  <tr>
+                    <th scope="row">Flight Line/Squadron </th>
+                    <td>{{departmentName}}</td>
+                    <th scope="row">Patt No</th>
+                    <td>{{itemDetail}}</td>
+                  </tr>
+                  <tr>
+                    <th scope="row">Name of Item</th>
+                    <td>{{itemName}}</td>
+                    <th scope="row">Type of Demand</th>
+                    <td>{{demandType}}</td>
+                  </tr>
+                  <tr>
+                    <th scope="row">Ser No</th>
+                    <td>{{itemSerNo}}</td>
+                    <th scope="row">Model</th>
+                    <td>{{model}}</td>
+                  </tr>
+                  <tr>
+                    <th scope="row"> Brand</th>
+                    <td>{{brand}}</td>
+                    <th scope="row">work Order/Po No</th>
+                    <td>{{workOrderNo}}</td>
+                  </tr>
+                  <tr>
+                    <th scope="row">SFT Due Date</th>
+                    <td>{{deliveryDate | date:'dd/MMM/yyyy'}}</td>
+                    <th scope="row">Accepted Qty</th>
+                    <td>{{sftQty}}</td>
+                  </tr>
+                  <tr>
+                    <th scope="row">Warranty From</th>
+                    <td>{{warrantyFrom | date:'dd/MMM/yyyy'}}</td>
+                    <th scope="row">Date of Accepance</th>
+                    <td>{{sftDate | date:'dd/MMM/yyyy'}}</td>
+                  </tr>
+                  <tr>
+                    <th scope="row">Warranty To</th>
+                    <td>{{warrantyTo | date:'dd/MMM/yyyy'}}</td>
+                    <th scope="row">Condition</th>
+                    <td>{{condition}}</td>
+                  </tr>
+                  <tr>
+                    <th scope="row">Price </th>
+                    <td>{{purchasePrice}}</td>
+                    <th scope="row">Qty</th>
+                    <td>{{qty}}</td>
+                    
+                  </tr>
+                  <tr>
+                    <th scope="row">Remarks</th>
+                    <td>{{remarks}}</td>
+                    <th scope="row">Doc</th>
+                    <td class="acceptanceDocument" > <img src={{acceptanceDocument}} /></td>
+                  </tr>
+                </tbody>
+              </table>          
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

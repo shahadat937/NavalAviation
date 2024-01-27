@@ -1,0 +1,46 @@
+﻿using SchoolManagement.Application.Features.MaintenanceCategories.Requests.Queries;
+using SchoolManagement.Application.Contracts.Persistence;
+using SchoolManagement.Application.DTOs.MaintenanceCategory;
+using SchoolManagement.Application.Models;
+using MediatR;
+using AutoMapper;
+using SchoolManagement.Application.DTOs.Common.Validators;
+using SchoolManagement.Application.Exceptions;
+using SchoolManagement.Domain;
+
+namespace SchoolManagement.Application.Features.MaintenanceCategories.Handlers.Queries
+{
+    public class GetMaintenanceCategoryListRequestHandler : IRequestHandler<GetMaintenanceCategoryListRequest, PagedResult<MaintenanceCategoryDto>>
+    {
+
+        private readonly ISchoolManagementRepository<MaintenanceCategory> _MaintenanceCategoryRepository;
+
+        private readonly IMapper _mapper;
+
+        public GetMaintenanceCategoryListRequestHandler(ISchoolManagementRepository<MaintenanceCategory> MaintenanceCategoryRepository, IMapper mapper)
+        {
+            _MaintenanceCategoryRepository = MaintenanceCategoryRepository;
+            _mapper = mapper;
+        }
+
+        public async Task<PagedResult<MaintenanceCategoryDto>> Handle(GetMaintenanceCategoryListRequest request, CancellationToken cancellationToken)
+        {
+            var validator = new QueryParamsValidator();
+            var validationResult = await validator.ValidateAsync(request.QueryParams);
+
+            if (validationResult.IsValid == false)
+                throw new ValidationException(validationResult);
+
+            IQueryable<MaintenanceCategory> MaintenanceCategories = _MaintenanceCategoryRepository.FilterWithInclude(x => (x.CategoryName.Contains(request.QueryParams.SearchText) || String.IsNullOrEmpty(request.QueryParams.SearchText)), "DepartmentName", "MaintenanceType");
+            var totalCount = MaintenanceCategories.Count();
+            MaintenanceCategories = MaintenanceCategories.OrderByDescending(x => x.MaintenanceCategoryId).Skip((request.QueryParams.PageNumber - 1) * request.QueryParams.PageSize).Take(request.QueryParams.PageSize);
+
+            var MaintenanceCategoryDtos = _mapper.Map<List<MaintenanceCategoryDto>>(MaintenanceCategories);
+            var result = new PagedResult<MaintenanceCategoryDto>(MaintenanceCategoryDtos, totalCount, request.QueryParams.PageNumber, request.QueryParams.PageSize);
+
+            return result;
+
+
+        }
+    }
+}

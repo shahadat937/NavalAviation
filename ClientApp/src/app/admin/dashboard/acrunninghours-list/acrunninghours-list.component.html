@@ -1,0 +1,88 @@
+<section class="content">
+  <div class="container-fluid">
+    <div class="block-header">
+      <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+          <ul class="breadcrumb breadcrumb-style ">
+            <li class="breadcrumb-item">
+              <h4 class="page-title">AC Running Hours</h4>
+            </li>
+            <li class="breadcrumb-item bcrumb-1">
+              <a routerLink="/admin/dashboard/main"><i class="fas fa-home"></i></a>
+            </li>
+            <li class="breadcrumb-item bcrumb-2">
+              <a href="#" onClick="return false;">AC Running Hours</a>
+            </li>
+            <li class="breadcrumb-item active">All</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+        <div class="card">
+          <div class="body">
+            <div class="responsive_table">
+              <div class="row dash-cd-m-0 dash-half-row">
+                <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 div-class div-left">
+
+                  <h4>AC Running Hours - <span class="count-color"> {{FlyingTimeByDeptName}} (
+                      {{CountFlyingTimeByAricraft}} ) </span></h4>
+                </div>
+                <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 div-class div-right">
+                  <div class="dialog m-b-10">
+                    <button class="back" [routerLink]="['/admin/dashboard/main']" mat-raised-button> <mat-icon>keyboard_backspace</mat-icon> Back</button> |
+                    <button class="all" (click)="FlyingTimeByDept(masterData.department.all, 'All')"
+                      mat-raised-button>All</button> |
+                    <button color="accent" (click)="FlyingTimeByDept(masterData.department.mpa, 'MPA')"
+                      mat-raised-button>MPA</button> |
+                    <button color="primary" (click)="FlyingTimeByDept(masterData.department.hel, 'HEL')"
+                      mat-raised-button>HEL</button> |
+                    <button color="warn" (click)="FlyingTimeByDept(masterData.department.uav, 'UAV')"
+                      mat-raised-button>UAV</button>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <mat-table #table [dataSource]="FlyingTimeByAricraftList" matSort
+                  class="mat-cell  db-tbl db-avl-qty-tbl content-center-align">
+                  <ng-container matColumnDef="ser">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header> Ser. </mat-header-cell>
+                    <mat-cell *matCellDef="let element; let i = index;"> {{ ((paging.pageIndex-1) * paging.pageSize) +
+                      i+1}} </mat-cell>
+                  </ng-container>
+                  <ng-container matColumnDef="deptName">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header> Dept Name </mat-header-cell>
+                    <mat-cell *matCellDef="let element"> {{element.deptName}} </mat-cell>
+                  </ng-container>
+                  <ng-container matColumnDef="airCraftName">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header> Aircraft Name </mat-header-cell>
+                    <mat-cell *matCellDef="let element"> {{element.airCraftName}} </mat-cell>
+                  </ng-container>
+                  <ng-container matColumnDef="overallLength">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header> Length</mat-header-cell>
+                    <mat-cell *matCellDef="let element"> {{element.overallLength}} </mat-cell>
+                  </ng-container>
+                  <ng-container matColumnDef="flyTime">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header> Running Hour</mat-header-cell>
+                    <mat-cell *matCellDef="let element"> <span
+                        *ngIf="element.flyingHr != Null || element.flyingMin != Null"> <a
+                          [routerLink]="['/admin/dashboard/flyingDetails-list', element.departmentNameId, element.airCraftNameId]">
+                          {{element.flyingHr}} : {{element.flyingMin}}</a> </span></mat-cell>
+                  </ng-container>
+                  <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                  <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+                </mat-table>
+              </div>
+            </div>
+
+            <!-- <mat-paginator [length]="paging.length" [showFirstLastButtons]="masterData.paging.showFirstLastButtons"
+              [pageSize]="paging.pageSize" [pageSizeOptions]="masterData.paging.pageSizeOptions"
+              (page)="pageChanged($event)">
+            </mat-paginator> -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

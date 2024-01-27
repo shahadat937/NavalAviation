@@ -1,0 +1,165 @@
+<section class="content">
+  <div class="container-fluid">
+    <div class="block-header">
+      <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+          <ul class="breadcrumb breadcrumb-style ">
+            <li class="breadcrumb-item">
+              <h4 class="page-title">{{pageTitle}}</h4>
+            </li>
+            <li class="breadcrumb-item bcrumb-1">
+              <a routerLink="/admin/dashboard/main"><i class="fas fa-home"></i></a>
+            </li>
+            <li class="breadcrumb-item bcrumb-2">
+              <a href="#" onClick="return false;">Attendance List</a>
+            </li>
+            <li class="breadcrumb-item active">{{destination}}</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="row clearfix">
+      <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+        <div class="card">
+          <div class="header">
+          </div>
+          <div class="body" >
+            <form  class="m-4" [formGroup]="AttendanceForm" (ngSubmit)="onSubmit()">
+              <div class="row">
+                <div   *ngIf="role == userRole.SuperAdmin || role == userRole.CO || role == userRole.HR" class="col-xl-2 col-lg-2 col-md-3 col-sm-12 mb-2">
+                  <mat-form-field class="example-full-width mb-3" appearance="outline">
+                    <mat-label>Flight Line/Squadron </mat-label>
+                    <mat-select formControlName="departmentNameId" required >
+                      <mat-option value="0">All</mat-option>
+                      <mat-option  *ngFor="let dropdown of selectedDepartmentName" [value]="dropdown.value">
+                        {{dropdown.text}}
+                      </mat-option>
+                    </mat-select>
+                    <mat-error *ngIf="AttendanceForm.get('departmentNameId').hasError('required')">
+                      Flight Line/Squadron is Required!
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+                <div class="col-xl-2 col-lg-2 col-md-3 col-sm-12 mb-2">
+                  <mat-form-field class="example-full-width mb-3" appearance="outline">
+                    <mat-label>Attendance Date</mat-label>
+                      <input matInput [matDatepicker]="atpicker" formControlName="attendanceDate">
+                      <mat-datepicker-toggle matSuffix [for]="atpicker"></mat-datepicker-toggle>
+                    <mat-datepicker #atpicker></mat-datepicker>
+                  </mat-form-field>
+                </div>
+                <div class="col-xl-2 col-lg-2 col-md-3 col-sm-12 mb-2">
+                  <mat-form-field class="example-full-width mb-3" appearance="outline">
+                    <mat-label>Breakdown States </mat-label>
+                    <mat-select formControlName="officerStatusId" >
+                      <mat-option value="0">All</mat-option>
+                      <mat-option  *ngFor="let dropdown of selectOfficersStatuses" [value]="dropdown.value">
+                        {{dropdown.text}}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+                <div  class="col-xl-3 col-lg-3 col-md-3 col-sm-12 mb-2">
+                  <mat-form-field class="example-full-width mb-3" appearance="outline">
+                    <mat-label>Search</mat-label>
+                    <input matInput formControlName="searchtext">
+                    <!-- <mat-error *ngIf="TrainingCrewForm.get('mobile').hasError('required')">
+                      mobile is required
+                    </mat-error> -->
+                  </mat-form-field>
+                </div>
+
+                <div class="col-xl-1 col-lg-1 col-md-1 col-sm-3 m-t-5-f">
+                  <button class="btn-space"  mat-raised-button color="primary">Find</button>
+                </div>
+                
+                <!-- <div class="col-xl-2 col-lg-2 col-md-2 col-sm-3 m-t-5">
+                  <input placeholder="Search" type="text" [(ngModel)]="searchText" #filter
+                        class="browser-default search-field custom-search"
+                        aria-label="Search box"/>
+                </div>
+                <div class="col-x2-1 col-lg-2 col-md-12 col-sm-12 mb-2-ap">
+                  <button mat-mini-fab (click)="applyFilter(searchText)" color="primary" >Go </button>
+                </div> -->
+                <div class="col-xl-1 col-lg-1 col-md-12 col-sm-12 mb-2-ap">
+                  <button class="btn-space" mat-raised-button color="accent" (click)="printSingle()">
+                    <mat-icon class="col-white">print</mat-icon>
+                  </button>
+                </div>
+             </div>
+              <div class="row">
+                <div class="col-xl-10 col-lg-10 col-md-10 col-sm-12 mb-2-r-attendance">
+                  
+                  <!-- <div class="row">
+              
+
+                    <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 count-value">
+                      
+                      <h3 *ngIf="this.role != this.userRole.CO && this.role != this.userRole.SuperAdmin">{{this.departmentName}} Flt Line</h3>
+                      <h3 *ngIf="this.role == this.userRole.CO || this.role == this.userRole.SuperAdmin" >Naval Aviation</h3>
+                    </div>
+                    <div class="col-xl-2 col-lg-2 col-md-3 col-sm-12 count-value">
+                      <h3>Total: {{totalCount}} </h3>
+                    </div>
+                    <div class="col-xl-2 col-lg-2 col-md-3 col-sm-12 count-value">
+                      <h3>Present: {{presentCount}}</h3>
+                    </div>
+                    <div class="col-xl-2 col-lg-2 col-md-3 col-sm-12 count-value">
+                      <h3>Away: {{awayCount}}</h3>
+                    </div>
+                    <div class="col-xl-2 col-lg-2 col-md-3 col-sm-12 count-value">
+                      <h3>Leave: {{leaveCount}}</h3>
+                    </div>
+                  </div> -->
+                  
+                </div>
+          <!-- #END# Basic Table -->
+              </div>
+              <div class="responsive_table">
+                <div class="container no-padding">
+                  <div id="print-routine">
+                    <table class="table tbl-by-group db-li-s-in">
+                      <thead>
+                        <tr>
+                          <th class="cl-mrk"><h5>Ser</h5></th>
+                          <th class="cl-mrk"><h5>Name</h5></th>
+                          <th class="cl-mrk"><h5>Rank</h5></th>
+                          <th class="cl-mrk"><h5>Status</h5></th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                          <tr *ngFor="let number of attendanceList; let i= index;">
+                            <td class="cl-mrk">{{i+1}} </td>
+                            <td class="cl-mrk left-align">{{number.name}} ({{number.pno}})</td>
+                            <td class="cl-mrk">{{number.rank}}{{number.sailorrank}} </td>
+                            <td class="cl-mrk"> 
+                              <span *ngIf="number.name1 == 'Present'" style="color:green;background-color: transparent;">{{number.name1}}</span>
+                              <span *ngIf="number.name1 != 'Present'" style="color:red;background-color: transparent;">{{number.name1}}</span>
+                            </td>
+                          </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>    
+              
+              <div class="overlay" *ngIf="popup">
+                <div class="popup">
+                  <div class="warning">Warning!</div>
+                  <a class="close" (click)="popup = false">&times;</a>
+                  <div class="content">
+                    <div id="print-barcode">
+                      <span class="remarkmessage">Remarks must add for absent</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+

@@ -1,0 +1,304 @@
+<section class="content">
+  <div class="container-fluid">
+    <div class="block-header">
+      <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+          <ul class="breadcrumb breadcrumb-style ">
+            <li class="breadcrumb-item">
+              <h4 class="page-title">{{pageTitle}}</h4>
+            </li>
+            <li class="breadcrumb-item bcrumb-1">
+              <a routerLink="/admin/dashboard/main"><i class="fas fa-home"></i></a>
+            </li>
+            <li class="breadcrumb-item bcrumb-2">
+              <a href="#" onClick="return false;">Required Spares For Maintenance</a>
+            </li>
+            <li class="breadcrumb-item active">{{destination}}</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div  class="row clearfix">
+      <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+        <div class="card">
+          <div class="body">
+            <form *ngIf="showView" class="m-4" [formGroup]="RequiredSparesForMaintenanceForm" (ngSubmit)="onSubmit()">
+              <div class="row">
+                <div *ngIf="role == userRole.SuperAdmin || role == userRole.CO" class="col-xl-4 col-lg-4 col-md-4 col-sm-12 mb-2">
+                  <mat-form-field class="example-full-width mb-3" appearance="outline">
+                    <mat-label>Flight Line/Squadron </mat-label>
+                    <mat-select formControlName="departmentNameId" required  (selectionChange)="getselectedMaintenanceTypes()">
+                      <mat-option  *ngFor="let dropdown of departmentName" [value]="dropdown.value">
+                        {{dropdown.text}}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+                <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 mb-2">
+                  <mat-form-field class="example-full-width mb-3" appearance="outline">
+                    <mat-label>Type of Item </mat-label>
+                    <mat-select formControlName="sparesCategoryId" required (selectionChange)="onselecteditemNameandPattNo()">
+                      <mat-option (onSelectionChange)="onStatus($event)" *ngFor="let dropdown of sparesCategoryValue" [value]="dropdown.value">
+                        {{dropdown.text}}
+                      </mat-option>
+                    </mat-select>
+                    <mat-error *ngIf="RequiredSparesForMaintenanceForm.get('sparesCategoryId').hasError('required')">
+                      Type of Item is required
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+                <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 mb-2">
+                  <mat-form-field class="example-full-width mb-3" appearance="outline">
+                    <mat-label>Maintenance Type </mat-label>
+                    <mat-select formControlName="maintenanceTypeId" required (selectionChange)="onGetMaintenanceTypeSelection()">
+                      <mat-option  *ngFor="let dropdown of maintenanceTypeValue" [value]="dropdown.value">
+                        {{dropdown.text}}
+                      </mat-option>
+                    </mat-select>
+                    <mat-error *ngIf="RequiredSparesForMaintenanceForm.get('maintenanceTypeId').hasError('required')">
+                      Maintenance Type is required
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+                <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 mb-2">
+                  <mat-form-field class="example-full-width mb-3" appearance="outline">
+                    <mat-label>Maintenance Category </mat-label>
+                    <mat-select formControlName="maintenanceCategoryId" required (selectionChange)="onGetMaintenanceCategorySelection()">
+                      <mat-option  *ngFor="let dropdown of maintenanceCategoryValue" [value]="dropdown.value">
+                        {{dropdown.text}}
+                      </mat-option>
+                    </mat-select>
+                    <mat-error *ngIf="RequiredSparesForMaintenanceForm.get('maintenanceCategoryId').hasError('required')">
+                      Maintenance Category is required
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+                
+                <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 mb-2">
+                  <mat-form-field class="example-full-width mb-3" appearance="outline">
+                    <mat-label>Maintenance Sub Category </mat-label>
+                    <mat-select formControlName="maintenanceSubCategoryId" required (selectionChange)="onGetMaintenanceSubCategorySelection()">
+                      <mat-option  *ngFor="let dropdown of maintenanceSubCategoryValue" [value]="dropdown.maintenanceSubCategoryId">
+                        {{dropdown.subCategoryName}}
+                      </mat-option>
+                    </mat-select>
+                    <mat-error *ngIf="RequiredSparesForMaintenanceForm.get('maintenanceSubCategoryId').hasError('required')">
+                      Maintenance Sub Category is required
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+                
+                <!-- <div *ngIf="role != userRole.CO" class="col-xl-4 col-lg-4 col-md-4 col-sm-12 mb-2">
+                  <mat-form-field class="example-full-width mb-3" appearance="outline">
+                    <mat-label>Item Name </mat-label>
+                    <mat-select formControlName="itemDetailId" required >
+                      <mat-option  *ngFor="let dropdown of itemNamevalue" [value]="dropdown.value">
+                        {{dropdown.text}}
+                      </mat-option>
+                    </mat-select>
+                    <mat-error *ngIf="RequiredSparesForMaintenanceForm.get('itemDetailId').hasError('required')">
+                      Item Name is required
+                    </mat-error>
+                  </mat-form-field>
+                </div> -->
+                
+                <div *ngIf="addStatus" class="col-xl-4 col-lg-4 col-md-4 col-sm-12 mb-2">
+                  <mat-form-field class="example-full-width mb-3" appearance="outline" >
+                    <mat-label>Patt No</mat-label>
+                    <input formControlName="part" matInput type="text" [matAutocomplete]="auto" required />
+                    <mat-autocomplete #auto="matAutocomplete">
+                      <mat-option *ngFor="let item of filteredOptions" [value]="item" (onSelectionChange)="onTraineeSelectionChanged(item)">
+                        {{ item.text }}
+                      </mat-option>
+                    </mat-autocomplete>
+                  </mat-form-field>
+                </div>
+                
+                
+                
+
+                
+
+                <!-- <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 mb-2">
+                  <mat-form-field class="example-full-width mb-3" appearance="outline">
+                    <mat-label>Remarks</mat-label>
+                    <input matInput formControlName="remarks">
+                  </mat-form-field>
+                </div> -->
+
+              </div>
+              <div *ngIf="addStatus" class="row">
+                <div *ngIf="role != userRole.CO" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                  <button class="btn-space" [disabled]="!RequiredSparesForMaintenanceForm.valid " mat-raised-button
+                    color="primary">{{btnText}}</button>
+                  <!-- <button type="button" mat-button routerLink="/maintenence-planning/aircraftname-list">Cancel</button> -->
+                </div>
+              </div>
+            </form>
+            <!-- <form class="m-4" [formGroup]="RequiredSparesForMaintenanceForm" (ngSubmit)="findSubmit()"> -->
+              <div class="row create-table db-tbl cls-rtn">
+                
+                <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 table-title">
+                  <h3> Total - {{totalResultCount}}</h3>
+                </div>
+                <div *ngIf="itemType!=1 && itemType!=2" class="col-xl-7 col-lg-7 col-md-7 col-sm-12 mb-2">
+                  <h3 class="text-center table-title">Required For Maintenance List </h3>
+                </div>
+                <div *ngIf="itemType==1" class="col-xl-7 col-lg-7 col-md-7 col-sm-12 mb-2">
+                  <h3 class="text-center table-title">Required Spares For Maintenance List </h3>
+                </div>
+                <div *ngIf="itemType==2" class="col-xl-7 col-lg-7 col-md-7 col-sm-12 mb-2">
+                  <h3 class="text-center table-title">Required Tools For Maintenance List </h3>
+                </div>
+                  
+                <div class="col-xl-2 col-lg-2 col-md-2 col-sm-12 mb-2 db-p" >
+                  <button *ngIf="role != userRole.CO" class="btn-space" mat-raised-button color="primary" (click)="addMode()"> Add
+                    <!-- <mat-icon class="col-white">print</mat-icon> -->
+                  </button>
+                  <button class="btn-space" mat-raised-button color="primary" (click)="printSingle()">
+                    <mat-icon class="col-white">print</mat-icon>
+                  </button>
+                </div>
+                <!-- <div *ngIf="role == userRole.SuperAdmin" class="col-xl-2 col-lg-2 col-md-2 col-sm-12 mb-2 dept-dropdown">
+                  <mat-form-field class="example-full-width mb-3" appearance="outline">
+                    <mat-label>Flight Line/Squadron </mat-label>
+                    <mat-select formControlName="departmentNameId" required >
+                      <mat-option  *ngFor="let dropdown of departmentName" [value]="dropdown.value">
+                        {{dropdown.text}}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+                <div class="col-xl-2 col-lg-2 col-md-2 col-sm-12 mb-2">
+                  <mat-form-field class="example-full-width mb-3" appearance="outline">
+                    <mat-label>Type of Item </mat-label>
+                    <mat-select formControlName="sparesCategoryId" required >
+                      <mat-option  *ngFor="let dropdown of sparesCategoryValue" [value]="dropdown.value">
+                        {{dropdown.text}}
+                      </mat-option>
+                    </mat-select>
+                    <mat-error *ngIf="RequiredSparesForMaintenanceForm.get('sparesCategoryId').hasError('required')">
+                      Type of Item is required
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+                <div class="col-xl-1 col-lg-1 col-md-1 col-sm-1 m-t-5">
+                  <button class="btn-space"  mat-raised-button color="primary">Find</button>
+                </div> -->
+                
+  
+              <div class="container">
+                    <!-- <div *ngIf="isNoDataFound">
+                    <h3>No Data Found</h3>
+                  </div> -->
+  
+                  <div id="print-routine">
+                    <table class="table tbl-by-group db-li-s-in">
+                      <thead>
+                        <tr>
+                          <th rowspan="2" class="thbm"><h5>Ser</h5></th>
+                          <th rowspan="2" class="thbm"><h5>Flight Line</h5></th>
+                          <th rowspan="2" class="thbm"><h5>Patt No</h5></th>
+                          <th rowspan="2" class="thbm"><h5>Item Name</h5></th>
+                          <th rowspan="2" class="thbm"><h5>Trade</h5></th>
+                          <!-- <th rowspan="2" class="thbm"><h5>Present Stock</h5></th> -->
+                          <!-- <th rowspan="2" class="thbm"><h5>Purchase Qty</h5></th> -->
+                          <th colspan="3" class="cl-mrk-rmrk">
+                            <h5>Available Stock</h5>
+                          </th>
+                          <th rowspan="2" class="thbm"><h5>Issued Qty</h5></th>
+                          <th *ngIf="role == userRole.SuperAdmin" rowspan="2" class="thbm"><h5>Approved</h5></th>
+                          <th *ngIf="(role != userRole.CO && showView) || showView" rowspan="2" class="cl-action"><h5>Actions</h5></th>
+                        </tr>
+                        <tr>
+                          <th class="cl-mrk-rmrk"><h5>Total</h5></th>
+                          <th class="cl-mrk-rmrk"><h5>Flt Line</h5></th>
+                          <th class="cl-mrk-rmrk"><h5>NSD</h5></th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <ng-container
+                          *ngFor="
+                            let data of requiredSparesForMaintenanceList;
+                            let i = index
+                          "
+                        >
+                          <tr>
+                            <td>
+                              {{
+                                (paging.pageIndex - 1) * paging.pageSize + i + 1
+                              }}
+                            </td>
+                            <td>
+                              {{ data.departmentName }}
+                            </td>
+                            <td>
+                              {{ data.partNo }}
+                            </td>
+                            <td>
+                              {{ data.nameOfItem }}
+                            </td>
+                            <td>
+                              {{ data.trade }}
+                            </td>
+                            <!-- <td>
+                              {{ data.presentStock }}
+                            </td>
+                            <td>
+                              {{ data.purchaseQty }}
+                            </td> -->
+                            <td>{{ data.totalStockQty }}</td>
+                            <td>{{ data.lineStock }}</td>
+                            <!-- <td>{{ data.nsdStock }}</td> -->
+                            <td>
+                              <a [routerLink]="['/maintenence-planning/view-nsdstockdetails', data.itemDetailId ]">{{ data.nsdStock }}</a>
+                            </td><td>
+                              <a [routerLink]="['/maintenence-planning/view-inventorydetails', data.itemDetailId ]">{{ data.issuedDeductQty }}</a>
+                            </td>
+                            <td *ngIf="role == userRole.SuperAdmin">
+                              <button mat-raised-button class="custom-btn courseplan-apr"  (click)="inActiveItem(data)"  (click)="$event.stopPropagation()">{{ data.verificationCompletStatus == 0 ? 'Not Approved' : 'Approved' }}</button>
+                            </td>
+                            <td *ngIf="(role != userRole.CO && showView) || showView" class="cl-action">
+                              <div>
+                                <button *ngIf="(role == userRole.admin || (role == userRole.User && data.verificationCompletStatus == 0))|| role == userRole.SuperAdmin"
+                                  mat-icon-button
+                                  color="accent"
+                                  class="btn-tbl-edit"
+                                  [routerLink]="[
+                                    '/maintenence-planning/update-requiredsparesformaintenance',
+                                    data.requiredSparesForMaintenanceId
+                                  ]"
+                                >
+                                  <mat-icon aria-label="Edit" class="col-white"
+                                    >edit</mat-icon
+                                  >
+                                </button>
+                                <button *ngIf="(role == userRole.admin || (role == userRole.User && data.verificationCompletStatus == 0))|| role == userRole.SuperAdmin"
+                                  mat-icon-button
+                                  color="accent"
+                                  class="btn-tbl-delete"
+                                  (click)="$event.stopPropagation()"
+                                  (click)="deleteItem(data)"
+                                >
+                                  <mat-icon aria-label="Delete" class="col-white"
+                                    >delete</mat-icon
+                                  >
+                                </button>
+                              </div>
+                              {{ data.actions }}
+                            </td>
+                          </tr>
+                        </ng-container>
+                      </tbody>
+                    </table>
+                    </div>
+                </div>
+              </div>
+              
+          <!-- </form> -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

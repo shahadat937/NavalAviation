@@ -1,0 +1,141 @@
+<section class="content">
+    <div class="container-fluid">
+      <div class="block-header">
+        <div class="row">
+          <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+            <ul class="breadcrumb breadcrumb-style ">
+              <li class="breadcrumb-item">
+                <h4 class="page-title">{{pageTitle}}</h4>
+              </li>
+              <li class="breadcrumb-item bcrumb-1">
+                <a routerLink="/admin/dashboard/main"><i class="fas fa-home"></i></a>
+              </li>
+              <li class="breadcrumb-item bcrumb-2">
+                <a href="#" onClick="return false;">Gse Maintenance</a>
+              </li>
+              <li class="breadcrumb-item active">{{destination}}</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="row clearfix">
+        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+          <div class="card">
+            <!--<div class="header">
+              <h2>{{destination}} GseMaintenance</h2>
+  
+            </div>-->
+            <div class="body">
+              <form class="m-4" [formGroup]="GseMaintenanceForm" (ngSubmit)="onSubmit()">
+                <div class="row">
+                  <!-- <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width mb-3" appearance="outline">
+                      <mat-label>Category Name</mat-label>
+                      <input matInput formControlName="categoryName" required>
+                      <mat-error *ngIf="GseMaintenanceForm.get('categoryName').hasError('required')">
+                        Category Name is required
+                      </mat-error>
+                    </mat-form-field>
+                  </div> -->
+                  <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width mb-3" appearance="outline">
+                        <mat-label>GSE Item Name</mat-label>
+                        
+                        <mat-select formControlName="gseItemNameId" required>
+                            <mat-option *ngFor="let code of gseItemName" [value]="code.value">
+                                {{code.text}}
+                              </mat-option>                          
+                        </mat-select>
+                        <mat-error *ngIf="GseMaintenanceForm.get('gseItemNameId').hasError('required')">
+                            Select Any GSE Item Name 
+                        </mat-error>
+                    </mat-form-field>
+                  </div>
+                  <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width mb-3" appearance="outline">
+                        <mat-label>GSE Schedule Work Type</mat-label>
+                        
+                        <mat-select formControlName="gseScheduleWorkTypeId" required>
+                            <mat-option *ngFor="let code of gseScheduleWorkType" [value]="code.value">
+                                {{code.text}}
+                              </mat-option>                          
+                        </mat-select>
+                        <mat-error *ngIf="GseMaintenanceForm.get('gseScheduleWorkTypeId').hasError('required')">
+                            Select Any GSE Schedule Work Type 
+                        </mat-error>
+                    </mat-form-field>
+                  </div>
+                  <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width mb-3" appearance="outline">
+                        <mat-label>GSE Maintenance Schedule Name</mat-label>
+                        
+                        <mat-select formControlName="gseMaintenanceScheduleNameId" required>
+                            <mat-option *ngFor="let code of gseMaintenanceScheduleName" [value]="code.value">
+                                {{code.text}}
+                              </mat-option>                          
+                        </mat-select>
+                        <mat-error *ngIf="GseMaintenanceForm.get('gseMaintenanceScheduleNameId').hasError('required')">
+                            Select Any GSE Maintenance Schedule Name 
+                        </mat-error>
+                    </mat-form-field>
+                  </div>
+                  
+                  <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width mb-3" appearance="outline">
+                      <mat-label>Date</mat-label>
+                        <input matInput [matDatepicker]="datepicker" formControlName="date" required>
+                        <mat-datepicker-toggle matSuffix [for]="datepicker"></mat-datepicker-toggle>
+                       <mat-datepicker #datepicker></mat-datepicker>
+                        <mat-error *ngIf="GseMaintenanceForm.get('date').hasError('required')">
+                        Please select date
+                        </mat-error>
+                    </mat-form-field>
+                  </div>
+                  
+                  <div *ngIf="role == userRole.SuperAdmin" class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width mb-3" appearance="outline">
+                        <mat-label>Flight Line/Squadron </mat-label>
+                        
+                        <mat-select formControlName="departmentNameId" required>
+                            <mat-option *ngFor="let code of departmentName" [value]="code.value">
+                                {{code.text}}
+                              </mat-option>                          
+                        </mat-select>
+                        <mat-error *ngIf="GseMaintenanceForm.get('departmentNameId').hasError('required')">
+                            Select Any Department 
+                        </mat-error>
+                    </mat-form-field>
+                  </div>
+                  
+                  <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width mb-3" appearance="outline">
+                      <mat-label>Remark</mat-label>
+                      <textarea matInput formControlName="remarks" ></textarea>
+                      
+                    </mat-form-field>
+                  </div>
+                  <!--<div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width mb-3" appearance="outline">
+                      <mat-label>Menu position</mat-label>
+                      <input matInput formControlName="menuPosition">
+                    </mat-form-field>
+                  </div>-->
+                </div>
+            
+            
+               
+                <div class="row">
+                  <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                    <button class="btn-space" [disabled]="!GseMaintenanceForm.valid " mat-raised-button
+                      color="primary">{{btnText}}</button>
+                    <button type="button" mat-button routerLink="/basic-setup/gsemaintenance-list">Cancel</button>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  
