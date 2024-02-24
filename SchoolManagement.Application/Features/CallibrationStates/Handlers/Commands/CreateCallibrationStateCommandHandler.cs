@@ -42,14 +42,23 @@ namespace SchoolManagement.Application.Features.CallibrationStates.Handlers.Comm
                 await _unitOfWork.Save();
 
 
-                //Get Item Stor Data
-                var itemStor = await _unitOfWork.Repository<ItemStor>().Get(CallibrationState.ItemStoreId.Value);
-                itemStor.NextCalibrationDate= CallibrationState.NextDueDate;
-                itemStor.LastCalibrationDate = CallibrationState.LastDateofCalibrated;
-     
+      //Get Item Stor Data
+      try
+      {
+        var itemStor = await _unitOfWork.Repository<ItemStor>().Get(CallibrationState.ItemStoreId.Value);
+        itemStor.NextCalibrationDate = CallibrationState.NextDueDate;
+        itemStor.LastCalibrationDate = CallibrationState.LastDateofCalibrated;
 
-                await _unitOfWork.Repository<ItemStor>().Update(itemStor);
-                await _unitOfWork.Save();
+
+        await _unitOfWork.Repository<ItemStor>().Update(itemStor);
+        await _unitOfWork.Save();
+      }
+      catch (Exception e)
+      {
+
+        throw;
+      }
+              
 
                 response.Success = true;
                 response.Message = "Creation Successful";

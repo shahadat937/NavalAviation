@@ -40,7 +40,7 @@ namespace SchoolManagement.Application.Features.ItemStors.Handlers.Commands
             {
               var Acceptances = await _unitOfWork.Repository<Acceptance>().Get((int)ItemStor.AcceptanceId);
               var accSftQty = Acceptances.StoreQty;
-              var storQty = ItemStor.TotalReceivedQty;
+              var storQty = (int)ItemStor.TotalReceivedQty;
               var remainAccQty = accSftQty - storQty;
               Acceptances.StoreQty = remainAccQty;
               Acceptances.SftStatus = 0;
