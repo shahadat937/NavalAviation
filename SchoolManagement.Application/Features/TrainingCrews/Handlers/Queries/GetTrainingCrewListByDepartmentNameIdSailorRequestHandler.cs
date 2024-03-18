@@ -22,7 +22,7 @@ namespace SchoolManagement.Application.Features.TrainingCrews.Handlers.Queries
     {
 
 
-      IQueryable<TrainingCrew> TrainingCrews = _TrainingCrewRepository.FilterWithInclude(x => (x.Pno.Contains(request.Text) || x.Name.Contains(request.Text) || String.IsNullOrEmpty(request.Text)), "Rank", "OfficersStatus", "DepartmentName", "SailorRank").Where(x => x.DepartmentNameId == (request.DepartmentNameId != 0 ? request.DepartmentNameId : x.DepartmentNameId) && x.EmployeeTypeId == request.EmployeeTypeId).OrderBy(x => Convert.ToInt32(x.Pno));
+      IQueryable<TrainingCrew> TrainingCrews = _TrainingCrewRepository.FilterWithInclude(x => (x.Pno.Contains(request.Text) || x.Name.Contains(request.Text) || String.IsNullOrEmpty(request.Text)), "Rank", "OfficersStatus", "DepartmentName", "SailorRank").Where(x => x.DepartmentNameId == (request.DepartmentNameId != 0 ? request.DepartmentNameId : x.DepartmentNameId) && x.EmployeeTypeId == request.EmployeeTypeId).OrderBy(x =>x.Pno);
       var totalCount = TrainingCrews.Count();
       //var TrainingCrew = TrainingCrews.OrderBy(x => Convert.ToInt32(x.Pno));
       //TrainingCrews = TrainingCrews.OrderBy(x => x.SailorRank.Remarks).Skip((request.QueryParams.PageNumber - 1) * request.QueryParams.PageSize).Take(request.QueryParams.PageSize);
