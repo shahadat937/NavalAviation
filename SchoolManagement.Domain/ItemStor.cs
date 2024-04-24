@@ -40,10 +40,10 @@ namespace SchoolManagement.Domain
         public DateTime? WarrantyStartDate { get; set; }
         public DateTime? WarrantyEndDate { get; set; }
         public DateTime? ItemReceivedDate { get; set; }
-        public double? TotalReceivedQty { get; set; }
-        public int? IssuedQty { get; set; } 
-        public double? NsdQty { get; set; }
-        public double? AvailableQty { get; set; }
+        public int? TotalReceivedQty { get; set; }
+        public int? IssuedQty { get; set; }
+        public int? NsdQty { get; set; }
+        public int? AvailableQty { get; set; }
         public string? Location { get; set; }
         public string? ServiceLife { get; set; }
         public string? EndLifeTime { get; set; }
