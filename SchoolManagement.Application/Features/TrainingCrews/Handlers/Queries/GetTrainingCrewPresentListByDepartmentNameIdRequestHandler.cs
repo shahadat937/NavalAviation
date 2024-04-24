@@ -25,7 +25,7 @@ namespace SchoolManagement.Application.Features.TrainingCrews.Handlers.Queries
 
             if (request.DepartmentNameId == 0)
             {
-              IQueryable<TrainingCrew> TrainingCrews = _TrainingCrewRepository.FilterWithInclude(x => x.OfficersStatusId != 4, "Rank", "OfficersStatus", "DepartmentName", "SailorRank").OrderBy(x => x.EmployeeTypeId).ThenBy(x => x.Pno);
+              IQueryable<TrainingCrew> TrainingCrews = _TrainingCrewRepository.FilterWithInclude(x => x.OfficersStatusId != 4 && x.PresentBilletId == 1, "Rank", "OfficersStatus", "DepartmentName", "SailorRank").OrderBy(x => x.EmployeeTypeId).ThenBy(x => x.Pno);
               TrainingCrewDtos = _mapper.Map<List<TrainingCrewDto>>(TrainingCrews);
             }
             else
