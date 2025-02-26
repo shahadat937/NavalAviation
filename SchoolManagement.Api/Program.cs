@@ -23,10 +23,10 @@ builder.Services.AddControllers().AddNewtonsoftJson();
 
 builder.Services.AddCors(o =>
 {
-    o.AddPolicy("CorsPolicy",
-        builder => builder.AllowAnyOrigin()
-        .AllowAnyMethod()
-        .AllowAnyHeader());
+  o.AddPolicy("CorsPolicy",
+      builder => builder.AllowAnyOrigin()
+      .AllowAnyMethod()
+      .AllowAnyHeader());
 });
 
 // configure the http request pipeline
@@ -35,6 +35,13 @@ var app = builder.Build();
 //{
 //    app.UseDeveloperExceptionPage();
 //}
+
+//app.Use(async (context, next) =>
+//{
+//  context.Response.Headers.Add("Content-Security-Policy",
+//      "default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self'; font-src 'self';");
+//  await next();
+//});
 
 app.UseMiddleware<ExceptionMiddleware>();
 
@@ -53,6 +60,13 @@ app.UseStaticFiles();
 //});
 //app.MapFallbackToController("Index", "Fallback");
 app.UseAuthorization();
+
+app.Use(async (context, next) =>
+{
+  context.Response.Headers.Add("Content-Security-Policy",
+      "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; frame-src 'self' ; object-src 'none';");
+  await next();
+});
 
 app.UseCors("CorsPolicy");
 
