@@ -1,10 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AuthService } from 'src/app/core/service/auth.service';
 import { Role } from 'src/app/core/models/role';
 import { UnsubscribeOnDestroyAdapter } from 'src/app/shared/UnsubscribeOnDestroyAdapter';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { DomSanitizer } from '@angular/platform-browser';
 @Component({
   selector: 'app-signin',
   templateUrl: './signin.component.html',
@@ -20,22 +21,31 @@ export class SigninComponent
   error = '';
   hide = true;
   lastPublishDate:any;
+  
+  captchaValue: number = 0;
+  captchaImage: any = '';
+
+  @ViewChild('captchaCanvas') captchaCanvas!: ElementRef<HTMLCanvasElement>;
+
   constructor(
     private formBuilder: FormBuilder,
     private route: ActivatedRoute,
     private router: Router,
-    private authService: AuthService,private snackBar: MatSnackBar
+    private authService: AuthService,private snackBar: MatSnackBar,
+    private sanitizer: DomSanitizer
   ) {
     super();
   }
   
 
   ngOnInit() {
-    this.lastPublishDate = '02/01/2024';
+    this.lastPublishDate = '02/26/2025';
     this.authForm = this.formBuilder.group({
       email: ['', Validators.required],
       password: ['', Validators.required],
+      captcha: ['', Validators.required],
     });
+    this.generateCaptcha();
   }
   get f() {
     return this.authForm.controls;
@@ -64,9 +74,24 @@ export class SigninComponent
         horizontalPosition: 'right',
         panelClass: 'snackbar-danger'
       });
+      this.submitted = false;
+      this.loading = false;
      
       return;
-    } else {
+    }
+    else if(this.f['captcha'].value != this.captchaValue){
+      this.snackBar.open('Invalid Captcha Answer', '', {
+        duration: 2000,
+        verticalPosition: 'bottom',
+        horizontalPosition: 'right',
+        panelClass: 'snackbar-danger'
+      });
+      this.submitted = false;
+      this.loading = false;
+     
+      return;
+    }
+    else {
       this.subs.sink = this.authService
         .login(this.f.email.value, this.f.password.value)
         .subscribe(
@@ -123,4 +148,23 @@ export class SigninComponent
         );
     }
   }
+
+  
+  generateCaptcha() {
+    const num1 = Math.floor(Math.random() * 10) + 1;
+    const num2 = Math.floor(Math.random() * 10) + 1;
+    this.captchaValue = num1 + num2;
+
+    const svg = `
+      <svg xmlns="http://www.w3.org/2000/svg" width="100" height="50">
+        <text x="10" y="30" font-size="20" fill="black">${num1} + ${num2} = ?</text>
+      </svg>`;
+
+    const encodedSvg = encodeURIComponent(svg);
+    const svgUrl = `data:image/svg+xml,${encodedSvg}`;
+
+    // Sanitize the SVG URL to bypass Angular's security
+    this.captchaImage = this.sanitizer.bypassSecurityTrustResourceUrl(svgUrl);
+  }
+
 }

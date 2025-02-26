@@ -1,7 +1,7 @@
 
 <div class="bg-login">
   <div class="row auth-container">
-    <div class="col-md-8 auth-form-section login-background widthc">
+    <div class="col-md-7 auth-form-section login-background widthc">
    
       <div class="login login-top-design">
         <div class="image logo">
@@ -16,7 +16,7 @@
   
     </div>
   
-    <div class="col-md-4 widthd">
+    <div class="col-md-5 widthd">
       <div class="row auth-main">
    
         <!-- <div class="col-sm-12 auth-form-section login-background"> -->
@@ -70,7 +70,7 @@
             </div>
           </div>
           <div class="row">
-            <div class="col-xl-12col-lg-12 col-md-12 col-sm-12 mb-2">
+            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
               <mat-form-field class="example-full-width" appearance="outline">
                 <mat-label>Password</mat-label>
                 <input matInput [type]="hide ? 'password' : 'text'" formControlName="password">
@@ -84,6 +84,29 @@
               </mat-form-field>
             </div>
           </div>
+
+          <div class="row mt-1">
+            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+              <div class="row">
+                <div class="col-xl-8 col-lg-8 col-md-8 col-sm-8 mb-2">
+                  <mat-form-field class="example-full-width" appearance="outline">
+                    <mat-label>Captcha</mat-label>
+                    <input matInput formControlName="captcha">
+                    <a class="show-pwd-icon" matSuffix (click)="generateCaptcha()">
+                      <mat-icon>autorenew</mat-icon>
+                    </a>
+                    <mat-error *ngIf="authForm.get('captcha').hasError('required')">
+                      Captcha is required
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+                <div class="col-xl-4 col-lg-4 col-md-4 col-sm-4 mb-2 d-flex align-items-center">
+                  <img [src]="captchaImage" alt="CAPTCHA" />
+                </div>
+              </div>
+            </div>
+          </div>
+
           <div class="d-flex justify-content-between align-items-center mb-2">
             <div class="form-check">
               <label class="form-check-label">
@@ -95,6 +118,8 @@
             </div>
             <!-- <a class="txt1 forget-link" routerLink="/authentication/forgot-password">Forgot Password?</a> -->
           </div>
+          
+            
           <!-- <div *ngIf="error" class="alert alert-danger mt-3 mb-0">{{error}}</div> -->
           <div class="container-auth-form-btn">
             <div style="text-align:center">
