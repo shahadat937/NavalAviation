@@ -38,21 +38,37 @@ namespace SchoolManagement.Identity.Services
         {
 
 
-            var user = await _userManager.Users.FirstOrDefaultAsync(x => x.Email == request.Email || x.TraineeId == request.Email);
+            var user = await _userManager.Users.FirstOrDefaultAsync(x => x.Email == request.Email || x.UserName == request.Email);
             if (user == null)
             {
 
-                throw new NotFoundException("User", request.Email);
+              throw new NotFoundException("User", request.Email);
             }
 
-            var result = await _signInManager.PasswordSignInAsync(user.UserName, request.Password, false, lockoutOnFailure: false);
+            if (await _userManager.IsLockedOutAsync(user))
+            {
+              var lockoutEnd = await _userManager.GetLockoutEndDateAsync(user);
+              var remainingTime = lockoutEnd.HasValue ? (lockoutEnd.Value.UtcDateTime - DateTime.UtcNow).Minutes : 0;
+              throw new BadRequestException($"Too many failed attempts. Your account is locked for {remainingTime + 1} more minutes.");
+            }
+
+            var result = await _signInManager.PasswordSignInAsync(user.UserName, request.Password, false, lockoutOnFailure: true);
 
             if (!result.Succeeded)
             {
-                throw new BadRequestException($"Credentials for '{request.Email} aren't valid'.");
+              if (await _userManager.IsLockedOutAsync(user))
+              {
+                var lockoutEnd = await _userManager.GetLockoutEndDateAsync(user);
+                var remainingTime = lockoutEnd.HasValue ? (lockoutEnd.Value.UtcDateTime - DateTime.UtcNow).Minutes : 0;
+                throw new BadRequestException($"Too many failed attempts. Your account is locked for {remainingTime + 1} minutes.");
+              }
+
+              int failedAttempts = await _userManager.GetAccessFailedCountAsync(user);
+              int remainingAttempts = 3 - failedAttempts;
+              throw new BadRequestException($"Invalid credentials. {remainingAttempts} attempt(s) left before lockout.");
             }
 
-            JwtSecurityToken jwtSecurityToken = await GenerateToken(user);
+      JwtSecurityToken jwtSecurityToken = await GenerateToken(user);
 
             AuthResponse response = new AuthResponse
             {

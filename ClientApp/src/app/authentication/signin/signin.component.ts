@@ -76,6 +76,7 @@ export class SigninComponent
       });
       this.submitted = false;
       this.loading = false;
+      this.generateCaptcha();
      
       return;
     }
@@ -88,6 +89,7 @@ export class SigninComponent
       });
       this.submitted = false;
       this.loading = false;
+      this.generateCaptcha();
      
       return;
     }
@@ -144,6 +146,7 @@ export class SigninComponent
             this.error = error;
             this.submitted = false;
             this.loading = false;
+            this.generateCaptcha();
           }
         );
     }
